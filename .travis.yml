@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-  - "stable"
+  - "8.9.4"
 
 sudo: true
 
@@ -10,6 +10,7 @@ cache:
     - "node_modules"
 install:
   - npm install
+  - npm install --save sequelize pg pg-hstore
 
 env:
   - CXX=g++-4.8
