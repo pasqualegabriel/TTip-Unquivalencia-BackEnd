@@ -22,7 +22,9 @@
     "mysql2": "^1.6.5",
     "pg": "^7.11.0",
     "sequelize": "^5.8.10",
-    "factory-girl": "^5.0.4"
+    "factory-girl": "^5.0.4",
+    "winston": "^2.4.0",
+    "winston-daily-rotate-file": "^1.7.2"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.2",
