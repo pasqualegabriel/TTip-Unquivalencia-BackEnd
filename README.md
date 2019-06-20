@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/pasqualegabriel/tip-backend.svg?branch=master)](https://travis-ci.org/pasqualegabriel/tip-backend)
 
-# tip-backend
+# TIP-BACKEND
 
 University Proyect of TIP - UNQ
 
@@ -13,7 +13,7 @@ Number |       Name              | UNQ-Records |    EMail
   3    |                         |             | 
 
 ### Trello
-![tip - trello](https://trello.com)
+![tip - trello](https://trello.com/)
 
 #### Installing node
 Get the latest version of node from the [official website](https://nodejs.org/) or using [nvm](https://github.com/creationix/nvm)
