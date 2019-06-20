@@ -10,7 +10,7 @@ cache:
     - "node_modules"
 install:
   - npm install
-  - npm install --g sequelize
+  - npm install -g sequelize sequelize-cli
 
 env:
   - CXX=g++-4.8
