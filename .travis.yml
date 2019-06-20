@@ -1,25 +1,27 @@
 language: node_js
+
 node_js:
   - "stable"
-cache:
-  yarn: true
-  directories:
-    - node_modules
-install:
-  - npm install
+
+sudo: true
+
+env:
+  - CXX=g++-4.8
+  
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
+
 services:
   - postgresql
 
-env:
-  global:
-  - NODE_ENV=test
-
 before_script:
-  - psql -c 'create database tip_test;' -U postgres
-  - psql -c "CREATE USER "user" WITH PASSWORD 'user';" -U postgres
-  - npm run build
-  - npm install -g sequelize-cli
-  - sequelize db:migrate
+  - psql -c "CREATE DATABASE tip_test;" -U postgres
+  - node_modules/.bin/sequelize db:migrate
+
 script:
   - npm test
   
