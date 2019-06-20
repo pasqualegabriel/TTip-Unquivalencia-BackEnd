@@ -1,3 +1,3 @@
-const { User } = require('../../models');
+const { User } = require('../models');
 
 exports.findAllUsers = () => User.findAll();

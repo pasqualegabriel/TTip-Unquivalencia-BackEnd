@@ -5,12 +5,12 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
-    "migrations": "./node_modules/.bin/sequelize --migrations-path ./migrations db:migrate",
+    "migrations": "./node_modules/.bin/sequelize --migrations-path ./migrations/migrations db:migrate",
     "eslint-check": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
     "lint": "eslint app migrations config test",
     "lint-diff": "git diff --name-only --cached --relative | grep \\\\.js$ | xargs ./node_modules/eslint/bin/eslint.js",
     "lint-fix": "eslint app migrations config test --fix",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_ENV=testing ./node_modules/mocha/bin/_mocha --timeout 5000 --exit test/app.js"
   },
   "author": "",
   "license": "ISC",
@@ -21,7 +21,8 @@
     "morgan": "^1.9.1",
     "mysql2": "^1.6.5",
     "pg": "^7.11.0",
-    "sequelize": "^5.8.10"
+    "sequelize": "^5.8.10",
+    "factory-girl": "^5.0.4"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.2",
@@ -32,6 +33,10 @@
     "eslint-plugin-prettier": "^2.1.1",
     "nodemon": "^1.19.1",
     "prettier-eslint": "^8.2.1",
-    "tedious": "^6.2.0"
+    "tedious": "^6.2.0",
+    "chai": "^4.1.2",
+    "chai-http": "^4.2.0",
+    "mocha": "^5.0.1",
+    "umzug": "^2.1.0"
   }
 }

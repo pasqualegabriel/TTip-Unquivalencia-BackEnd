@@ -6,20 +6,20 @@ module.exports = {
     password: config.password,
     database: config.name,
     host: config.host,
-    dialect: 'mssql'
+    dialect: 'postgres'
   },
   testing: {
     username: config.username,
     password: config.password,
     database: config.name,
     host: config.host,
-    dialect: 'mssql'
+    dialect: 'postgres'
   },
   production: {
     username: config.username,
     password: config.password,
     database: config.name,
     host: config.host,
-    dialect: 'mssql'
+    dialect: 'postgres'
   }
 };
