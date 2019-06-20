@@ -5,9 +5,15 @@ node_js:
 
 sudo: true
 
+cache:
+  directories:
+    - "node_modules"
+install:
+  - npm install
+
 env:
   - CXX=g++-4.8
-  
+
 addons:
   apt:
     sources:
@@ -20,7 +26,7 @@ services:
 
 before_script:
   - psql -c "CREATE DATABASE tip_test;" -U postgres
-  - node_modules/.bin/sequelize db:migrate
+  - sequelize db:migrate
 
 script:
   - npm test
