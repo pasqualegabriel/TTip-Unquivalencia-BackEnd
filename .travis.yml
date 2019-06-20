@@ -10,7 +10,7 @@ cache:
     - "node_modules"
 install:
   - npm install
-  - npm install --save sequelize pg pg-hstore
+  - npm install --g sequelize
 
 env:
   - CXX=g++-4.8
