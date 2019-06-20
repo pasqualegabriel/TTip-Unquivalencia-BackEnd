@@ -13,7 +13,7 @@ Number |       Name              | UNQ-Records |    EMail
   3    |                         |             | 
 
 ### Trello
-![tip - trello](https://trello.com/)
+[tip - trello](https://trello.com/)
 
 #### Installing node
 Get the latest version of node from the [official website](https://nodejs.org/) or using [nvm](https://github.com/creationix/nvm)
