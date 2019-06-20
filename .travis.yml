@@ -1,9 +1,25 @@
 language: node_js
 node_js:
-  - "11.10.1"
+  - "stable"
 cache:
   yarn: true
   directories:
     - node_modules
+install:
+  - npm install
+services:
+  - postgresql
+
+env:
+  global:
+  - NODE_ENV=test
+
+before_script:
+  - psql -c 'create database tip_test;' -U postgres
+  - psql -c "CREATE USER user WITH PASSWORD user;" -U postgres
+  - npm run build
+  - npm install -g sequelize-cli
+  - sequelize db:migrate
 script:
-- yarn test
+  - npm test
+  
