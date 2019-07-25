@@ -26,10 +26,11 @@ Nvm approach is preferred.
 #### Database configuration
 Before running the app, make sure you have [postgresql installed](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-14-04) and a db created, to create it run the following steps inside a psql terminal:
 1. CREATE DATABASE db_project_name;
-2. \c db_project_name
-3. CREATE ROLE "project_name" LOGIN CREATEDB PASSWORD 'project_name';
-4. grant all privileges on database db_project_name to project_name;
-5. ALTER DATABASE db_project_name OWNER TO project_name;
+2. CREATE DATABASE db_project_name_test;
+3. \c db_project_name
+4. CREATE ROLE "project_name" LOGIN CREATEDB PASSWORD 'project_name';
+5. grant all privileges on database db_project_name_test to project_name;
+6. ALTER DATABASE db_project_name_test OWNER TO project_name;
 
 Then, set in `.env` some variables:
 - `DB_HOST=localhost`
