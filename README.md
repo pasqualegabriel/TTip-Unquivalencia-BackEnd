@@ -28,6 +28,8 @@ Before running the app, make sure you have [postgresql installed](https://www.di
 1. CREATE DATABASE db_project_name;
 2. \c db_project_name
 3. CREATE ROLE "project_name" LOGIN CREATEDB PASSWORD 'project_name';
+4. grant all privileges on database db_project_name to project_name;
+5. ALTER DATABASE db_project_name OWNER TO project_name;
 
 Then, set in `.env` some variables:
 - `DB_HOST=localhost`
