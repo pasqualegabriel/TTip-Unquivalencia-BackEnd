@@ -9,7 +9,11 @@ const env = process.env.NODE_ENV || 'development';
 const config = require(`../../config/db`)[env];
 const db = {};
 
+console.log('config.database');
+console.log(config.database);
+
 const sequelize = new Sequelize(config.database, config.username, config.password, {
+  host: 'localhost',
   dialect: 'mysql'
 });
 

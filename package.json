@@ -13,7 +13,7 @@
     "lint": "eslint app migrations config test",
     "lint-diff": "git diff --name-only --cached --relative | grep \\\\.js$ | xargs ./node_modules/eslint/bin/eslint.js",
     "lint-fix": "eslint app migrations config test --fix",
-    "test": "DB_NAME=mysql://tip_test@localhost:3306/ NODE_ENV=testing ./node_modules/mocha/bin/_mocha --timeout 5000 --exit test/app.js"
+    "test": "NODE_ENV=testing ./node_modules/mocha/bin/_mocha --timeout 5000 --exit test/app.js"
   },
   "author": "",
   "license": "ISC",
