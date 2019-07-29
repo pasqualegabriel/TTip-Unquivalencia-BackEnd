@@ -26,8 +26,8 @@ services:
   - mysql
 
 before_script:
-  - NODE_ENV=testing npm run create-db
-  - NODE_ENV=testing npm run migrations
+  - mysql -e 'CREATE DATABASE tip_test;'
+  - sequelize db:migrate
 
 script:
   - npm test
