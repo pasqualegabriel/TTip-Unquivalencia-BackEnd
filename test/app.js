@@ -12,7 +12,7 @@ chai.use(chaiHttp);
 beforeEach('drop tables, re-create them and populate sample data', () =>
   models.sequelize
     .query('SET FOREIGN_KEY_CHECKS = 0;')
-    .then(() => models.sequelize.query('delete from users;'))
+    .then(() => models.sequelize.sync({ force: true }))
     .then(() => models.sequelize.query('SET FOREIGN_KEY_CHECKS = 1;'))
 );
 
