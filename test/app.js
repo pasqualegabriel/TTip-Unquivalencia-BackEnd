@@ -4,33 +4,17 @@ const fs = require('fs'),
   path = require('path'),
   chai = require('chai'),
   chaiHttp = require('chai-http'),
-  models = require('../app/models'),
-  dataCreation = require('../scripts/dataCreation'),
-  logger = require('../app//logger');
+  models = require('../app/models');
 
 chai.use(chaiHttp);
 
-const getTablesQuery = `SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_type = 'BASE TABLE';`;
-
-// THIS WORKS ONLY WITH POSTGRESQL
-beforeEach('drop tables, re-create them and populate sample data', done => {
-  models.sequelize.query(getTablesQuery).then(tables => {
-    if (!tables.length) logger.info('Yuu have to run: NODE_ENV=testing npm run migrations');
-    else {
-      const tableExpression = tables
-        .map(table => {
-          return `"public"."${table[0]}"`;
-        })
-        .join(', ');
-      return models.sequelize
-        .query(`TRUNCATE TABLE ${tableExpression} RESTART IDENTITY`)
-        .then(() => {
-          return dataCreation.execute();
-        })
-        .then(() => done());
-    }
-  });
-});
+// THIS WORKS ONLY WITH MYSQL
+beforeEach('drop tables, re-create them and populate sample data', () =>
+  models.sequelize
+    .query('SET FOREIGN_KEY_CHECKS = 0;')
+    .then(() => models.sequelize.sync({ force: true }))
+    .then(() => models.sequelize.query('SET FOREIGN_KEY_CHECKS = 1;'))
+);
 
 // including all test files
 const normalizedPath = path.join(__dirname, '.');

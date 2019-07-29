@@ -10,7 +10,7 @@ cache:
     - "node_modules"
 install:
   - npm install
-  - npm install -g sequelize sequelize-cli pg
+  - npm install -g sequelize sequelize-cli pg mysql2
 
 env:
   - CXX=g++-4.8
@@ -23,11 +23,11 @@ addons:
       - g++-4.8
 
 services:
-  - postgresql
+  - mysql
 
 before_script:
-  - psql -c "CREATE DATABASE tip_test;" -U postgres
-  - sequelize db:migrate
+  - NODE_ENV=testing sequelize db:create
+  - NODE_ENV=testing sequelize db:migrate
 
 script:
   - npm test
