@@ -27,7 +27,6 @@ services:
 
 before_script:
   - mysql -e 'CREATE DATABASE tip_test;'
-  - sequelize db:migrate
 
 script:
   - npm test
