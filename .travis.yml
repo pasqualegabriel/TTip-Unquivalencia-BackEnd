@@ -29,6 +29,7 @@ services:
 
 before_install:
   - mysql -e 'CREATE DATABASE tip_test;'
+  - mysql -u root -e "GRANT ALL PRIVILEGES ON tip_test.* TO 'travis'@'%';";
 
 test:
   adapter: mysql2
