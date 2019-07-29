@@ -1,5 +1,7 @@
 language: node_js
 
+dist: precise
+
 node_js:
   - "10"
 
@@ -25,7 +27,7 @@ addons:
 services:
   - mysql
 
-before_script:
+before_install:
   - mysql -e 'CREATE DATABASE tip_test;'
 
 test:
