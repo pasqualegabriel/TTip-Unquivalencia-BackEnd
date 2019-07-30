@@ -17,6 +17,9 @@ install:
 env:
   - CXX=g++-4.8
   - DB_NAME=tip_test
+  - DB_HOST=localhost
+  - NODE_API_DB_NAME_TEST=tip_test
+  - DB_USERNAME=travis
 
 addons:
   apt:
