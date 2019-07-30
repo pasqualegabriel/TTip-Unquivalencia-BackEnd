@@ -30,10 +30,11 @@ before_install:
   - "export MYSQL_HOST=localhost"
   - "export MYSQL_PORT=3306"
   - "export MYSQL_USER=root"
-  - "export DB_HOST=tip_test"
-  - "export DB_USERNAME=localhost"
+  - "export DB_HOST=localhost"
+  - "export DB_USERNAME=root"
   - "export DB_PORT=3306"
-  - "export NODE_API_DB_NAME_TEST=root"
+  - "export DB_HOST=root"
+  - "export DB_NAME=tip_test"
   - "export NODE_API_DB_NAME_TEST=tip_test"
 
 install:
