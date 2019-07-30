@@ -28,9 +28,10 @@ Before running the app, make sure you have [mysql installed](https://www.digital
 
 Then, set in `.env` some variables:
 - `DB_HOST=localhost`
+- `DB_PORT=3306`
 - `DB_NAME=db_project_name`
-- `DB_USERNAME=project_name`
-- `DB_PASSWORD=project_name`
+- `DB_USERNAME=db_username`
+- `DB_PASSWORD=db_pass`
 - `NODE_API_DB_NAME_TEST=db_project_name_test`
 
 **Remember not to push nor commit the `.env` file.**
