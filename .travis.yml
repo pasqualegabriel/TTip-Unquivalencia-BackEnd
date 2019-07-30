@@ -18,12 +18,9 @@ cache:
     - node_modules
 
 before_install:
-  # Skip updating shrinkwrap / lock
-  - "npm config set shrinkwrap false"
-
   # Setup Node.js version-specific dependencies
   - "mysql -e 'CREATE DATABASE tip_test;'"
-  - "test $(echo $TRAVIS_NODE_VERSION | cut -d. -f1) -ge 6 || npm rm --save-dev eslint"
+  - mysql -u root -e "GRANT ALL PRIVILEGES ON tip_test.* TO 'root'@'%';";
 
   # Setup environment
   - "export MYSQL_DATABASE=tip_test"
