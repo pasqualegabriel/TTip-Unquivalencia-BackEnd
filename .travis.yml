@@ -16,6 +16,7 @@ install:
 
 env:
   - CXX=g++-4.8
+  - DB_NAME=tip_test
 
 addons:
   apt:
