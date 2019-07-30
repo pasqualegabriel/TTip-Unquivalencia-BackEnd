@@ -58,12 +58,8 @@ before_install:
   - "npm config set shrinkwrap false"
 
   # Setup Node.js version-specific dependencies
-  - "node tool/install-nyc.js --nyc-optional"
+  - "mysql -e 'CREATE DATABASE tip_test;'"
   - "test $(echo $TRAVIS_NODE_VERSION | cut -d. -f1) -ge 6 || npm rm --save-dev eslint"
-
-  # Update Node.js modules
-  - "test ! -d node_modules || npm prune"
-  - "test ! -d node_modules || npm rebuild"
 
   # Setup environment
   - "export MYSQL_DATABASE=tip_test"
@@ -74,16 +70,8 @@ before_install:
 install:
   - "docker run -d --name mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=$MYSQL_DATABASE -p $MYSQL_PORT:3306 $DOCKER_MYSQL_TYPE:$DOCKER_MYSQL_VERSION"
   - "npm install"
-  - "node tool/wait-mysql.js $MYSQL_PORT $MYSQL_HOST"
-
-before_script:
-  - "docker --version"
-  - "node tool/mysql-version.js"
+  - "npm install -g sequelize sequelize-cli pg mysql2"
 
 script:
   # Run test script
-  - "npm run-script test-ci"
-  - "test -z $(npm -ps ls eslint) || npm run-script lint"
-
-after_script:
-  - "test -d .nyc_output && npm install coveralls@2 && nyc report --reporter=text-lcov | coveralls"
+  - "npm test"
