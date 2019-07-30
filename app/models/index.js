@@ -10,7 +10,7 @@ const config = require(`../../config/db`)[env];
 const db = {};
 
 const sequelize = new Sequelize(config.database, config.username, config.password, {
-  host: config.host,
+  host: 'localhost',
   dialect: 'mysql'
 });
 
