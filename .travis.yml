@@ -1,44 +1,10 @@
 language: node_js
 node_js:
-  - "0.6"
-  - "0.8"
-  - "0.10"
-  - "0.12"
-  - "1.8"
-  - "2.5"
-  - "3.3"
-  - "4.2.0" # Test timers regression
-  - "4.9"
-  - "5.12"
-  - "6.17"
-  - "7.10"
-  - &lts "8.16"
-  - "9.11"
-  - "10.15"
-  - "11.14"
-  - "12.0"
+  - "10"
 env:
   global:
     # Necessary to build Node.js 0.6 on Travis CI images
     - "CC=gcc-4.6 CXX=g++-4.6"
-  matrix:
-    - "DOCKER_MYSQL_TYPE=mysql DOCKER_MYSQL_VERSION=5.7"
-matrix:
-  include:
-    - node_js: *lts
-      env: "DOCKER_MYSQL_TYPE=mysql DOCKER_MYSQL_VERSION=5.5"
-    - node_js: *lts
-      env: "DOCKER_MYSQL_TYPE=mysql DOCKER_MYSQL_VERSION=5.6"
-    - node_js: *lts
-      env: "DOCKER_MYSQL_TYPE=mariadb DOCKER_MYSQL_VERSION=5.5"
-    - node_js: *lts
-      env: "DOCKER_MYSQL_TYPE=mariadb DOCKER_MYSQL_VERSION=10.0"
-    - node_js: *lts
-      env: "DOCKER_MYSQL_TYPE=mariadb DOCKER_MYSQL_VERSION=10.1"
-    - node_js: *lts
-      env: "DOCKER_MYSQL_TYPE=mariadb DOCKER_MYSQL_VERSION=10.2"
-    - node_js: *lts
-      env: "DOCKER_MYSQL_TYPE=mariadb DOCKER_MYSQL_VERSION=10.3"
 
 dist: trusty
 addons:
@@ -46,8 +12,6 @@ addons:
     packages:
       - g++-4.6
 sudo: required
-services:
-  - docker
 
 cache:
   directories:
@@ -66,9 +30,13 @@ before_install:
   - "export MYSQL_HOST=localhost"
   - "export MYSQL_PORT=3306"
   - "export MYSQL_USER=root"
+  - "export DB_HOST=tip_test"
+  - "export DB_USERNAME=localhost"
+  - "export DB_PORT=3306"
+  - "export NODE_API_DB_NAME_TEST=root"
+  - "export NODE_API_DB_NAME_TEST=tip_test"
 
 install:
-  - "docker run -d --name mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=$MYSQL_DATABASE -p $MYSQL_PORT:3306 $DOCKER_MYSQL_TYPE:$DOCKER_MYSQL_VERSION"
   - "npm install"
   - "npm install -g sequelize sequelize-cli pg mysql2"
 
