@@ -13,7 +13,7 @@ console.log('config.database');
 console.log(config.database);
 
 const sequelize = new Sequelize(config.database, config.username, config.password, {
-  host: 'mysql://tip_test@localhost:3306/',
+  host: 'mysql://travis@localhost:3306/',
   dialect: 'mysql'
 });
 
