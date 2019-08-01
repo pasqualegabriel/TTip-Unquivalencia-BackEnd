@@ -42,9 +42,17 @@ Then, set in `.env` some variables:
 
 **Remember not to push nor commit the `.env` file.**
 
+Finally, run in a terminal (proyect base):
+1. NODE_ENV=testing npm run create-db && NODE_ENV=testing npm run migrations
+2. npm run create-db && npm run migrations 
+
+### Model and Migration
+
+To create a model with its migration, for example, run `sequelize model:generate --name user --attributes name:string,password:string,age:integer` 
+
 ### Migrations
 
-To create a migration, run `sequelize migration:create --name="my-migration-name"  --migrations-path ./migrations/migrations`.
+To create a migration, run `sequelize migration:create --name="my-migration-name" --migrations-path ./migrations/migrations`.
 
 To run them, execute `npm run migrations`.
 
