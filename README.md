@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/pasqualegabriel/tip-backend.svg?branch=master)](https://travis-ci.org/pasqualegabriel/tip-backend)
+[![Build Status](https://travis-ci.org/pasqualegabriel/TTip-Unquivalencia-BackEnd.svg?branch=master)](https://travis-ci.org/pasqualegabriel/TTip-Unquivalencia-BackEnd)
 
 # TIP-BACKEND
 
