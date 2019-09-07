@@ -26,7 +26,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       equivalence: {
         allowNull: false,
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        defaultValue: 'SIN EVALUAR'
       },
       year: {
         allowNull: false,
@@ -39,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
   Request.associate = function(models) {
-    // associations can be defined here
+    models.request.belongsTo(models.file, { foreignKey: 'fk_fileid', targetKey: 'id' });
   };
   return Request;
 };

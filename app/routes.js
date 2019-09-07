@@ -3,5 +3,5 @@ const userController = require('./controllers/user'),
 
 exports.init = app => {
   app.get('/users', [], userController.getUsers);
-  app.post('/v1/request', [], requestController.addRequest);
+  app.post('/api/v1/request', [], requestController.addRequest);
 };
