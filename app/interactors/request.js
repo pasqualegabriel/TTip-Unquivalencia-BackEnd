@@ -13,3 +13,5 @@ exports.createRequestToFile = (
     equivalence,
     year
   });
+
+exports.findRequests = fileId => Request.findAll({ raw: true, where: { fk_fileid: fileId } });

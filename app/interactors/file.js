@@ -35,4 +35,4 @@ exports.createFile = ({
     }
   );
 
-exports.findAllFiles = () => File.findAll({ include: [Request] });
+exports.findAllFiles = () => File.findAll({ include: [{ model: Request, attributes: ['equivalence'] }] });
