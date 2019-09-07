@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
   File.associate = function(models) {
-    // associations can be defined here
+    models.file.hasMany(models.request, { foreignKey: 'fk_fileid', sourceKey: 'id' });
   };
   return File;
 };

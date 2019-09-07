@@ -9,6 +9,14 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      fk_fileid: {
+        type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'files',
+          key: 'id'
+        }
+      },
       file_number: {
         allowNull: false,
         type: Sequelize.STRING
