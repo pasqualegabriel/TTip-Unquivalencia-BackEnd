@@ -1,4 +1,3 @@
-const { User } = require('../models'),
-  errors = require('../errors');
+const { User } = require('../models');
 
-exports.findAllUsers = () => User.findAll().catch(err => Promise.reject(errors.databaseError(err.message)));
+exports.findAllUsers = () => User.findAll();

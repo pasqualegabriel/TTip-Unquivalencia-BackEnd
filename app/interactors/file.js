@@ -1,8 +1,6 @@
-const { request: Request, file: File } = require('../models'),
-  errors = require('../errors');
+const { request: Request, file: File } = require('../models');
 
-exports.findFile = fileNumber =>
-  File.findOne({ where: { fileNumber } }).catch(err => Promise.reject(errors.databaseError(err.message)));
+exports.findFile = fileNumber => File.findOne({ where: { fileNumber } });
 
 exports.createFile = ({
   fileNumber,
@@ -35,4 +33,6 @@ exports.createFile = ({
     {
       include: [Request]
     }
-  ).catch(err => Promise.reject(errors.databaseError(err.message)));
+  );
+
+exports.findAllFiles = () => File.findAll({ include: [Request] });
