@@ -1,11 +1,15 @@
-const { request: Request, file: File } = require('../models'),
-  errors = require('../errors');
+const { request: Request } = require('../models');
 
-exports.createRequestToFile = ({ fileNumber, mail, name, surname }, fileId) =>
-  File.create({
+exports.createRequestToFile = (
+  { fileNumber, univesityOrigin, subjectOrigin, subjectUnq, equivalence, year },
+  fileId
+) =>
+  Request.create({
     fk_fileid: fileId,
     fileNumber,
-    mail,
-    name,
-    surname
-  }).catch(err => Promise.reject(errors.databaseError(err.message)));
+    univesityOrigin,
+    subjectOrigin,
+    subjectUnq,
+    equivalence,
+    year
+  });
