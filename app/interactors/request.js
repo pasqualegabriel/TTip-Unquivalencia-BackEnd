@@ -15,3 +15,5 @@ exports.createRequestToFile = (
   });
 
 exports.findRequests = fileId => Request.findAll({ raw: true, where: { fk_fileid: fileId } });
+
+exports.updateRequest = (id, { equivalence }) => Request.update({ equivalence }, { where: { id } });
