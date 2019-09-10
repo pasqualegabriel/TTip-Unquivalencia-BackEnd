@@ -1,4 +1,4 @@
-const { createRequestToFile, findRequests } = require('../interactors/request'),
+const { createRequestToFile, findRequests, updateRequest } = require('../interactors/request'),
   { findFile, createFile } = require('../interactors/file'),
   logger = require('../logger');
 
@@ -14,4 +14,9 @@ exports.addRequest = (req, res, next) =>
 exports.getRequestsByFileId = (req, res, next) =>
   findRequests(req.params.fileId)
     .then(requests => res.status(200).send(requests))
+    .catch(next);
+
+exports.updateEquivalence = (req, res, next) =>
+  updateRequest(req.params.requestId, req.body)
+    .then(() => res.status(200).send('Request updated'))
     .catch(next);
