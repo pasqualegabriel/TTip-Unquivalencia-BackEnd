@@ -8,4 +8,5 @@ exports.init = app => {
   app.get('/api/v1/files', [], fileController.getAllFiles);
   app.get('/api/v1/requests/:fileId', [], requestController.getRequestsByFileId);
   app.post('/api/v1/request/:requestId', [], requestController.updateEquivalence);
+  app.get('/api/v1/request/:requestId', [], requestController.getRequest);
 };
