@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/pasqualegabriel/tip-backend.svg?branch=master)](https://travis-ci.org/pasqualegabriel/tip-backend)
+[![Build Status](https://travis-ci.org/pasqualegabriel/TTip-Unquivalencia-BackEnd.svg?branch=master)](https://travis-ci.org/pasqualegabriel/TTip-Unquivalencia-BackEnd)
 
 # TIP-BACKEND
 
@@ -6,11 +6,12 @@ University Proyect of TIP - UNQ
 
 ### Members
 
-Number |       Name              | UNQ-Records |    EMail
--------|-------------------------|-------------|------------------------
-  1    |                         |             | 
-  2    |                         |             | 
-  3    |                         |             | 
+Number |       Name              | UNQ-Records |    EMail                 |Position 
+-------|-------------------------|-------------|--------------------------|----------------
+  1    |Camila Cintioli          |             | camila.cintioli@gmail.com| Developer
+  2    |Gabriel Pasquale         |    33566    | pasqualeunq@gmail.com    | Developer
+  3    |Fernando Autalan         |    38046    | f.n.autalan@gmail.com    | Developer
+  4    |Susana Rosito            |             | rosito.susana@gmail.com  | Tutora 
 
 ### Trello
 [tip - trello](https://trello.com/)

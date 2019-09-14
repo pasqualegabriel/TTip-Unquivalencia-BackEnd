@@ -5,14 +5,12 @@ const chai = require('chai'),
 
 describe('user controller', () => {
   beforeEach(() => factory.create('user'));
-  it('should get a user', done => {
+  it('should get a user', () =>
     chai
       .request(server)
       .get('/users')
       .then(res => {
         res.should.have.status(200);
         res.body.length.should.be.equal(1);
-        done();
-      });
-  });
+      }));
 });
