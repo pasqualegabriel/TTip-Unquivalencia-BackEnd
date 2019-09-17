@@ -7,6 +7,5 @@ factory.define('user', User, {
   lastName: factory.chance('string'),
   email: factory.chance('string'),
   password: factory.chance('string'),
-  invalidationDate: new Date(),
   role: factory.chance('pickone', ['admin', 'user', 'professor'])
 });

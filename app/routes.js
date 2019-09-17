@@ -15,7 +15,7 @@ exports.init = app => {
   app.get('/api/v1/request/:requestId', [], requestController.getRequest);
   app.post(
     '/api/v1/user/session',
-    [validate({ body: logInSchema }), userValidations.validateLogin],
+    [validate({ body: logInSchema }), userValidations.validateLogin, userValidations.verifyPassword],
     userController.signIn
   );
 };

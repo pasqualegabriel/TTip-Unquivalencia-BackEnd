@@ -12,3 +12,4 @@ exports.databaseError = message => internalError(message, exports.DATABASE_ERROR
 exports.invalidMailMessage = 'Invalid Mail';
 exports.invalidPasswordMessage = 'Invalid Password';
 exports.nonExistentMailMessage = 'Non existent mail';
+exports.incorrectPasswordMessage = 'Incorrect Password';

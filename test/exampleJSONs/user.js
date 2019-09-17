@@ -1,37 +1,32 @@
 exports.userExample = {
   name: 'FirstName',
   lastName: 'LastName',
-  email: 'test@wolox.com.ar',
-  password: 'passwordTest1'
+  email: 'test@gmail.com',
+  password: 'passwordTest1',
+  role: 'admin'
 };
 
 exports.loginExample = {
-  email: 'test@wolox.com.ar',
+  email: 'test@gmail.com',
   password: 'passwordTest1'
 };
 
-exports.anUserWithoutEmailAndPasswordExample = {
-  name: 'FirstName',
-  lastName: 'LastName'
-};
-
-exports.anUserWithAnInvalidPasswordExample = {
-  name: 'FirstName',
-  lastName: 'LastName',
-  email: 'test@wolox.com.ar',
-  password: 'invalid'
-};
-
-exports.anUserWithAnInvalidEmailExample = {
-  name: 'FirstName',
-  lastName: 'LastName',
-  email: 'test_invalid_email.com',
+exports.loginWithAWrongEmail = {
+  email: 'wronggmail.com',
   password: 'passwordTest1'
 };
 
-exports.otherUserExample = {
-  name: 'FirstName2',
-  lastName: 'LastName2',
-  email: 'test2@wolox.com.ar',
-  password: 'passwordTest2'
+exports.loginWithNonExistentEmail = {
+  email: 'wrong@gmail.com',
+  password: 'passwordTest1'
+};
+
+exports.loginWithAInvalidPassword = {
+  email: 'test@gmail.com',
+  password: 'toSmall'
+};
+
+exports.loginWithAWrongPassword = {
+  email: 'test@gmail.com',
+  password: 'wrongpassword'
 };
