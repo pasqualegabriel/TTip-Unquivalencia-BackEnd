@@ -1,13 +1,7 @@
 const bcrypt = require('bcryptjs'),
   jwt = require('jsonwebtoken'),
   config = require('../../config'),
-  logger = require('../logger'),
-  { findAllUsers } = require('../interactors/user');
-
-exports.getUsers = (_, res, next) =>
-  findAllUsers()
-    .then(users => res.status(200).send(users))
-    .catch(next);
+  logger = require('../logger');
 
 exports.signIn = (req, res, next) => {
   const { email, password } = req.body;

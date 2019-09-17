@@ -7,7 +7,7 @@ const chai = require('chai'),
 describe('user', () => {
   describe('/user/session POST', () => {
     beforeEach(() => factory.create('user', userExample));
-    it.only('Should successfully POST login', () =>
+    it('Should successfully POST login', () =>
       chai
         .request(server)
         .post('/api/v1/user/session')
