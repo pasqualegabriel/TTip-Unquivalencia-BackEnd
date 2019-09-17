@@ -9,6 +9,7 @@
     "drop-db": "./node_modules/.bin/sequelize --migrations-path ./migrations/migrations db:drop",
     "create-db": "./node_modules/.bin/sequelize --migrations-path ./migrations/migrations db:create",
     "migrations": "./node_modules/.bin/sequelize --migrations-path ./migrations/migrations db:migrate",
+    "seed-db": "./node_modules/.bin/sequelize db:seed:all",
     "eslint-check": "eslint --print-config .eslintrc.js | eslint-config-prettier-check",
     "lint": "eslint app migrations config test",
     "lint-diff": "git diff --name-only --cached --relative | grep \\\\.js$ | xargs ./node_modules/eslint/bin/eslint.js",

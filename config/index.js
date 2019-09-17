@@ -41,6 +41,13 @@ const config = {
     session: {
       secret: process.env.NODE_API_SESSION_SECRET
     },
+    admin: {
+      name: process.env.ADMIN_NAME,
+      lastName: process.env.ADMIN_LAST_NAME,
+      email: process.env.ADMIN_EMAIL,
+      password: process.env.ADMIN_PASSWORD,
+      role: process.env.ADMIN_ROLE
+    },
     rollbar: {}
   }
 };
