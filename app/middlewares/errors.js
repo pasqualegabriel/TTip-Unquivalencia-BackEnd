@@ -1,5 +1,6 @@
 const errors = require('../errors'),
-  logger = require('../logger');
+  logger = require('../logger'),
+  { ValidationError } = require('express-json-validator-middleware');
 
 const DEFAULT_STATUS_CODE = 500;
 
@@ -10,6 +11,8 @@ const statusCodes = {
 };
 
 exports.handle = (error, req, res, next) => {
+  if (error instanceof ValidationError)
+    return res.status(DEFAULT_STATUS_CODE).send(error.validationErrors.body);
   if (error.internalCode) {
     return res.status(statusCodes[error.internalCode] || DEFAULT_STATUS_CODE);
   } else {

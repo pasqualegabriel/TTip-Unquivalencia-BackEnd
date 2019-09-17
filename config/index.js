@@ -38,7 +38,9 @@ const config = {
       password: process.env.DB_PASSWORD
     },
     api: {},
-    session: {},
+    session: {
+      secret: process.env.NODE_API_SESSION_SECRET
+    },
     rollbar: {}
   }
 };

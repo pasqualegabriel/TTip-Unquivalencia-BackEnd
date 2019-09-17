@@ -1,9 +1,12 @@
 const { User } = require('../../app/models'),
-  { factory } = require('factory-girl');
+  { factory } = require('factory-girl'),
+  { roles } = require('../../app/constants/user');
 
 factory.define('user', User, {
   name: factory.chance('string'),
   lastName: factory.chance('string'),
   email: factory.chance('string'),
-  password: factory.chance('string')
+  password: factory.chance('string'),
+  invalidationDate: new Date(),
+  role: factory.chance('pickone', ['admin', 'user', 'professor'])
 });
