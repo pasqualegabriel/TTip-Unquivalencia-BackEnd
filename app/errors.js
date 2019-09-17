@@ -13,3 +13,4 @@ exports.invalidMailMessage = 'Invalid Mail';
 exports.invalidPasswordMessage = 'Invalid Password';
 exports.nonExistentMailMessage = 'Non existent mail';
 exports.incorrectPasswordMessage = 'Incorrect Password';
+exports.theEmailAlreadyExistsMessage = 'The Email already exists';

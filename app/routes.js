@@ -3,7 +3,7 @@ const userController = require('./controllers/user'),
   requestController = require('./controllers/request'),
   userValidations = require('./middlewares/user'),
   { Validator } = require('express-json-validator-middleware'),
-  { logInSchema } = require('./middlewares/schemas');
+  { logInSchema, userSchema } = require('./middlewares/schemas');
 
 const { validate } = new Validator({ allErrors: true });
 
@@ -17,5 +17,10 @@ exports.init = app => {
     '/api/v1/user/session',
     [validate({ body: logInSchema }), userValidations.validateLogin, userValidations.verifyPassword],
     userController.signIn
+  );
+  app.post(
+    '/api/v1/new/user',
+    [validate({ body: userSchema }), userValidations.verifyAdminLogin, userValidations.validateNewUser],
+    userController.signUp
   );
 };
