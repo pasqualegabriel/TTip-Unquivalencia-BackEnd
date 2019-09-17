@@ -4,7 +4,9 @@ const userInteractor = require('../interactors/user'),
     invalidPasswordMessage,
     nonExistentMailMessage,
     incorrectPasswordMessage,
-    theEmailAlreadyExistsMessage
+    theEmailAlreadyExistsMessage,
+    permissionDeniedMessage,
+    youAreNotLoggedInMessage
   } = require('../errors'),
   { isEmail } = require('validator'),
   { compare: bcryptCompare } = require('bcryptjs'),
@@ -52,9 +54,9 @@ const verifyLogin = (req, res, next, permissions) => {
       .then(anUser =>
         anUser && token && permissions.includes(anUser.role)
           ? next()
-          : res.status(401).send('Permission Denied')
+          : res.status(401).send([permissionDeniedMessage])
       );
-  } else return res.status(401).send('You are not logged in');
+  } else return res.status(401).send([youAreNotLoggedInMessage]);
 };
 
 exports.validateNewUser = (req, res, next) => {
