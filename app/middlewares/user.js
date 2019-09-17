@@ -37,6 +37,6 @@ exports.verifyPassword = (req, res, next) => {
   const { password } = req.body;
   const { password: passwordUserStored } = res.locals.user;
   return bcryptCompare(password, passwordUserStored)
-    .then(samePassword => (samePassword ? next() : res.status(401).send(incorrectPasswordMessage)))
+    .then(samePassword => (samePassword ? next() : res.status(401).send([incorrectPasswordMessage])))
     .catch(next);
 };

@@ -68,7 +68,7 @@ describe('user', () => {
         .send(loginWithAWrongPassword)
         .then(error => {
           error.should.have.status(401);
-          error.text.should.be.equal(incorrectPasswordMessage);
+          error.body[0].should.be.equal(incorrectPasswordMessage);
         }));
   });
 });
