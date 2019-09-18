@@ -44,7 +44,7 @@ exports.loginWithNonExistentEmail = {
 
 exports.loginWithAInvalidPassword = {
   email: 'test@gmail.com',
-  password: 'toSmall'
+  password: 'tooSmall'
 };
 
 exports.loginWithAWrongPassword = {
