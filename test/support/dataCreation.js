@@ -7,5 +7,5 @@ factory.define('user', User, {
   lastName: factory.chance('string'),
   email: factory.chance('string'),
   password: factory.chance('string'),
-  role: factory.chance('pickone', ['admin', 'user', 'professor'])
+  role: factory.chance('pickone', roles)
 });
