@@ -1,6 +1,14 @@
-const { findAllUsers } = require('../interactors/user');
+const jwt = require('jsonwebtoken'),
+  config = require('../../config'),
+  logger = require('../logger'),
+  { mapUserData } = require('../mappers/user');
 
-exports.getUsers = (_, res, next) =>
-  findAllUsers()
-    .then(users => res.status(200).send(users))
-    .catch(next);
+exports.signIn = (_, res) => {
+  const user = mapUserData(res.locals.user);
+  const token = jwt.sign(user, config.common.session.secret);
+  logger.info(`${user.email} logged in correctly`);
+  return res.status(200).send({
+    user,
+    token
+  });
+};
