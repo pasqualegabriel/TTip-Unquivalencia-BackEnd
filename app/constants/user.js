@@ -1,1 +1,2 @@
-exports.roles = ['admin', 'user', 'professor'];
+exports.ADMIN = 'admin';
+exports.roles = [exports.ADMIN, 'user', 'professor'];

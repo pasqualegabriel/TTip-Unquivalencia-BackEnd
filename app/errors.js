@@ -13,3 +13,6 @@ exports.invalidMailMessage = 'Email invalido';
 exports.invalidPasswordMessage = 'Password invalido';
 exports.nonExistentMailMessage = 'Email inexistente';
 exports.incorrectPasswordMessage = 'Password incorrecto';
+exports.theEmailAlreadyExistsMessage = 'Ya existe el email';
+exports.permissionDeniedMessage = 'Permiso denegado';
+exports.youAreNotLoggedInMessage = 'No estas logiado';

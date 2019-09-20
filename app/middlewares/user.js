@@ -3,10 +3,16 @@ const userInteractor = require('../interactors/user'),
     invalidMailMessage,
     invalidPasswordMessage,
     nonExistentMailMessage,
-    incorrectPasswordMessage
+    incorrectPasswordMessage,
+    theEmailAlreadyExistsMessage,
+    permissionDeniedMessage,
+    youAreNotLoggedInMessage
   } = require('../errors'),
   { isEmail } = require('validator'),
-  { compare: bcryptCompare } = require('bcryptjs');
+  { compare: bcryptCompare } = require('bcryptjs'),
+  jwt = require('jsonwebtoken'),
+  config = require('../../config'),
+  { ADMIN } = require('../constants/user');
 
 const baseValidation = (email, password) => {
   const errors = [];
@@ -25,10 +31,9 @@ exports.validateLogin = (req, res, next) => {
       if (user && isValidEmail && isPasswordValid) {
         res.locals.user = user;
         return next();
-      } else {
-        if (!user) errors.push(nonExistentMailMessage);
-        return res.status(401).send(errors);
       }
+      if (!user) errors.push(nonExistentMailMessage);
+      return res.status(401).send(errors);
     })
     .catch(next);
 };
@@ -40,3 +45,28 @@ exports.verifyPassword = (req, res, next) => {
     .then(samePassword => (samePassword ? next() : res.status(401).send([incorrectPasswordMessage])))
     .catch(next);
 };
+
+const verifyLogin = (req, res, next, permissions) => {
+  if (req.headers.authorization) {
+    const tokenString = req.headers.authorization.replace('Bearer ', '');
+    const token = jwt.decode(tokenString, config.common.session.secret);
+    return userInteractor
+      .findOneByEmail(token.email)
+      .then(anUser =>
+        anUser && token && permissions.includes(anUser.role)
+          ? next()
+          : res.status(401).send([permissionDeniedMessage])
+      );
+  } else return res.status(401).send([youAreNotLoggedInMessage]);
+};
+
+exports.validateNewUser = (req, res, next) => {
+  const { errors, isValidEmail, isPasswordValid } = baseValidation(req.body.email, req.body.password);
+  return userInteractor.findOneByEmail(req.body.email).then(oldUser => {
+    if (!oldUser && isValidEmail && isPasswordValid) return next();
+    if (oldUser) errors.push(theEmailAlreadyExistsMessage);
+    return res.status(401).send(errors);
+  });
+};
+
+exports.verifyAdminLogin = (req, res, next) => verifyLogin(req, res, next, [ADMIN]);
