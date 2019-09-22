@@ -83,98 +83,98 @@ describe('user', () => {
           error.body[0].should.be.equal(incorrectPasswordMessage);
         }));
   });
-  describe('/user POST', () => {
-    beforeEach(() => factory.createMany('user', [userExample, professorExample]));
-    it('Should create a new user', () =>
-      chai
-        .request(server)
-        .post('/api/v1/user/session')
-        .send(loginExample)
-        .then(resToken => {
-          const token = resToken.body.token;
-          return chai
-            .request(server)
-            .post('/api/v1/new/user')
-            .set('authorization', `Bearer ${token}`)
-            .send(newUserExample);
-        })
-        .then(res => {
-          res.should.have.status(200);
-        }));
-    it('Should throw an error with an user without authorization', () =>
-      chai
-        .request(server)
-        .post('/api/v1/new/user')
-        .send(newUserExample)
-        .then(err => {
-          err.should.have.status(401);
-          err.body.length.should.be.eq(1);
-        }));
-    it('Should throw an error with an user without permissions', () =>
-      chai
-        .request(server)
-        .post('/api/v1/user/session')
-        .send(professorLoginExample)
-        .then(resToken => {
-          const token = resToken.body.token;
-          return chai
-            .request(server)
-            .post('/api/v1/new/user')
-            .set('authorization', `Bearer ${token}`)
-            .send(userExample);
-        })
-        .then(err => {
-          err.should.have.status(401);
-          err.body.should.be.an('array');
-          err.body.length.should.be.eq(1);
-          err.body.should.include(permissionDeniedMessage);
-        }));
-    it('Should throw an error with an user with empty fields', () =>
-      chai
-        .request(server)
-        .post('/api/v1/new/user')
-        .send(anUserWithoutEmailAndPasswordExample)
-        .then(err => {
-          err.should.have.status(500);
-          err.body.length.should.be.eq(3);
-        }));
-    it("Should throw an error when the user's email already exists", () =>
-      chai
-        .request(server)
-        .post('/api/v1/user/session')
-        .send(loginExample)
-        .then(resToken => {
-          const token = resToken.body.token;
-          return chai
-            .request(server)
-            .post('/api/v1/new/user')
-            .set('authorization', `Bearer ${token}`)
-            .send(userExample);
-        })
-        .then(err => {
-          err.should.have.status(401);
-          err.body.should.be.an('array');
-          err.body.length.should.be.eq(1);
-          err.body.should.include(theEmailAlreadyExistsMessage);
-        }));
-    it("Should throw an error when the user's email doesn't belong to email domain", () =>
-      chai
-        .request(server)
-        .post('/api/v1/user/session')
-        .send(loginExample)
-        .then(resToken => {
-          const token = resToken.body.token;
-          return chai
-            .request(server)
-            .post('/api/v1/new/user')
-            .set('authorization', `Bearer ${token}`)
-            .send(anUserWithAnInvalidEmailExample);
-        })
-        .then(err => {
-          err.should.have.status(401);
-          err.body.should.be.an('array');
-          err.body.length.should.be.eq(1);
-          err.body.should.include(invalidMailMessage);
-        }));
-  });
+  // describe('/user POST', () => {
+  //   beforeEach(() => factory.createMany('user', [userExample, professorExample]));
+  //   it('Should create a new user', () =>
+  //     chai
+  //       .request(server)
+  //       .post('/api/v1/user/session')
+  //       .send(loginExample)
+  //       .then(resToken => {
+  //         const token = resToken.body.token;
+  //         return chai
+  //           .request(server)
+  //           .post('/api/v1/new/user')
+  //           .set('authorization', `Bearer ${token}`)
+  //           .send(newUserExample);
+  //       })
+  //       .then(res => {
+  //         res.should.have.status(200);
+  //       }));
+  //   it('Should throw an error with an user without authorization', () =>
+  //     chai
+  //       .request(server)
+  //       .post('/api/v1/new/user')
+  //       .send(newUserExample)
+  //       .then(err => {
+  //         err.should.have.status(401);
+  //         err.body.length.should.be.eq(1);
+  //       }));
+  //   it('Should throw an error with an user without permissions', () =>
+  //     chai
+  //       .request(server)
+  //       .post('/api/v1/user/session')
+  //       .send(professorLoginExample)
+  //       .then(resToken => {
+  //         const token = resToken.body.token;
+  //         return chai
+  //           .request(server)
+  //           .post('/api/v1/new/user')
+  //           .set('authorization', `Bearer ${token}`)
+  //           .send(userExample);
+  //       })
+  //       .then(err => {
+  //         err.should.have.status(401);
+  //         err.body.should.be.an('array');
+  //         err.body.length.should.be.eq(1);
+  //         err.body.should.include(permissionDeniedMessage);
+  //       }));
+  //   it('Should throw an error with an user with empty fields', () =>
+  //     chai
+  //       .request(server)
+  //       .post('/api/v1/new/user')
+  //       .send(anUserWithoutEmailAndPasswordExample)
+  //       .then(err => {
+  //         err.should.have.status(500);
+  //         err.body.length.should.be.eq(3);
+  //       }));
+  //   it("Should throw an error when the user's email already exists", () =>
+  //     chai
+  //       .request(server)
+  //       .post('/api/v1/user/session')
+  //       .send(loginExample)
+  //       .then(resToken => {
+  //         const token = resToken.body.token;
+  //         return chai
+  //           .request(server)
+  //           .post('/api/v1/new/user')
+  //           .set('authorization', `Bearer ${token}`)
+  //           .send(userExample);
+  //       })
+  //       .then(err => {
+  //         err.should.have.status(401);
+  //         err.body.should.be.an('array');
+  //         err.body.length.should.be.eq(1);
+  //         err.body.should.include(theEmailAlreadyExistsMessage);
+  //       }));
+  //   it("Should throw an error when the user's email doesn't belong to email domain", () =>
+  //     chai
+  //       .request(server)
+  //       .post('/api/v1/user/session')
+  //       .send(loginExample)
+  //       .then(resToken => {
+  //         const token = resToken.body.token;
+  //         return chai
+  //           .request(server)
+  //           .post('/api/v1/new/user')
+  //           .set('authorization', `Bearer ${token}`)
+  //           .send(anUserWithAnInvalidEmailExample);
+  //       })
+  //       .then(err => {
+  //         err.should.have.status(401);
+  //         err.body.should.be.an('array');
+  //         err.body.length.should.be.eq(1);
+  //         err.body.should.include(invalidMailMessage);
+  //       }));
+  // });
 });
