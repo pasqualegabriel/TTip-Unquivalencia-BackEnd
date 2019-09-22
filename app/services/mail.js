@@ -5,7 +5,7 @@ const nodemailer = require('nodemailer'),
     }
   } = require('../../config');
 
-module.exports = (to, subject, text) => {
+module.exports = ({ to, subject, text }) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {

@@ -157,25 +157,6 @@ describe('user', () => {
           err.body.length.should.be.eq(1);
           err.body.should.include(theEmailAlreadyExistsMessage);
         }));
-    it("Should throw an error when the user's password is invalid", () =>
-      chai
-        .request(server)
-        .post('/api/v1/user/session')
-        .send(loginExample)
-        .then(resToken => {
-          const token = resToken.body.token;
-          return chai
-            .request(server)
-            .post('/api/v1/new/user')
-            .set('authorization', `Bearer ${token}`)
-            .send(anUserWithAnInvalidPasswordExample);
-        })
-        .then(err => {
-          err.should.have.status(401);
-          err.body.should.be.an('array');
-          err.body.length.should.be.eq(1);
-          err.body.should.include(invalidPasswordMessage);
-        }));
     it("Should throw an error when the user's email doesn't belong to email domain", () =>
       chai
         .request(server)

@@ -61,9 +61,11 @@ const verifyLogin = (req, res, next, permissions) => {
 };
 
 exports.validateNewUser = (req, res, next) => {
-  const { errors, isValidEmail, isPasswordValid } = baseValidation(req.body.email, req.body.password);
+  const errors = [];
+  const isValidEmail = isEmail(req.body.email);
+  if (!isValidEmail) errors.push(invalidMailMessage);
   return userInteractor.findOneByEmail(req.body.email).then(oldUser => {
-    if (!oldUser && isValidEmail && isPasswordValid) return next();
+    if (!oldUser && isValidEmail) return next();
     if (oldUser) errors.push(theEmailAlreadyExistsMessage);
     return res.status(401).send(errors);
   });
