@@ -23,4 +23,5 @@ exports.init = app => {
     [validate({ body: userSchema }), userValidations.verifyAdminLogin, userValidations.validateNewUser],
     userController.signUp
   );
+  app.get('/api/v1/users', [userValidations.verifyAdminAndUserLogin], userController.users);
 };

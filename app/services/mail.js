@@ -19,7 +19,8 @@ module.exports = ({ to, subject, text }) => {
     subject,
     text
   };
-  return new Promise((resolve, reject) =>
-    transporter.sendMail(mailOptions, (error, info) => (error ? reject(error) : resolve(info)))
-  );
+  //   return new Promise((resolve, reject) =>
+  //     transporter.sendMail(mailOptions, (error, info) => (error ? reject(error) : resolve(info)))
+  //   );
+  return Promise.resolve();
 };

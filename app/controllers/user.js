@@ -2,8 +2,8 @@ const jwt = require('jsonwebtoken'),
   config = require('../../config'),
   logger = require('../logger'),
   { mapUserData } = require('../mappers/user'),
-  { createUser } = require('../interactors/user'),
-  { generateNewPassword, generateNewUserMail } = require('../helpers'),
+  { createUser, findAndCountAllUsers } = require('../interactors/user'),
+  { generateNewPassword, generateNewUserMail, getPageParams } = require('../helpers'),
   sendEmail = require('../services/mail');
 
 exports.signIn = (_, res) => {
@@ -31,5 +31,17 @@ exports.signUp = (req, res, next) => {
     .then(() => {
       logger.info(`Email with password to ${user.email} was sent successfully`);
     })
+    .catch(next);
+};
+
+exports.users = (req, res, next) => {
+  const { limit, offset } = getPageParams(req.query);
+  return findAndCountAllUsers(req.query, offset, limit)
+    .then(({ count, rows: users }) =>
+      res.status(200).send({
+        users,
+        total_pages: limit ? Math.ceil(count / limit) : 1
+      })
+    )
     .catch(next);
 };

@@ -12,7 +12,7 @@ const userInteractor = require('../interactors/user'),
   { compare: bcryptCompare } = require('bcryptjs'),
   jwt = require('jsonwebtoken'),
   config = require('../../config'),
-  { ADMIN } = require('../constants/user');
+  { ADMIN, USER } = require('../constants/user');
 
 const baseValidation = (email, password) => {
   const errors = [];
@@ -72,3 +72,5 @@ exports.validateNewUser = (req, res, next) => {
 };
 
 exports.verifyAdminLogin = (req, res, next) => verifyLogin(req, res, next, [ADMIN]);
+
+exports.verifyAdminAndUserLogin = (req, res, next) => verifyLogin(req, res, next, [ADMIN, USER]);
