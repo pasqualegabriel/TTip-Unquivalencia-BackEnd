@@ -48,6 +48,10 @@ const config = {
       password: process.env.ADMIN_PASSWORD,
       role: process.env.ADMIN_ROLE
     },
+    mail: {
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASS
+    },
     rollbar: {}
   }
 };
