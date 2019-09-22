@@ -9,7 +9,7 @@ exports.config = {
       secret: 'some-super-secret'
     },
     mail: {
-      user: 'test@gmail.com',
+      user: 'test@mail.com',
       pass: 'password'
     }
   }

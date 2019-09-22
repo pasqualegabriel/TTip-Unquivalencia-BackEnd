@@ -17,8 +17,7 @@ exports.professorExample = {
 exports.newUserExample = {
   name: 'FirstName2',
   lastName: 'LastName2',
-  email: 'test2@gmail.com',
-  password: 'passwordTest2',
+  email: 'test2@mail.com',
   role: 'user'
 };
 
@@ -55,14 +54,6 @@ exports.loginWithAWrongPassword = {
 exports.anUserWithoutEmailAndPasswordExample = {
   name: 'FirstName',
   lastName: 'LastName'
-};
-
-exports.anUserWithAnInvalidPasswordExample = {
-  name: 'FirstName',
-  lastName: 'LastName',
-  email: 'test@wolox.com.ar',
-  password: 'invalid',
-  role: 'user'
 };
 
 exports.anUserWithAnInvalidEmailExample = {
