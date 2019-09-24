@@ -47,12 +47,9 @@ exports.users = (req, res, next) => {
     .catch(next);
 };
 
-exports.invalidateSessions = (req, res, next) => {
+exports.invalidateSessions = (_, res, next) => {
   logger.info(`Starting invalidate sessions`);
   return updateUser(res.locals.user, { invalidationDate: moment() })
-    .then(user => {
-      logger.info(`All sessions have been invalidated successfully`);
-      return res.status(200).send(user);
-    })
+    .then(() => res.status(200).send('All sessions have been invalidated successfully'))
     .catch(next);
 };

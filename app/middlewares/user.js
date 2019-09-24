@@ -6,7 +6,8 @@ const userInteractor = require('../interactors/user'),
     incorrectPasswordMessage,
     theEmailAlreadyExistsMessage,
     permissionDeniedMessage,
-    youAreNotLoggedInMessage
+    youAreNotLoggedInMessage,
+    sessionExpiredMessage
   } = require('../errors'),
   { isEmail } = require('validator'),
   { compare: bcryptCompare } = require('bcryptjs'),
@@ -59,7 +60,7 @@ const verifyLogin = (req, res, next, permissions) => {
         invalidationTime.add(config.common.session.invalidationTimeInMinutes, 'minutes');
         return invalidationTime > moment() && moment(token.lastSignInDate) > invalidationDate
           ? next()
-          : res.status(401).send('The session expired');
+          : res.status(401).send([sessionExpiredMessage]);
       } else return res.status(401).send([permissionDeniedMessage]);
     });
   } else return res.status(401).send([youAreNotLoggedInMessage]);
