@@ -2,9 +2,10 @@ const jwt = require('jsonwebtoken'),
   config = require('../../config'),
   logger = require('../logger'),
   { mapUserData } = require('../mappers/user'),
-  { createUser, findAndCountAllUsers } = require('../interactors/user'),
+  { createUser, findAndCountAllUsers, updateUser } = require('../interactors/user'),
   { generateNewPassword, generateNewUserMail, getPageParams } = require('../helpers'),
-  sendEmail = require('../services/mail');
+  sendEmail = require('../services/mail'),
+  moment = require('moment');
 
 exports.signIn = (_, res) => {
   const user = mapUserData(res.locals.user);
@@ -43,5 +44,15 @@ exports.users = (req, res, next) => {
         total_pages: limit ? Math.ceil(count / limit) : 1
       })
     )
+    .catch(next);
+};
+
+exports.invalidateSessions = (req, res, next) => {
+  logger.info(`Starting invalidate sessions`);
+  return updateUser(res.locals.user, { invalidationDate: moment() })
+    .then(user => {
+      logger.info(`All sessions have been invalidated successfully`);
+      return res.status(200).send(user);
+    })
     .catch(next);
 };

@@ -39,7 +39,8 @@ const config = {
     },
     api: {},
     session: {
-      secret: process.env.NODE_API_SESSION_SECRET
+      secret: process.env.NODE_API_SESSION_SECRET,
+      invalidationTimeInMinutes: 900
     },
     admin: {
       name: process.env.ADMIN_NAME,

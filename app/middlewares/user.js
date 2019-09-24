@@ -12,7 +12,8 @@ const userInteractor = require('../interactors/user'),
   { compare: bcryptCompare } = require('bcryptjs'),
   jwt = require('jsonwebtoken'),
   config = require('../../config'),
-  { ADMIN, USER } = require('../constants/user');
+  { ADMIN, USER, roles } = require('../constants/user'),
+  moment = require('moment');
 
 const baseValidation = (email, password) => {
   const errors = [];
@@ -50,13 +51,17 @@ const verifyLogin = (req, res, next, permissions) => {
   if (req.headers.authorization) {
     const tokenString = req.headers.authorization.replace('Bearer ', '');
     const token = jwt.decode(tokenString, config.common.session.secret);
-    return userInteractor
-      .findOneByEmail(token.email)
-      .then(anUser =>
-        anUser && token && permissions.includes(anUser.role)
+    return userInteractor.findOneByEmail(token.email).then(anUser => {
+      if (anUser && token && permissions.includes(anUser.role)) {
+        res.locals.user = anUser;
+        const invalidationTime = moment(token.lastSignInDate);
+        const invalidationDate = moment(anUser.invalidationDate);
+        invalidationTime.add(config.common.session.invalidationTimeInMinutes, 'minutes');
+        return invalidationTime > moment() && moment(token.lastSignInDate) > invalidationDate
           ? next()
-          : res.status(401).send([permissionDeniedMessage])
-      );
+          : res.status(401).send('The session expired');
+      } else return res.status(401).send([permissionDeniedMessage]);
+    });
   } else return res.status(401).send([youAreNotLoggedInMessage]);
 };
 
@@ -74,3 +79,5 @@ exports.validateNewUser = (req, res, next) => {
 exports.verifyAdminLogin = (req, res, next) => verifyLogin(req, res, next, [ADMIN]);
 
 exports.verifyAdminAndUserLogin = (req, res, next) => verifyLogin(req, res, next, [ADMIN, USER]);
+
+exports.verifyAuthentication = (req, res, next) => verifyLogin(req, res, next, roles);

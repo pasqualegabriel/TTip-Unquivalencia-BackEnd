@@ -39,3 +39,5 @@ exports.findAndCountAllUsers = (
     order
   });
 };
+
+exports.updateUser = (user, params) => user.update(params);
