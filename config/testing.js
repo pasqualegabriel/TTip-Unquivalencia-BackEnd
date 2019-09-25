@@ -7,6 +7,10 @@ exports.config = {
     },
     session: {
       secret: 'some-super-secret'
+    },
+    mail: {
+      user: 'test@mail.com',
+      pass: 'password'
     }
   }
 };

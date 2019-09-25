@@ -13,15 +13,12 @@ exports.logInSchema = {
 
 exports.userSchema = {
   type: 'object',
-  required: ['name', 'lastName', 'password', 'email', 'role'],
+  required: ['name', 'lastName', 'email', 'role'],
   properties: {
     name: {
       type: 'string'
     },
     lastName: {
-      type: 'string'
-    },
-    password: {
       type: 'string'
     },
     email: {

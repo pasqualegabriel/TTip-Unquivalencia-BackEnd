@@ -29,6 +29,7 @@
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.9.1",
     "nock": "^10.0.6",
+    "nodemailer": "^6.3.0",
     "pg": "^7.11.0",
     "sequelize": "^5.10.2",
     "validator": "^11.1.0",
@@ -37,17 +38,19 @@
   },
   "devDependencies": {
     "babel-eslint": "^8.2.2",
+    "chai": "^4.1.2",
+    "chai-http": "^4.2.0",
     "eslint": "^4.8.0",
     "eslint-config-airbnb-base": "^12.0.2",
     "eslint-config-prettier": "^2.3.1",
     "eslint-plugin-import": "^2.6.1",
     "eslint-plugin-prettier": "^2.1.1",
+    "mocha": "^5.0.1",
+    "mockery": "^2.1.0",
+    "nodemailer-mock": "^1.4.3",
     "nodemon": "^1.19.1",
     "prettier-eslint": "^8.2.1",
     "tedious": "^6.2.0",
-    "chai": "^4.1.2",
-    "chai-http": "^4.2.0",
-    "mocha": "^5.0.1",
     "umzug": "^2.1.0"
   }
 }
