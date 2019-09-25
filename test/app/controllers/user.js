@@ -27,6 +27,7 @@ const { should: chaiShould, request, expect } = require('chai'),
   mockery = require('mockery'),
   nodemailerMock = require('nodemailer-mock'),
   { PROFESSOR } = require('../../../app/constants/user'),
+  config = require('../../../config'),
   should = chaiShould();
 
 describe('/user/session POST', () => {
@@ -312,4 +313,127 @@ describe('/users GET', () => {
       .then(res => {
         res.should.have.status(401);
       }));
+});
+
+describe('Disable all sessions', () => {
+  it('Should successfully POST to /api/v1/user/invalidate/all/sessions with a valid token', () =>
+    factory
+      .create('user', userExample)
+      .then(() =>
+        request(server)
+          .post('/api/v1/user/session')
+          .send(loginExample)
+      )
+      .then(resToken => {
+        const token = resToken.body.token;
+        return request(server)
+          .post('/api/v1/user/invalidate/all/sessions')
+          .set('authorization', `Bearer ${token}`)
+          .send({});
+      })
+      .then(res => {
+        res.should.have.status(200);
+      }));
+  it('Should successfully GET users with a token created after of disable all sessions', () =>
+    factory
+      .create('user', userExample)
+      .then(() =>
+        request(server)
+          .post('/api/v1/user/session')
+          .send(loginExample)
+      )
+      .then(resToken1 =>
+        request(server)
+          .post('/api/v1/user/invalidate/all/sessions')
+          .set('authorization', `Bearer ${resToken1.body.token}`)
+          .send({})
+      )
+      .then(() =>
+        request(server)
+          .post('/api/v1/user/session')
+          .send(loginExample)
+      )
+      .then(resTokenValid =>
+        request(server)
+          .get('/api/v1/users')
+          .set('authorization', `Bearer ${resTokenValid.body.token}`)
+      )
+      .then(res => {
+        res.should.have.status(200);
+      }));
+  it('Should throw an error when sending GET users with a token that was disabled', () =>
+    factory
+      .create('user', userExample)
+      .then(() =>
+        request(server)
+          .post('/api/v1/user/session')
+          .send(loginExample)
+      )
+      .then(resToken1 =>
+        request(server)
+          .post('/api/v1/user/session')
+          .send(loginExample)
+          .then(resToken2 =>
+            request(server)
+              .post('/api/v1/user/invalidate/all/sessions')
+              .set('authorization', `Bearer ${resToken1.body.token}`)
+              .send({})
+              .then(() =>
+                request(server)
+                  .get('/api/v1/users')
+                  .set('authorization', `Bearer ${resToken2.body.token}`)
+                  .then(res => {
+                    res.should.have.status(401);
+                  })
+              )
+          )
+      ));
+  it('Should throw an error when sending to POST to /api/v1/user/invalidate/all/sessions when an user is not logged', () =>
+    request(server)
+      .post('/api/v1/user/invalidate/all/sessions')
+      .send({})
+      .then(err => {
+        err.should.have.status(401);
+      }));
+});
+describe('Token Expiration', () => {
+  it('Should successfully GET users with a token that has not expired', () => {
+    config.common.session.invalidationTimeInMinutes = 10;
+    return factory
+      .create('user', userExample)
+      .then(() =>
+        request(server)
+          .post('/api/v1/user/session')
+          .send(loginExample)
+      )
+      .then(resToken => {
+        const token = resToken.body.token;
+        return request(server)
+          .get('/api/v1/users')
+          .set('authorization', `Bearer ${token}`);
+      })
+      .then(res => {
+        res.should.have.status(200);
+        res.body.users.should.be.an('array');
+        res.body.users.length.should.be.eq(1);
+      });
+  });
+  it('Should throw an error when sending to GET users with a token that has expired', () => {
+    config.common.session.invalidationTimeInMinutes = 0;
+    return factory
+      .create('user', userExample)
+      .then(() =>
+        request(server)
+          .post('/api/v1/user/session')
+          .send(loginExample)
+      )
+      .then(resToken =>
+        request(server)
+          .get('/api/v1/users')
+          .set('authorization', `Bearer ${resToken.body.token}`)
+      )
+      .then(res => {
+        res.should.have.status(401);
+      });
+  });
 });

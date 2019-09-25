@@ -24,4 +24,9 @@ exports.init = app => {
     userController.signUp
   );
   app.get('/api/v1/users', [userValidations.verifyAdminAndUserLogin], userController.users);
+  app.post(
+    '/api/v1/user/invalidate/all/sessions',
+    [userValidations.verifyAuthentication],
+    userController.invalidateSessions
+  );
 };

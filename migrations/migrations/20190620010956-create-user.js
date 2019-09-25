@@ -33,6 +33,11 @@ module.exports = {
         defaultValue: 'user',
         allowNull: false
       },
+      invalidation_date: {
+        type: Sequelize.DATE,
+        defaultValue: new Date(),
+        allowNull: false
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE
