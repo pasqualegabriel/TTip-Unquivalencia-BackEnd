@@ -21,7 +21,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      univesity_origin: {
+      university_origin: {
         allowNull: false,
         type: Sequelize.STRING
       },
@@ -38,7 +38,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       year: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.INTEGER
       },
       created_at: {
