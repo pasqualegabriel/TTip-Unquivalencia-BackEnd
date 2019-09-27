@@ -9,10 +9,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         field: 'file_number'
       },
-      univesityOrigin: {
+      universityOrigin: {
         allowNull: false,
         type: DataTypes.STRING,
-        field: 'univesity_origin'
+        field: 'university_origin'
       },
       subjectOrigin: {
         allowNull: false,
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: 'SIN EVALUAR'
       },
       year: {
-        allowNull: false,
+        allowNull: true,
         type: DataTypes.INTEGER
       }
     },
