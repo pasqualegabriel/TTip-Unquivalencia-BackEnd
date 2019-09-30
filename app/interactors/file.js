@@ -4,7 +4,7 @@ exports.findFile = fileNumber => File.findOne({ where: { fileNumber } });
 
 exports.createFile = ({
   fileNumber,
-  univesityOrigin,
+  universityOrigin,
   subjectOrigin,
   subjectUnq,
   equivalence,
@@ -22,7 +22,7 @@ exports.createFile = ({
       requests: [
         {
           fileNumber,
-          univesityOrigin,
+          universityOrigin,
           subjectOrigin,
           subjectUnq,
           equivalence,
