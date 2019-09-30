@@ -1,13 +1,13 @@
 const { request: Request } = require('../models');
 
 exports.createRequestToFile = (
-  { fileNumber, univesityOrigin, subjectOrigin, subjectUnq, equivalence, year },
+  { fileNumber, universityOrigin, subjectOrigin, subjectUnq, equivalence, year },
   fileId
 ) =>
   Request.create({
     fk_fileid: fileId,
     fileNumber,
-    univesityOrigin,
+    universityOrigin,
     subjectOrigin,
     subjectUnq,
     equivalence,
