@@ -3,12 +3,17 @@ const userController = require('./controllers/user'),
   requestController = require('./controllers/request'),
   userValidations = require('./middlewares/user'),
   { Validator } = require('express-json-validator-middleware'),
-  { logInSchema, userSchema } = require('./middlewares/schemas');
+  { logInSchema, userSchema, fileSchema } = require('./middlewares/schemas'),
+  { checkSchema } = require('express-validator');
 
 const { validate } = new Validator({ allErrors: true });
 
 exports.init = app => {
-  app.post('/api/v1/request', [userValidations.verifyAdminAndUserLogin], requestController.addRequest);
+  app.post(
+    '/api/v1/request',
+    [userValidations.verifyAdminAndUserLogin, validate({ body: fileSchema })],
+    requestController.addRequest
+  );
   app.get('/api/v1/files', [userValidations.verifyAdminAndUserLogin], fileController.getAllFiles);
   app.get('/api/v1/file', [userValidations.verifyAdminAndUserLogin], fileController.getFileByFileNumber);
   app.get(
