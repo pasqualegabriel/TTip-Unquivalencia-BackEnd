@@ -90,3 +90,9 @@ exports.mapExistingFile = (fileId, { fileNumber, universityOrigin, yearNote, req
       observations
     })
   );
+
+exports.mapFileByFileNumber = file => {
+  const request = file.dataValues.requests[0].dataValues;
+  delete file.dataValues.requests;
+  return { ...request, ...file.dataValues };
+};

@@ -9,4 +9,5 @@ exports.createFile = file =>
 
 exports.findAllFiles = () => File.findAll({ include: [{ model: Request, attributes: ['equivalence'] }] });
 
-exports.findFileByFileNumber = fileNumber => File.findOne({ where: { fileNumber } });
+exports.findFileByFileNumber = fileNumber =>
+  File.findOne({ where: { fileNumber }, include: [{ model: Request, limit: 1 }] });
