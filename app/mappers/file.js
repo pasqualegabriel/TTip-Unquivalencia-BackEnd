@@ -1,0 +1,90 @@
+exports.mapNewFile = ({ fileNumber, universityOrigin, yearNote, mail, name, surname, dni, requests }) => ({
+  fileNumber,
+  universityOrigin,
+  yearNote,
+  mail,
+  name,
+  surname,
+  dni,
+  requests: requests.map(
+    ({
+      careerOrigin,
+      yearPlanOrigin,
+      subjectOrigin,
+      courseMode,
+      subjectOriginWeeklyHours,
+      subjectOriginTotalHours,
+      yearOfApproval,
+      careerUnq,
+      subjectUnq,
+      subjectWeeklyHoursUnq,
+      subjectTotalHoursUnq,
+      subjectCoreUnq,
+      credits,
+      yearOfEquivalence,
+      signature,
+      observations
+    }) => ({
+      fileNumber,
+      universityOrigin,
+      careerOrigin,
+      yearPlanOrigin,
+      subjectOrigin,
+      courseMode,
+      subjectOriginWeeklyHours,
+      subjectOriginTotalHours,
+      yearOfApproval,
+      careerUnq,
+      subjectUnq,
+      subjectWeeklyHoursUnq,
+      subjectTotalHoursUnq,
+      subjectCoreUnq,
+      credits,
+      yearOfEquivalence,
+      signature,
+      observations
+    })
+  )
+});
+
+exports.mapExistingFile = (fileId, { fileNumber, universityOrigin, requests }) =>
+  requests.map(
+    ({
+      careerOrigin,
+      yearPlanOrigin,
+      subjectOrigin,
+      courseMode,
+      subjectOriginWeeklyHours,
+      subjectOriginTotalHours,
+      yearOfApproval,
+      careerUnq,
+      subjectUnq,
+      subjectWeeklyHoursUnq,
+      subjectTotalHoursUnq,
+      subjectCoreUnq,
+      credits,
+      yearOfEquivalence,
+      signature,
+      observations
+    }) => ({
+      fileNumber,
+      fk_fileid: fileId,
+      universityOrigin,
+      careerOrigin,
+      yearPlanOrigin,
+      subjectOrigin,
+      courseMode,
+      subjectOriginWeeklyHours,
+      subjectOriginTotalHours,
+      yearOfApproval,
+      careerUnq,
+      subjectUnq,
+      subjectWeeklyHoursUnq,
+      subjectTotalHoursUnq,
+      subjectCoreUnq,
+      credits,
+      yearOfEquivalence,
+      signature,
+      observations
+    })
+  );
