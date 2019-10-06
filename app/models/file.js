@@ -27,9 +27,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         defaultValue: 'N/I'
       },
-      year_note: {
+      yearNote: {
         allowNull: false,
         type: DataTypes.STRING,
+        field: 'year_note',
         defaultValue: 'N/I'
       },
       universityOrigin: {
