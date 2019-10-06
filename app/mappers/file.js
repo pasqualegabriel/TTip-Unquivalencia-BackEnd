@@ -27,6 +27,7 @@ exports.mapNewFile = ({ fileNumber, universityOrigin, yearNote, mail, name, surn
     }) => ({
       fileNumber,
       universityOrigin,
+      yearNote,
       careerOrigin,
       yearPlanOrigin,
       subjectOrigin,
@@ -47,7 +48,7 @@ exports.mapNewFile = ({ fileNumber, universityOrigin, yearNote, mail, name, surn
   )
 });
 
-exports.mapExistingFile = (fileId, { fileNumber, universityOrigin, requests }) =>
+exports.mapExistingFile = (fileId, { fileNumber, universityOrigin, yearNote, requests }) =>
   requests.map(
     ({
       careerOrigin,
@@ -70,6 +71,7 @@ exports.mapExistingFile = (fileId, { fileNumber, universityOrigin, requests }) =
       fileNumber,
       fk_fileid: fileId,
       universityOrigin,
+      yearNote,
       careerOrigin,
       yearPlanOrigin,
       subjectOrigin,
