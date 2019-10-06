@@ -3,8 +3,7 @@ const userController = require('./controllers/user'),
   requestController = require('./controllers/request'),
   userValidations = require('./middlewares/user'),
   { Validator } = require('express-json-validator-middleware'),
-  { logInSchema, userSchema, fileSchema } = require('./middlewares/schemas'),
-  { checkSchema } = require('express-validator');
+  { logInSchema, userSchema, fileSchema } = require('./middlewares/schemas');
 
 const { validate } = new Validator({ allErrors: true });
 
