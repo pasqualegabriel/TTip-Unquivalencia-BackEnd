@@ -21,11 +21,49 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      year_note: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: 'N/I'
+      },
       university_origin: {
         allowNull: false,
         type: Sequelize.STRING
       },
+      career_origin: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      year_plan_origin: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: 'N/I'
+      },
       subject_origin: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      course_mode: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: 'N/I'
+      },
+      subject_origin_weekly_hours: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: 'N/I'
+      },
+      subject_origin_total_hours: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: 'N/I'
+      },
+      year_of_approval: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: 'N/I'
+      },
+      career_unq: {
         allowNull: false,
         type: Sequelize.STRING
       },
@@ -33,13 +71,44 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      subject_weekly_hours_unq: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: 'N/I'
+      },
+      subject_total_hours_unq: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: 'N/I'
+      },
+      subject_core_unq: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: 'N/I'
+      },
+      credits: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: 'N/I'
+      },
+      year_of_equivalence: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: 'N/I'
+      },
+      signature: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: 'N/I'
+      },
       equivalence: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      year: {
-        allowNull: true,
-        type: Sequelize.INTEGER
+      observations: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: ''
       },
       created_at: {
         allowNull: false,

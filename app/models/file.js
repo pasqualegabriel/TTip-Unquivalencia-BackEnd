@@ -19,7 +19,23 @@ module.exports = (sequelize, DataTypes) => {
       },
       mail: {
         allowNull: true,
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        defaultValue: 'N/I'
+      },
+      dni: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        defaultValue: 'N/I'
+      },
+      year_note: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        defaultValue: 'N/I'
+      },
+      universityOrigin: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        field: 'university_origin'
       }
     },
     {
