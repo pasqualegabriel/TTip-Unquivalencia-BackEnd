@@ -10,6 +10,7 @@ const { validate } = new Validator({ allErrors: true });
 exports.init = app => {
   app.post('/api/v1/request', [userValidations.verifyAdminAndUserLogin], requestController.addRequest);
   app.get('/api/v1/files', [userValidations.verifyAdminAndUserLogin], fileController.getAllFiles);
+  app.get('/api/v1/file', [userValidations.verifyAdminAndUserLogin], fileController.getFileByFileNumber);
   app.get(
     '/api/v1/requests/:fileId',
     [userValidations.verifyAdminAndUserLogin],
