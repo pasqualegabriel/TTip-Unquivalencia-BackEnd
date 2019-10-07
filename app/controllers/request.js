@@ -1,4 +1,12 @@
-const { createRequestToFile, findRequests, updateRequest, getRequest } = require('../interactors/request'),
+const {
+    createRequestToFile,
+    findRequests,
+    updateRequest,
+    getRequest,
+    getRequestMatch,
+    findRequestsTotalMatch,
+    findRequestsMatch
+  } = require('../interactors/request'),
   { findFile, createFile } = require('../interactors/file'),
   { mapExistingFile, mapNewFile } = require('../mappers/file'),
   logger = require('../logger');
@@ -26,5 +34,24 @@ exports.updateEquivalence = (req, res, next) =>
 
 exports.getRequest = (req, res, next) =>
   getRequest(req.params.requestId)
+    .then(request => res.status(200).send(request))
+    .catch(next);
+
+exports.getRequestMatchs = (req, res, next) =>
+  getRequestMatch(req.body)
+    .then(requests =>
+      findRequestsTotalMatch(requests[0]).then(requestsTotalMatch => ({
+        requests,
+        requestsTotalMatch
+      }))
+    )
+    .then(request =>
+      request.requestsTotalMatch.length
+        ? Promise.resolve({ ...request, requestsMatch: [] })
+        : findRequestsMatch(request.requests[0]).then(requestsMatch => ({
+            ...request,
+            requestsMatch
+          }))
+    )
     .then(request => res.status(200).send(request))
     .catch(next);

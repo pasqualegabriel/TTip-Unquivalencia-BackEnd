@@ -31,6 +31,11 @@ exports.init = app => {
     [userValidations.verifyAdminAndUserLogin],
     requestController.getRequest
   );
+  app.get(
+    '/api/v1/matchs/requests',
+    [userValidations.verifyAdminAndUserLogin],
+    requestController.getRequestMatchs
+  );
   app.post(
     '/api/v1/user/session',
     [validate({ body: logInSchema }), userValidations.validateLogin, userValidations.verifyPassword],
