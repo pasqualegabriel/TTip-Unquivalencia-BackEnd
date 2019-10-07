@@ -1,7 +1,7 @@
 const { flatMap } = require('lodash');
 
 const verifyField = (fields, field, index) =>
-  fields[field] ? [] : [{ message: `'${field}' is required at position ${index}`, index }];
+  fields[field] ? [] : [{ message: `'${field}' is required at position ${index}`, field, index }];
 
 const verifyRequestFields = ({ careerOrigin, subjectOrigin, careerUnq, subjectUnq }, index) => {
   const fields = { careerOrigin, subjectOrigin, careerUnq, subjectUnq };
