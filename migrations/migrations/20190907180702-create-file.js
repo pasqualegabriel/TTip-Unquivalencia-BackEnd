@@ -25,6 +25,20 @@ module.exports = {
         allowNull: true,
         type: Sequelize.STRING
       },
+      dni: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: 'N/I'
+      },
+      year_note: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: 'N/I'
+      },
+      university_origin: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE
