@@ -1,5 +1,7 @@
 'use strict';
 
+const { equivalences, withoutEvaluating } = require('../../app/constants/request');
+
 module.exports = {
   up: (queryInterface, Sequelize) =>
     queryInterface.createTable('requests', {
@@ -103,7 +105,9 @@ module.exports = {
       },
       equivalence: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.ENUM,
+        values: equivalences,
+        defaultValue: withoutEvaluating
       },
       observations: {
         allowNull: false,

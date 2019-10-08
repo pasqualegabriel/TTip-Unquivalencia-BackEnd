@@ -1,7 +1,7 @@
 'use strict';
 
 const bcrypt = require('bcryptjs'),
-  { roles } = require('../constants/user');
+  { roles, USER } = require('../constants/user');
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.ENUM,
         values: roles,
-        defaultValue: 'user'
+        defaultValue: USER
       }
     },
     {

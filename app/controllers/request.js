@@ -5,6 +5,7 @@ const {
     getRequest,
     getRequestMatch,
     findRequestsTotalMatch,
+    findRequestsMatchWithoutYearPlanOrigin,
     findRequestsMatch
   } = require('../interactors/request'),
   { findFile, createFile } = require('../interactors/file'),
@@ -40,13 +41,23 @@ exports.getRequest = (req, res, next) =>
 exports.getRequestMatchs = (req, res, next) =>
   getRequestMatch(req.body)
     .then(requests =>
-      findRequestsTotalMatch(requests[0]).then(requestsTotalMatch => ({
+      findRequestsTotalMatch(requests[0]).then(requestsTotalMatchApproved => ({
         requests,
-        requestsTotalMatch
+        requestsTotalMatchApproved
       }))
     )
     .then(request =>
-      request.requestsTotalMatch.length
+      request.requestsTotalMatchApproved.length
+        ? Promise.resolve({ ...request, requestsMatchWithoutYearPlanApproved: [] })
+        : findRequestsMatchWithoutYearPlanOrigin(request.requests[0]).then(
+            requestsMatchWithoutYearPlanApproved => ({
+              ...request,
+              requestsMatchWithoutYearPlanApproved
+            })
+          )
+    )
+    .then(request =>
+      request.requestsTotalMatchApproved.length || request.requestsMatchWithoutYearPlanApproved.length
         ? Promise.resolve({ ...request, requestsMatch: [] })
         : findRequestsMatch(request.requests[0]).then(requestsMatch => ({
             ...request,

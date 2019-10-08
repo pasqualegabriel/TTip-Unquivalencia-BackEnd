@@ -2,7 +2,7 @@ const {
     request: Request,
     Sequelize: { Op }
   } = require('../models'),
-  { uniq } = require('lodash');
+  { approved, rejected } = require('../constants/request');
 
 exports.createRequestToFile = requests => Request.bulkCreate(requests);
 
@@ -22,64 +22,52 @@ exports.findRequestsTotalMatch = ({
   fk_fileid: fkFileId,
   universityOrigin,
   careerOrigin,
-  subjectOrigin,
   yearPlanOrigin,
   subjectUnq
 }) =>
   Request.findAll({
-    attributes: ['fk_fileid'],
     raw: true,
     where: {
       universityOrigin,
       careerOrigin,
-      subjectOrigin,
       yearPlanOrigin,
       subjectUnq,
       fk_fileid: { [Op.ne]: fkFileId },
-      equivalence: { [Op.in]: ['APROBADA', 'RECHAZADA'] }
+      equivalence: approved
     },
-    limit: 5
-  }).then(fkFileIdsRes => {
-    const fkFileIds = fkFileIdsRes.length ? uniq(fkFileIdsRes.map(fks => fks.fk_fileid)) : [fkFileIdsRes];
-    return Request.findAll({
-      raw: true,
-      where: {
-        fk_fileid: { [Op.in]: fkFileIds },
-        subjectUnq,
-        equivalence: { [Op.in]: ['APROBADA', 'RECHAZADA'] }
-      },
-      order: [['fk_fileid', 'asc']]
-    });
+    limit: 15,
+    order: [['fk_fileid', 'asc']]
   });
 
-exports.findRequestsMatch = ({
+exports.findRequestsMatchWithoutYearPlanOrigin = ({
   fk_fileid: fkFileId,
   universityOrigin,
   careerOrigin,
-  subjectOrigin,
   subjectUnq
 }) =>
   Request.findAll({
-    attributes: ['fk_fileid'],
     raw: true,
     where: {
       universityOrigin,
       careerOrigin,
-      subjectOrigin,
       subjectUnq,
       fk_fileid: { [Op.ne]: fkFileId },
-      equivalence: { [Op.in]: ['APROBADA', 'RECHAZADA'] }
+      equivalence: approved
     },
-    limit: 15
-  }).then(fkFileIdsRes => {
-    const fkFileIds = fkFileIdsRes.length ? uniq(fkFileIdsRes.map(fks => fks.fk_fileid)) : [fkFileIdsRes];
-    return Request.findAll({
-      raw: true,
-      where: {
-        fk_fileid: { [Op.in]: fkFileIds },
-        subjectUnq,
-        equivalence: { [Op.in]: ['APROBADA', 'RECHAZADA'] }
-      },
-      order: [['fk_fileid', 'asc']]
-    });
+    limit: 15,
+    order: [['fk_fileid', 'asc']]
+  });
+
+exports.findRequestsMatch = ({ fk_fileid: fkFileId, universityOrigin, careerOrigin, subjectUnq }) =>
+  Request.findAll({
+    raw: true,
+    where: {
+      universityOrigin,
+      careerOrigin,
+      subjectUnq,
+      fk_fileid: { [Op.ne]: fkFileId },
+      equivalence: { [Op.in]: [approved, rejected] }
+    },
+    limit: 40,
+    order: [['fk_fileid', 'asc']]
   });

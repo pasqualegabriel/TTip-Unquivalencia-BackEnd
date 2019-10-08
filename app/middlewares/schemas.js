@@ -60,3 +60,19 @@ exports.fileSchema = {
     }
   }
 };
+
+exports.matchRequestSchema = {
+  type: 'object',
+  required: ['fk_fileid', 'subjectUnq', 'requestId'],
+  properties: {
+    fk_fileid: {
+      type: 'number'
+    },
+    subjectUnq: {
+      type: 'string'
+    },
+    requestId: {
+      type: 'number'
+    }
+  }
+};
