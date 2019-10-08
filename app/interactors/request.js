@@ -33,7 +33,7 @@ exports.findRequestsTotalMatch = ({
       careerOrigin,
       yearPlanOrigin,
       subjectUnq,
-      fk_fileid: { [Op.ne]: fkFileId },
+      fk_fileid: { [Op.ne]: parseInt(fkFileId) },
       equivalence: approved
     },
     limit: 1

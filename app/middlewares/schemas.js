@@ -66,13 +66,13 @@ exports.matchRequestSchema = {
   required: ['fk_fileid', 'subjectUnq', 'requestId'],
   properties: {
     fk_fileid: {
-      type: 'number'
+      type: 'string'
     },
     subjectUnq: {
       type: 'string'
     },
     requestId: {
-      type: 'number'
+      type: 'string'
     }
   }
 };

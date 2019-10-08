@@ -33,7 +33,7 @@ exports.init = app => {
   );
   app.get(
     '/api/v1/matchs/requests',
-    [validate({ body: matchRequestSchema }), userValidations.verifyAdminAndUserLogin],
+    [validate({ query: matchRequestSchema }), userValidations.verifyAdminAndUserLogin],
     requestController.getRequestMatchs
   );
   app.post(

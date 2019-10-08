@@ -39,7 +39,7 @@ exports.getRequest = (req, res, next) =>
     .catch(next);
 
 exports.getRequestMatchs = (req, res, next) =>
-  getRequestMatch(req.body)
+  getRequestMatch(req.query)
     .then(requests =>
       findRequestsTotalMatch(requests[0]).then(requestsTotalMatchApproved => ({
         requests,
