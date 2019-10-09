@@ -10,6 +10,7 @@ const {
   } = require('../interactors/request'),
   { findFile, createFile } = require('../interactors/file'),
   { mapExistingFile, mapNewFile } = require('../mappers/file'),
+  { find } = require('lodash'),
   logger = require('../logger');
 
 exports.addRequest = (req, res, next) =>
@@ -38,31 +39,26 @@ exports.getRequest = (req, res, next) =>
     .then(request => res.status(200).send(request))
     .catch(next);
 
-exports.getRequestMatchs = (req, res, next) =>
-  getRequestMatch(req.query)
-    .then(requests =>
-      findRequestsTotalMatch(requests[0]).then(requestsTotalMatchApproved => ({
-        requests,
-        requestsTotalMatchApproved
-      }))
-    )
-    .then(request =>
-      request.requestsTotalMatchApproved.length
-        ? Promise.resolve({ ...request, requestsMatchWithoutYearPlanApproved: [] })
-        : findRequestsMatchWithoutYearPlanOrigin(request.requests[0]).then(
-            requestsMatchWithoutYearPlanApproved => ({
-              ...request,
-              requestsMatchWithoutYearPlanApproved
-            })
-          )
-    )
-    .then(request =>
-      request.requestsTotalMatchApproved.length || request.requestsMatchWithoutYearPlanApproved.length
-        ? Promise.resolve({ ...request, requestsMatch: [] })
-        : findRequestsMatch(request.requests[0]).then(requestsMatch => ({
-            ...request,
-            requestsMatch
-          }))
-    )
-    .then(request => res.status(200).send(request))
-    .catch(next);
+exports.getRequestMatchs = async (req, res, next) => {
+  try {
+    const requests = await getRequestMatch(req.query);
+    const request = find(requests, { id: parseInt(req.query.requestId) });
+    const requestsTotalMatchApproved = await findRequestsTotalMatch(request);
+    const requestsMatchWithoutYearPlanApproved = requestsTotalMatchApproved.length
+      ? []
+      : await findRequestsMatchWithoutYearPlanOrigin(request);
+    const requestsMatch =
+      requestsTotalMatchApproved.length || requestsMatchWithoutYearPlanApproved.length
+        ? []
+        : await findRequestsMatch(request);
+    return res.status(200).send({
+      request,
+      requests,
+      requestsTotalMatchApproved,
+      requestsMatchWithoutYearPlanApproved,
+      requestsMatch
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
