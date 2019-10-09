@@ -10,7 +10,7 @@ const {
   } = require('../interactors/request'),
   { findFile, createFile } = require('../interactors/file'),
   { mapExistingFile, mapNewFile } = require('../mappers/file'),
-  { find } = require('lodash'),
+  { get, find, differenceBy } = require('lodash'),
   logger = require('../logger');
 
 exports.addRequest = (req, res, next) =>
@@ -51,11 +51,18 @@ exports.getRequestMatchs = async (req, res, next) => {
       requestsTotalMatchApproved.length || requestsMatchWithoutYearPlanApproved.length
         ? []
         : await findRequestsMatch(request);
+    const getSubjectsOrigin = someRequests =>
+      differenceBy(someRequests, requests, 'subjectOrigin').map(({ subjectOrigin }) => subjectOrigin);
     return res.status(200).send({
       request,
       requests,
       requestsTotalMatchApproved,
       requestsMatchWithoutYearPlanApproved,
+      subjectsToApprove: requestsTotalMatchApproved.length
+        ? getSubjectsOrigin(requestsTotalMatchApproved)
+        : requestsMatchWithoutYearPlanApproved.length
+        ? getSubjectsOrigin(requestsMatchWithoutYearPlanApproved)
+        : [],
       requestsMatch
     });
   } catch (error) {
