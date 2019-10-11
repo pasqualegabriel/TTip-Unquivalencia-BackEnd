@@ -383,7 +383,7 @@ describe('Disable all sessions', () => {
                   .get('/api/v1/users')
                   .set('authorization', `Bearer ${resToken2.body.token}`)
                   .then(res => {
-                    res.should.have.status(401);
+                    res.should.have.status(450);
                   })
               )
           )
@@ -433,7 +433,7 @@ describe('Token Expiration', () => {
           .set('authorization', `Bearer ${resToken.body.token}`)
       )
       .then(res => {
-        res.should.have.status(401);
+        res.should.have.status(450);
       });
   });
 });
