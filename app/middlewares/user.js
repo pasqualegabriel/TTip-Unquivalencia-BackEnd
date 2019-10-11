@@ -60,7 +60,7 @@ const verifyLogin = (req, res, next, permissions) => {
         invalidationTime.add(config.common.session.invalidationTimeInMinutes, 'minutes');
         return invalidationTime > moment() && moment(token.lastSignInDate) > invalidationDate
           ? next()
-          : res.status(401).send([sessionExpiredMessage]);
+          : res.status(450).send([sessionExpiredMessage]);
       } else return res.status(401).send([permissionDeniedMessage]);
     });
   } else return res.status(401).send([youAreNotLoggedInMessage]);

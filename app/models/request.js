@@ -1,5 +1,7 @@
 'use strict';
 
+const { equivalences, withoutEvaluating } = require('../constants/request');
+
 module.exports = (sequelize, DataTypes) => {
   const Request = sequelize.define(
     'request',
@@ -106,8 +108,9 @@ module.exports = (sequelize, DataTypes) => {
       },
       equivalence: {
         allowNull: false,
-        type: DataTypes.STRING,
-        defaultValue: 'SIN EVALUAR'
+        type: DataTypes.ENUM,
+        values: equivalences,
+        defaultValue: withoutEvaluating
       },
       observations: {
         allowNull: false,

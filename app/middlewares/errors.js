@@ -12,7 +12,13 @@ const statusCodes = {
 
 exports.handle = (error, req, res, next) => {
   if (error instanceof ValidationError)
-    return res.status(DEFAULT_STATUS_CODE).send(error.validationErrors.body.map(({ message }) => message));
+    return res
+      .status(DEFAULT_STATUS_CODE)
+      .send(
+        error.validationErrors.body
+          ? error.validationErrors.body.map(({ message }) => message)
+          : error.validationErrors.query.map(({ message }) => message)
+      );
   if (error.internalCode) {
     return res.status(statusCodes[error.internalCode] || DEFAULT_STATUS_CODE);
   } else {

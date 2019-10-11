@@ -1,6 +1,6 @@
 'use strict';
 
-const { roles } = require('../../app/constants/user');
+const { roles, USER } = require('../../app/constants/user');
 
 module.exports = {
   up: (queryInterface, Sequelize) =>
@@ -30,7 +30,7 @@ module.exports = {
       role: {
         type: Sequelize.ENUM,
         values: roles,
-        defaultValue: 'user',
+        defaultValue: USER,
         allowNull: false
       },
       invalidation_date: {

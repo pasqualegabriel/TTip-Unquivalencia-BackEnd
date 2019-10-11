@@ -1,6 +1,16 @@
-const { createRequestToFile, findRequests, updateRequest, getRequest } = require('../interactors/request'),
+const {
+    createRequestToFile,
+    findRequests,
+    updateRequest,
+    getRequest,
+    getRequestMatch,
+    findRequestsTotalMatch,
+    findRequestsMatchWithoutYearPlanOrigin,
+    findRequestsMatch
+  } = require('../interactors/request'),
   { findFile, createFile } = require('../interactors/file'),
   { mapExistingFile, mapNewFile } = require('../mappers/file'),
+  { get, find, differenceBy } = require('lodash'),
   logger = require('../logger');
 
 exports.addRequest = (req, res, next) =>
@@ -28,3 +38,34 @@ exports.getRequest = (req, res, next) =>
   getRequest(req.params.requestId)
     .then(request => res.status(200).send(request))
     .catch(next);
+
+exports.getRequestMatchs = async (req, res, next) => {
+  try {
+    const requests = await getRequestMatch(req.query);
+    const request = find(requests, { id: parseInt(req.query.requestId) });
+    const requestsTotalMatchApproved = await findRequestsTotalMatch(request);
+    const requestsMatchWithoutYearPlanApproved = requestsTotalMatchApproved.length
+      ? []
+      : await findRequestsMatchWithoutYearPlanOrigin(request);
+    const requestsMatch =
+      requestsTotalMatchApproved.length || requestsMatchWithoutYearPlanApproved.length
+        ? []
+        : await findRequestsMatch(request);
+    const getSubjectsOrigin = someRequests =>
+      differenceBy(someRequests, requests, 'subjectOrigin').map(({ subjectOrigin }) => subjectOrigin);
+    return res.status(200).send({
+      request,
+      requests,
+      requestsTotalMatchApproved,
+      requestsMatchWithoutYearPlanApproved,
+      subjectsToApprove: requestsTotalMatchApproved.length
+        ? getSubjectsOrigin(requestsTotalMatchApproved)
+        : requestsMatchWithoutYearPlanApproved.length
+        ? getSubjectsOrigin(requestsMatchWithoutYearPlanApproved)
+        : [],
+      requestsMatch
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
