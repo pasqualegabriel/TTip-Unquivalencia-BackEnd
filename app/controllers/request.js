@@ -10,7 +10,7 @@ const {
   } = require('../interactors/request'),
   { findFile, createFile } = require('../interactors/file'),
   { mapExistingFile, mapNewFile } = require('../mappers/file'),
-  { get, find, differenceBy } = require('lodash'),
+  { differenceBy } = require('lodash'),
   logger = require('../logger');
 
 exports.addRequest = (req, res, next) =>
@@ -41,8 +41,8 @@ exports.getRequest = (req, res, next) =>
 
 exports.getRequestMatchs = async (req, res, next) => {
   try {
-    const requests = await getRequestMatch(req.query);
-    const request = find(requests, { id: parseInt(req.query.requestId) });
+    const { dataValues: request } = await getRequest(req.params.requestId);
+    const requests = await getRequestMatch(request);
     const requestsTotalMatchApproved = await findRequestsTotalMatch(request);
     const requestsMatchWithoutYearPlanApproved = requestsTotalMatchApproved.length
       ? []

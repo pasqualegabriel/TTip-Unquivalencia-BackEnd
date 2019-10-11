@@ -4,7 +4,7 @@ const userController = require('./controllers/user'),
   userValidations = require('./middlewares/user'),
   fileValidations = require('./middlewares/file'),
   { Validator } = require('express-json-validator-middleware'),
-  { logInSchema, userSchema, fileSchema, matchRequestSchema } = require('./middlewares/schemas');
+  { logInSchema, userSchema, fileSchema } = require('./middlewares/schemas');
 
 const { validate } = new Validator({ allErrors: true });
 
@@ -32,8 +32,8 @@ exports.init = app => {
     requestController.getRequest
   );
   app.get(
-    '/api/v1/matchs/requests',
-    [validate({ query: matchRequestSchema }), userValidations.verifyAdminAndUserLogin],
+    '/api/v1/matchs/requests/:requestId',
+    [userValidations.verifyAdminAndUserLogin],
     requestController.getRequestMatchs
   );
   app.post(
