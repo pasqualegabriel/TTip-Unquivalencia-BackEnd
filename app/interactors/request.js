@@ -93,3 +93,10 @@ exports.findRequestsMatch = ({ fk_fileid: fkFileId, universityOrigin, careerOrig
     limit: 40,
     order: [['fk_fileid', 'asc']]
   });
+
+exports.findRequestsStepper = fileId =>
+  Request.findAll({
+    attributes: [['id', 'requestId'], 'subjectOrigin', 'subjectUnq'],
+    raw: true,
+    where: { fk_fileid: fileId }
+  });

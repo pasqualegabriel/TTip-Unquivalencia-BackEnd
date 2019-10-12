@@ -36,6 +36,11 @@ exports.init = app => {
     [userValidations.verifyAdminAndUserLogin],
     requestController.getRequestMatchs
   );
+  app.get(
+    '/api/v1/stepper/requests/:requestId',
+    [userValidations.verifyAuthentication],
+    requestController.getStepperRequest
+  );
   app.post(
     '/api/v1/user/session',
     [validate({ body: logInSchema }), userValidations.validateLogin, userValidations.verifyPassword],
