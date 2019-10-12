@@ -1,4 +1,5 @@
-const { uniqBy, pickBy } = require('lodash');
+const { uniqBy, pickBy } = require('lodash'),
+  { approved, rejected } = require('../constants/request');
 
 exports.mapNewFile = ({ fileNumber, universityOrigin, yearNote, mail, name, surname, dni, requests }) => ({
   fileNumber,
@@ -24,9 +25,7 @@ exports.mapNewFile = ({ fileNumber, universityOrigin, yearNote, mail, name, surn
       subjectTotalHoursUnq,
       subjectCoreUnq,
       credits,
-      yearOfEquivalence,
-      signature,
-      observations
+      yearOfEquivalence
     }) => ({
       fileNumber,
       universityOrigin,
@@ -44,9 +43,7 @@ exports.mapNewFile = ({ fileNumber, universityOrigin, yearNote, mail, name, surn
       subjectTotalHoursUnq,
       subjectCoreUnq,
       credits,
-      yearOfEquivalence,
-      signature,
-      observations
+      yearOfEquivalence
     })
   )
 });
@@ -67,9 +64,7 @@ exports.mapExistingFile = (fileId, { fileNumber, universityOrigin, yearNote, req
       subjectTotalHoursUnq,
       subjectCoreUnq,
       credits,
-      yearOfEquivalence,
-      signature,
-      observations
+      yearOfEquivalence
     }) => ({
       fileNumber,
       fk_fileid: fileId,
@@ -88,9 +83,7 @@ exports.mapExistingFile = (fileId, { fileNumber, universityOrigin, yearNote, req
       subjectTotalHoursUnq,
       subjectCoreUnq,
       credits,
-      yearOfEquivalence,
-      signature,
-      observations
+      yearOfEquivalence
     })
   );
 
@@ -111,3 +104,11 @@ exports.mapFileByFileNumber = file => {
   delete file.dataValues.requests;
   return { ...request, ...file.dataValues };
 };
+
+exports.getStatus = (requestsSaved, newRequests) =>
+  uniqBy(
+    [...requestsSaved, ...newRequests].filter(
+      ({ equivalence }) => equivalence !== approved && equivalence !== rejected
+    ),
+    'subjectUnq'
+  ).length;

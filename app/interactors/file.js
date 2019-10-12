@@ -28,3 +28,5 @@ exports.findFileByFileNumber = fileNumber =>
   File.findOne({ where: { fileNumber }, include: [{ model: Request, limit: 1 }] });
 
 exports.updateFile = (file, id) => File.update(file, { where: { id } });
+
+exports.decrementStatus = id => File.decrement('status', { where: { id } });

@@ -7,12 +7,14 @@ const {
     findRequestsTotalMatch,
     findRequestsMatchWithoutYearPlanOrigin,
     findRequestsMatch,
-    findRequestsStepper
+    findRequestsStepper,
+    updateRequestsWithoutEvaluating
   } = require('../interactors/request'),
-  { findFile, createFile, updateFile } = require('../interactors/file'),
-  { mapExistingFile, mapNewFile, mapUpdateFile } = require('../mappers/file'),
+  { findFile, createFile, updateFile, decrementStatus } = require('../interactors/file'),
+  { mapExistingFile, mapNewFile, mapUpdateFile, getStatus } = require('../mappers/file'),
   { mapSetRequests } = require('../mappers/request'),
-  { differenceBy, uniqBy } = require('lodash'),
+  { approved, rejected } = require('../constants/request'),
+  { differenceBy } = require('lodash'),
   logger = require('../logger');
 
 exports.addRequest = (req, res, next) =>
@@ -20,14 +22,21 @@ exports.addRequest = (req, res, next) =>
     .then(file => {
       logger.info(`File ${file ? 'already' : 'does not'} exists`);
       return file
-        ? createRequestToFile(mapExistingFile(file.dataValues.id, req.body)).then(() =>
-            updateFile(
-              mapUpdateFile({
-                status: uniqBy([...req.body.requests, ...file.requests], 'subjectUnq').length
-              }),
-              file.dataValues.id
+        ? createRequestToFile(mapExistingFile(file.dataValues.id, req.body))
+            .then(() =>
+              updateRequestsWithoutEvaluating(
+                file.dataValues.id,
+                req.body.requests.map(({ subjectUnq }) => subjectUnq)
+              )
             )
-          )
+            .then(() =>
+              updateFile(
+                mapUpdateFile({
+                  status: getStatus(file.requests, req.body.requests)
+                }),
+                file.dataValues.id
+              )
+            )
         : createFile(mapNewFile(req.body));
     })
     .then(() => res.status(200).send('Request created successfully'))
@@ -39,8 +48,18 @@ exports.getRequestsByFileId = (req, res, next) =>
     .catch(next);
 
 exports.updateEquivalence = (req, res, next) =>
-  updateRequest(req.params.requestId, req.body)
-    .then(() => res.status(200).send('Request updated'))
+  getRequest(req.params.requestId)
+    .then(request =>
+      updateRequest(request.dataValues, req.body, res.locals.user.name)
+        .then(() =>
+          (req.body.equivalence === approved || req.body.equivalence === rejected) &&
+          request.dataValues.equivalence !== approved &&
+          request.dataValues.equivalence !== rejected
+            ? decrementStatus(request.dataValues.fk_fileid)
+            : Promise.resolve()
+        )
+        .then(() => res.status(200).send('Request updated'))
+    )
     .catch(next);
 
 exports.getRequest = (req, res, next) =>
