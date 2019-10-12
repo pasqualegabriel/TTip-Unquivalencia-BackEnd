@@ -37,6 +37,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.STRING,
         field: 'university_origin'
+      },
+      status: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        defaultValue: 0
       }
     },
     {

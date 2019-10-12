@@ -9,10 +9,10 @@ const {
     findRequestsMatch,
     findRequestsStepper
   } = require('../interactors/request'),
-  { findFile, createFile } = require('../interactors/file'),
-  { mapExistingFile, mapNewFile } = require('../mappers/file'),
+  { findFile, createFile, updateFile } = require('../interactors/file'),
+  { mapExistingFile, mapNewFile, mapUpdateFile } = require('../mappers/file'),
   { mapSetRequests } = require('../mappers/request'),
-  { differenceBy } = require('lodash'),
+  { differenceBy, uniqBy } = require('lodash'),
   logger = require('../logger');
 
 exports.addRequest = (req, res, next) =>
@@ -20,7 +20,14 @@ exports.addRequest = (req, res, next) =>
     .then(file => {
       logger.info(`File ${file ? 'already' : 'does not'} exists`);
       return file
-        ? createRequestToFile(mapExistingFile(file.dataValues.id, req.body))
+        ? createRequestToFile(mapExistingFile(file.dataValues.id, req.body)).then(() =>
+            updateFile(
+              mapUpdateFile({
+                status: uniqBy([...req.body.requests, ...file.requests], 'subjectUnq').length
+              }),
+              file.dataValues.id
+            )
+          )
         : createFile(mapNewFile(req.body));
     })
     .then(() => res.status(200).send('Request created successfully'))

@@ -1,3 +1,5 @@
+const { uniqBy, pickBy } = require('lodash');
+
 exports.mapNewFile = ({ fileNumber, universityOrigin, yearNote, mail, name, surname, dni, requests }) => ({
   fileNumber,
   universityOrigin,
@@ -6,6 +8,7 @@ exports.mapNewFile = ({ fileNumber, universityOrigin, yearNote, mail, name, surn
   name,
   surname,
   dni,
+  status: uniqBy(requests, 'subjectUnq').length,
   requests: requests.map(
     ({
       careerOrigin,
@@ -90,6 +93,18 @@ exports.mapExistingFile = (fileId, { fileNumber, universityOrigin, yearNote, req
       observations
     })
   );
+
+exports.mapUpdateFile = ({ fileNumber, universityOrigin, yearNote, mail, name, surname, dni, status }) =>
+  pickBy({
+    fileNumber,
+    universityOrigin,
+    yearNote,
+    mail,
+    name,
+    surname,
+    dni,
+    status
+  });
 
 exports.mapFileByFileNumber = file => {
   const request = file.dataValues.requests[0].dataValues;
