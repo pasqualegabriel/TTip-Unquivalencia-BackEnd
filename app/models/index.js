@@ -9,9 +9,7 @@ const env = process.env.NODE_ENV || 'development';
 const config = require(`../../config/db`)[env];
 const db = {};
 
-const sequelize = new Sequelize(config.database, config.username, config.password, {
-  dialect: 'postgres'
-});
+const sequelize = new Sequelize(config.database, config.username, config.password, config);
 
 fs.readdirSync(__dirname)
   .filter(file => {
