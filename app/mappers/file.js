@@ -1,5 +1,5 @@
 const { uniqBy, pickBy } = require('lodash'),
-  { approved, rejected } = require('../constants/request');
+  { withoutEvaluating, equivalencesFinished } = require('../constants/request');
 
 exports.mapNewFile = ({ fileNumber, universityOrigin, yearNote, mail, name, surname, dni, requests }) => ({
   fileNumber,
@@ -107,8 +107,9 @@ exports.mapFileByFileNumber = file => {
 
 exports.getStatus = (requestsSaved, newRequests) =>
   uniqBy(
-    [...requestsSaved, ...newRequests].filter(
-      ({ equivalence }) => equivalence !== approved && equivalence !== rejected
-    ),
+    [
+      ...requestsSaved.map(({ dataValues: { subjectUnq, equivalence } }) => ({ subjectUnq, equivalence })),
+      ...newRequests.map(({ subjectUnq }) => ({ subjectUnq, equivalence: withoutEvaluating }))
+    ].filter(({ equivalence }) => !equivalencesFinished.includes(equivalence)),
     'subjectUnq'
   ).length;

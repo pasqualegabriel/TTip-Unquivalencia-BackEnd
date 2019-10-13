@@ -11,7 +11,7 @@ exports.findFile = fileNumber =>
     include: [
       {
         model: Request,
-        attributes: ['subjectUnq'],
+        attributes: ['subjectUnq', 'equivalence'],
         where: { equivalence: { [Op.notIn]: [approved, rejected] } }
       }
     ]

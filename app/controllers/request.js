@@ -17,27 +17,25 @@ const {
   { differenceBy } = require('lodash'),
   logger = require('../logger');
 
+const createRequestsToFile = (fileSaved, newFile) =>
+  createRequestToFile(mapExistingFile(fileSaved.id, newFile))
+    .then(() =>
+      updateRequestsWithoutEvaluating(fileSaved.id, newFile.requests.map(({ subjectUnq }) => subjectUnq))
+    )
+    .then(() =>
+      updateFile(
+        mapUpdateFile({
+          status: getStatus(fileSaved.requests, newFile.requests)
+        }),
+        fileSaved.id
+      )
+    );
+
 exports.addRequest = (req, res, next) =>
   findFile(req.body.fileNumber)
     .then(file => {
       logger.info(`File ${file ? 'already' : 'does not'} exists`);
-      return file
-        ? createRequestToFile(mapExistingFile(file.dataValues.id, req.body))
-            .then(() =>
-              updateRequestsWithoutEvaluating(
-                file.dataValues.id,
-                req.body.requests.map(({ subjectUnq }) => subjectUnq)
-              )
-            )
-            .then(() =>
-              updateFile(
-                mapUpdateFile({
-                  status: getStatus(file.requests, req.body.requests)
-                }),
-                file.dataValues.id
-              )
-            )
-        : createFile(mapNewFile(req.body));
+      return file ? createRequestsToFile(file.dataValues, req.body) : createFile(mapNewFile(req.body));
     })
     .then(() => res.status(200).send('Request created successfully'))
     .catch(next);

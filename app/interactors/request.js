@@ -10,7 +10,7 @@ exports.findRequests = fileId => Request.findAll({ raw: true, where: { fk_fileid
 
 exports.updateRequestsWithoutEvaluating = (fkFileId, subjectsUnq) =>
   Request.update(
-    { equivalence: withoutEvaluating },
+    { equivalence: withoutEvaluating, signature: 'N/I' },
     { where: { fk_fileid: fkFileId, subjectUnq: { [Op.in]: subjectsUnq } } }
   );
 
