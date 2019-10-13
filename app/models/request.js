@@ -116,6 +116,22 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.STRING,
         defaultValue: ''
+      },
+      professorEquivalence: {
+        allowNull: true,
+        type: DataTypes.ENUM,
+        values: equivalences,
+        field: 'professor_equivalence'
+      },
+      professorObservations: {
+        allowNull: true,
+        type: DataTypes.STRING,
+        field: 'professor_observations'
+      },
+      commentsToProfessor: {
+        allowNull: true,
+        type: DataTypes.STRING,
+        field: 'comments_to_professor'
       }
     },
     {
