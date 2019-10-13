@@ -14,8 +14,11 @@ exports.updateRequestsWithoutEvaluating = (fkFileId, subjectsUnq) =>
     { where: { fk_fileid: fkFileId, subjectUnq: { [Op.in]: subjectsUnq } } }
   );
 
-exports.updateRequest = ({ fk_fileid: fdFileId, subjectUnq }, { equivalence }, signature) =>
-  Request.update({ equivalence, signature }, { where: { fk_fileid: fdFileId, subjectUnq } });
+exports.updateRequest = ({ fk_fileid: fdFileId, subjectUnq }, { equivalence, observations }, signature) =>
+  Request.update(
+    { equivalence, signature, observations: observations || '-' },
+    { where: { fk_fileid: fdFileId, subjectUnq } }
+  );
 
 exports.getRequest = id => Request.findByPk(id);
 

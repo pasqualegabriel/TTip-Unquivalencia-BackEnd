@@ -10,10 +10,10 @@ const {
     findRequestsStepper,
     updateRequestsWithoutEvaluating
   } = require('../interactors/request'),
-  { findFile, createFile, updateFile, decrementStatus } = require('../interactors/file'),
+  { findFile, createFile, updateFile, decrementFileStatus } = require('../interactors/file'),
   { mapExistingFile, mapNewFile, mapUpdateFile, getStatus } = require('../mappers/file'),
   { mapSetRequests } = require('../mappers/request'),
-  { approved, rejected } = require('../constants/request'),
+  { equivalencesFinished } = require('../constants/request'),
   { differenceBy } = require('lodash'),
   logger = require('../logger');
 
@@ -49,17 +49,17 @@ exports.getRequestsByFileId = (req, res, next) =>
 
 exports.updateEquivalence = (req, res, next) =>
   getRequest(req.params.requestId)
-    .then(request =>
-      updateRequest(request.dataValues, req.body, res.locals.user.name)
+    .then(request => {
+      if (equivalencesFinished.includes(request.dataValues.equivalence))
+        return res.status(200).send('Request already updated');
+      return updateRequest(request.dataValues, req.body, res.locals.user.name)
         .then(() =>
-          (req.body.equivalence === approved || req.body.equivalence === rejected) &&
-          request.dataValues.equivalence !== approved &&
-          request.dataValues.equivalence !== rejected
-            ? decrementStatus(request.dataValues.fk_fileid)
+          equivalencesFinished.includes(req.body.equivalence)
+            ? decrementFileStatus(request.dataValues.fk_fileid)
             : Promise.resolve()
         )
-        .then(() => res.status(200).send('Request updated'))
-    )
+        .then(() => res.status(200).send('Request updated'));
+    })
     .catch(next);
 
 exports.getRequest = (req, res, next) =>

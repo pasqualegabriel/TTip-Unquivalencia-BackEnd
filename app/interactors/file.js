@@ -29,4 +29,4 @@ exports.findFileByFileNumber = fileNumber =>
 
 exports.updateFile = (file, id) => File.update(file, { where: { id } });
 
-exports.decrementStatus = id => File.decrement('status', { where: { id } });
+exports.decrementFileStatus = id => File.decrement('status', { where: { id } });

@@ -3,6 +3,7 @@ const userController = require('./controllers/user'),
   requestController = require('./controllers/request'),
   userValidations = require('./middlewares/user'),
   fileValidations = require('./middlewares/file'),
+  requestValidations = require('./middlewares/request'),
   { Validator } = require('express-json-validator-middleware'),
   { logInSchema, userSchema, fileSchema } = require('./middlewares/schemas');
 
@@ -23,7 +24,7 @@ exports.init = app => {
   );
   app.post(
     '/api/v1/request/:requestId',
-    [userValidations.verifyAdminLogin],
+    [userValidations.verifyAdminLogin, requestValidations.verifyEquivalence],
     requestController.updateEquivalence
   );
   app.get(
