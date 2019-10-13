@@ -68,6 +68,15 @@ exports.getRequest = (req, res, next) =>
 exports.getRequestMatchs = async (req, res, next) => {
   try {
     const { dataValues: request } = await getRequest(req.params.requestId);
+    if (request.professorEquivalence)
+      return res.status(200).send({
+        professorEquivalence: request.professorEquivalence,
+        professorObservations: request.professorObservations,
+        requestsTotalMatchApproved: [],
+        requestsMatchWithoutYearPlanApproved: [],
+        subjectsToApprove: [],
+        requestsMatch: []
+      });
     const requests = await getRequestMatch(request);
     const requestsTotalMatchApproved = await findRequestsTotalMatch(request);
     const requestsMatchWithoutYearPlanApproved = requestsTotalMatchApproved.length
