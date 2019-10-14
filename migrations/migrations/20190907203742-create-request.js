@@ -114,6 +114,10 @@ module.exports = {
         type: Sequelize.STRING,
         defaultValue: ''
       },
+      professor_id: {
+        allowNull: true,
+        type: Sequelize.INTEGER
+      },
       professor_equivalence: {
         allowNull: true,
         type: Sequelize.ENUM,

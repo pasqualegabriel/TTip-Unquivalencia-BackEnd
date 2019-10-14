@@ -117,6 +117,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         defaultValue: ''
       },
+      professorId: {
+        allowNull: true,
+        type: DataTypes.INTEGER,
+        field: 'professor_id'
+      },
       professorEquivalence: {
         allowNull: true,
         type: DataTypes.ENUM,

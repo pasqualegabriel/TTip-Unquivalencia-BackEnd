@@ -20,6 +20,12 @@ exports.updateRequest = ({ fk_fileid: fdFileId, subjectUnq }, { equivalence, obs
     { where: { fk_fileid: fdFileId, subjectUnq } }
   );
 
+exports.updateRequestProfessor = ({ fk_fileid: fdFileId, subjectUnq }, { equivalence, observations }) =>
+  Request.update(
+    { professorEquivalence: equivalence, professorObservations: observations || '-' },
+    { where: { fk_fileid: fdFileId, subjectUnq } }
+  );
+
 exports.getRequest = id => Request.findByPk(id);
 
 exports.getRequestMatch = ({ fk_fileid: fkFileId, subjectUnq }) =>

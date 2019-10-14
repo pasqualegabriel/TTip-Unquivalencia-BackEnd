@@ -8,7 +8,8 @@ const {
     findRequestsMatchWithoutYearPlanOrigin,
     findRequestsMatch,
     findRequestsStepper,
-    updateRequestsWithoutEvaluating
+    updateRequestsWithoutEvaluating,
+    updateRequestProfessor
   } = require('../interactors/request'),
   { findFile, createFile, updateFile, decrementFileStatus } = require('../interactors/file'),
   { mapExistingFile, mapNewFile, mapUpdateFile, getStatus } = require('../mappers/file'),
@@ -45,20 +46,22 @@ exports.getRequestsByFileId = (req, res, next) =>
     .then(requests => res.status(200).send(requests))
     .catch(next);
 
-exports.updateEquivalence = (req, res, next) =>
-  getRequest(req.params.requestId)
-    .then(request => {
-      if (equivalencesFinished.includes(request.dataValues.equivalence))
-        return res.status(200).send('Request already updated');
-      return updateRequest(request.dataValues, req.body, res.locals.user.name)
-        .then(() =>
-          equivalencesFinished.includes(req.body.equivalence)
-            ? decrementFileStatus(request.dataValues.fk_fileid)
-            : Promise.resolve()
-        )
-        .then(() => res.status(200).send('Request updated'));
-    })
+const updateRequests = ({ request, user }, body) =>
+  user.id === request.professorId
+    ? updateRequestProfessor(request, body)
+    : updateRequest(request, body, user.name).then(() =>
+        equivalencesFinished.includes(body.equivalence)
+          ? decrementFileStatus(request.fk_fileid)
+          : Promise.resolve()
+      );
+
+exports.updateEquivalence = (req, res, next) => {
+  if (equivalencesFinished.includes(res.locals.request.equivalence))
+    return res.status(200).send('Request already updated');
+  return updateRequests(res.locals, req.body)
+    .then(() => res.status(200).send('Request updated'))
     .catch(next);
+};
 
 exports.getRequest = (req, res, next) =>
   getRequest(req.params.requestId)
@@ -70,8 +73,6 @@ exports.getRequestMatchs = async (req, res, next) => {
     const { dataValues: request } = await getRequest(req.params.requestId);
     if (request.professorEquivalence)
       return res.status(200).send({
-        professorEquivalence: request.professorEquivalence,
-        professorObservations: request.professorObservations,
         requestsTotalMatchApproved: [],
         requestsMatchWithoutYearPlanApproved: [],
         subjectsToApprove: [],
