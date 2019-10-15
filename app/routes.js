@@ -24,7 +24,7 @@ exports.init = app => {
   );
   app.post(
     '/api/v1/request/:requestId',
-    [userValidations.verifyAdminLogin, requestValidations.verifyEquivalence],
+    [userValidations.verifyUpdateEquivalenceAuthentication, requestValidations.verifyEquivalence],
     requestController.updateEquivalence
   );
   app.get(

@@ -1,6 +1,6 @@
 'use strict';
 
-const { equivalences, withoutEvaluating } = require('../constants/request');
+const { equivalences, equivalencesFinished, withoutEvaluating } = require('../constants/request');
 
 module.exports = (sequelize, DataTypes) => {
   const Request = sequelize.define(
@@ -116,6 +116,27 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.STRING,
         defaultValue: ''
+      },
+      professorId: {
+        allowNull: true,
+        type: DataTypes.INTEGER,
+        field: 'professor_id'
+      },
+      professorEquivalence: {
+        allowNull: true,
+        type: DataTypes.ENUM,
+        values: equivalencesFinished,
+        field: 'professor_equivalence'
+      },
+      professorObservations: {
+        allowNull: true,
+        type: DataTypes.STRING,
+        field: 'professor_observations'
+      },
+      commentsToProfessor: {
+        allowNull: true,
+        type: DataTypes.STRING,
+        field: 'comments_to_professor'
       }
     },
     {

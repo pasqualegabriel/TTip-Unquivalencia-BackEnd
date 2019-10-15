@@ -1,4 +1,5 @@
 const userInteractor = require('../interactors/user'),
+  { getRequest } = require('../interactors/request'),
   {
     invalidMailMessage,
     invalidPasswordMessage,
@@ -48,12 +49,16 @@ exports.verifyPassword = (req, res, next) => {
     .catch(next);
 };
 
-const verifyLogin = (req, res, next, permissions) => {
+const verifyLogin = (req, res, next, permissions, professorId) => {
   if (req.headers.authorization) {
     const tokenString = req.headers.authorization.replace('Bearer ', '');
     const token = jwt.decode(tokenString, config.common.session.secret);
     return userInteractor.findOneByEmail(token.email).then(anUser => {
-      if (anUser && token && permissions.includes(anUser.role)) {
+      if (
+        anUser &&
+        token &&
+        (permissions.includes(anUser.role) || (professorId && professorId === anUser.id))
+      ) {
         res.locals.user = anUser;
         const invalidationTime = moment(token.lastSignInDate);
         const invalidationDate = moment(anUser.invalidationDate);
@@ -82,3 +87,11 @@ exports.verifyAdminLogin = (req, res, next) => verifyLogin(req, res, next, [ADMI
 exports.verifyAdminAndUserLogin = (req, res, next) => verifyLogin(req, res, next, [ADMIN, USER]);
 
 exports.verifyAuthentication = (req, res, next) => verifyLogin(req, res, next, roles);
+
+exports.verifyUpdateEquivalenceAuthentication = (req, res, next) =>
+  getRequest(req.params.requestId)
+    .then(request => {
+      res.locals.request = request.dataValues;
+      return verifyLogin(req, res, next, [ADMIN], res.locals.request.professorId);
+    })
+    .catch(next);
