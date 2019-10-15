@@ -7,21 +7,35 @@ const {
     findRequestsTotalMatch,
     findRequestsMatchWithoutYearPlanOrigin,
     findRequestsMatch,
-    findRequestsStepper
+    findRequestsStepper,
+    updateRequestsWithoutEvaluating
   } = require('../interactors/request'),
-  { findFile, createFile } = require('../interactors/file'),
-  { mapExistingFile, mapNewFile } = require('../mappers/file'),
+  { findFile, createFile, updateFile, decrementFileStatus } = require('../interactors/file'),
+  { mapExistingFile, mapNewFile, mapUpdateFile, getStatus } = require('../mappers/file'),
   { mapSetRequests } = require('../mappers/request'),
+  { equivalencesFinished } = require('../constants/request'),
   { differenceBy } = require('lodash'),
   logger = require('../logger');
+
+const createRequestsToFile = (fileSaved, newFile) =>
+  createRequestToFile(mapExistingFile(fileSaved.id, newFile))
+    .then(() =>
+      updateRequestsWithoutEvaluating(fileSaved.id, newFile.requests.map(({ subjectUnq }) => subjectUnq))
+    )
+    .then(() =>
+      updateFile(
+        mapUpdateFile({
+          status: getStatus(fileSaved.requests, newFile.requests)
+        }),
+        fileSaved.id
+      )
+    );
 
 exports.addRequest = (req, res, next) =>
   findFile(req.body.fileNumber)
     .then(file => {
       logger.info(`File ${file ? 'already' : 'does not'} exists`);
-      return file
-        ? createRequestToFile(mapExistingFile(file.dataValues.id, req.body))
-        : createFile(mapNewFile(req.body));
+      return file ? createRequestsToFile(file.dataValues, req.body) : createFile(mapNewFile(req.body));
     })
     .then(() => res.status(200).send('Request created successfully'))
     .catch(next);
@@ -32,8 +46,18 @@ exports.getRequestsByFileId = (req, res, next) =>
     .catch(next);
 
 exports.updateEquivalence = (req, res, next) =>
-  updateRequest(req.params.requestId, req.body)
-    .then(() => res.status(200).send('Request updated'))
+  getRequest(req.params.requestId)
+    .then(request => {
+      if (equivalencesFinished.includes(request.dataValues.equivalence))
+        return res.status(200).send('Request already updated');
+      return updateRequest(request.dataValues, req.body, res.locals.user.name)
+        .then(() =>
+          equivalencesFinished.includes(req.body.equivalence)
+            ? decrementFileStatus(request.dataValues.fk_fileid)
+            : Promise.resolve()
+        )
+        .then(() => res.status(200).send('Request updated'));
+    })
     .catch(next);
 
 exports.getRequest = (req, res, next) =>

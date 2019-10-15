@@ -2,13 +2,23 @@ const {
     request: Request,
     Sequelize: { Op }
   } = require('../models'),
-  { approved, rejected } = require('../constants/request');
+  { approved, rejected, withoutEvaluating } = require('../constants/request');
 
 exports.createRequestToFile = requests => Request.bulkCreate(requests);
 
 exports.findRequests = fileId => Request.findAll({ raw: true, where: { fk_fileid: fileId } });
 
-exports.updateRequest = (id, { equivalence }) => Request.update({ equivalence }, { where: { id } });
+exports.updateRequestsWithoutEvaluating = (fkFileId, subjectsUnq) =>
+  Request.update(
+    { equivalence: withoutEvaluating, signature: 'N/I' },
+    { where: { fk_fileid: fkFileId, subjectUnq: { [Op.in]: subjectsUnq } } }
+  );
+
+exports.updateRequest = ({ fk_fileid: fdFileId, subjectUnq }, { equivalence, observations }, signature) =>
+  Request.update(
+    { equivalence, signature, observations: observations || '-' },
+    { where: { fk_fileid: fdFileId, subjectUnq } }
+  );
 
 exports.getRequest = id => Request.findByPk(id);
 
