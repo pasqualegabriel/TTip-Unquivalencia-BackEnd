@@ -6,10 +6,12 @@ const {
     getRequestMatch,
     findRequestsTotalMatch,
     findRequestsMatchWithoutYearPlanOrigin,
-    findRequestsMatch
+    findRequestsMatch,
+    findRequestsStepper
   } = require('../interactors/request'),
   { findFile, createFile } = require('../interactors/file'),
   { mapExistingFile, mapNewFile } = require('../mappers/file'),
+  { mapSetRequests } = require('../mappers/request'),
   { differenceBy } = require('lodash'),
   logger = require('../logger');
 
@@ -67,3 +69,9 @@ exports.getRequestMatchs = async (req, res, next) => {
     return next(error);
   }
 };
+
+exports.getStepperRequest = (req, res, next) =>
+  getRequest(parseInt(req.params.requestId))
+    .then(request => findRequestsStepper(request.dataValues.fk_fileid))
+    .then(requests => res.status(200).send(mapSetRequests(requests)))
+    .catch(next);
