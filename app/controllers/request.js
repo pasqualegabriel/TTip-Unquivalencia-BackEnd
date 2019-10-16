@@ -15,6 +15,7 @@ const {
   { mapExistingFile, mapNewFile, mapUpdateFile, getStatus } = require('../mappers/file'),
   { mapSetRequests } = require('../mappers/request'),
   { equivalencesFinished } = require('../constants/request'),
+  { ADMIN } = require('../constants/user'),
   { differenceBy } = require('lodash'),
   logger = require('../logger');
 
@@ -47,7 +48,7 @@ exports.getRequestsByFileId = (req, res, next) =>
     .catch(next);
 
 const updateRequests = ({ request, user }, body) =>
-  user.id === request.professorId
+  user.id === request.professorId && user.role !== ADMIN
     ? updateRequestProfessor(request, body)
     : updateRequest(request, body, user.name).then(() =>
         equivalencesFinished.includes(body.equivalence)
