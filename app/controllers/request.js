@@ -110,12 +110,16 @@ exports.getRequestMatchs = async (req, res, next) => {
   }
 };
 
+const getRequestsStepper = ({ id, role }, request) =>
+  role === PROFESSOR
+    ? findRequestsStepperProfessor(request.fk_fileid, id)
+    : findRequestsStepper(request.fk_fileid);
+
 exports.getStepperRequest = (req, res, next) =>
   getRequest(parseInt(req.params.requestId))
     .then(request =>
-      res.locals.user.role === PROFESSOR
-        ? findRequestsStepperProfessor(request.dataValues.fk_fileid, res.locals.user.id)
-        : findRequestsStepper(request.dataValues.fk_fileid)
+      getRequestsStepper(res.locals.user, request.dataValues).then(requests =>
+        res.status(200).send(mapSetRequests(requests, request.dataValues.subjectUnq))
+      )
     )
-    .then(requests => res.status(200).send(mapSetRequests(requests)))
     .catch(next);
