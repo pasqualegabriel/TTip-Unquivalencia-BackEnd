@@ -88,10 +88,16 @@ exports.verifyAdminAndUserLogin = (req, res, next) => verifyLogin(req, res, next
 
 exports.verifyAuthentication = (req, res, next) => verifyLogin(req, res, next, roles);
 
-exports.verifyUpdateEquivalenceAuthentication = (req, res, next) =>
+const verifyRequestsAuthentication = (req, res, next, someRoles) =>
   getRequest(req.params.requestId)
     .then(request => {
       res.locals.request = request.dataValues;
-      return verifyLogin(req, res, next, [ADMIN], res.locals.request.professorId);
+      return verifyLogin(req, res, next, someRoles, res.locals.request.professorId);
     })
     .catch(next);
+
+exports.verifyUpdateEquivalenceAuthentication = (req, res, next) =>
+  verifyRequestsAuthentication(req, res, next, [ADMIN]);
+
+exports.verifyGetRequestAuthentication = (req, res, next) =>
+  verifyRequestsAuthentication(req, res, next, [ADMIN, USER]);

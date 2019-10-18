@@ -116,3 +116,9 @@ exports.findRequestsStepper = fileId =>
     raw: true,
     where: { fk_fileid: fileId }
   });
+
+exports.findAllRequestsProfessor = (professorId, fileId) =>
+  Request.findAll({
+    raw: true,
+    where: { fk_fileid: fileId, professorId }
+  });

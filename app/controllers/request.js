@@ -9,13 +9,14 @@ const {
     findRequestsMatch,
     findRequestsStepper,
     updateRequestsWithoutEvaluating,
-    updateRequestProfessor
+    updateRequestProfessor,
+    findAllRequestsProfessor
   } = require('../interactors/request'),
   { findFile, createFile, updateFile, decrementFileStatus } = require('../interactors/file'),
   { mapExistingFile, mapNewFile, mapUpdateFile, getStatus } = require('../mappers/file'),
   { mapSetRequests } = require('../mappers/request'),
   { equivalencesFinished } = require('../constants/request'),
-  { ADMIN } = require('../constants/user'),
+  { ADMIN, PROFESSOR } = require('../constants/user'),
   { differenceBy } = require('lodash'),
   logger = require('../logger');
 
@@ -42,8 +43,11 @@ exports.addRequest = (req, res, next) =>
     .then(() => res.status(200).send('Request created successfully'))
     .catch(next);
 
+const findRequestsByFileId = ({ id, rol }, fileId) =>
+  rol === PROFESSOR ? findAllRequestsProfessor(id, fileId) : findRequests(fileId);
+
 exports.getRequestsByFileId = (req, res, next) =>
-  findRequests(req.params.fileId)
+  findRequestsByFileId(res.locals.user, req.params.fileId)
     .then(requests => res.status(200).send(requests))
     .catch(next);
 
