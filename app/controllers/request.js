@@ -8,6 +8,7 @@ const {
     findRequestsMatchWithoutYearPlanOrigin,
     findRequestsMatch,
     findRequestsStepper,
+    findRequestsStepperProfessor,
     updateRequestsWithoutEvaluating,
     updateRequestProfessor,
     findAllRequestsProfessor
@@ -111,6 +112,10 @@ exports.getRequestMatchs = async (req, res, next) => {
 
 exports.getStepperRequest = (req, res, next) =>
   getRequest(parseInt(req.params.requestId))
-    .then(request => findRequestsStepper(request.dataValues.fk_fileid))
+    .then(request =>
+      res.locals.user.role === PROFESSOR
+        ? findRequestsStepperProfessor(request.dataValues.fk_fileid, res.locals.user.id)
+        : findRequestsStepper(request.dataValues.fk_fileid)
+    )
     .then(requests => res.status(200).send(mapSetRequests(requests)))
     .catch(next);

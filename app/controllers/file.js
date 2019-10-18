@@ -2,10 +2,7 @@ const { findAllFiles, findAllFilesProfessor, findFileByFileNumber } = require('.
   { mapFileByFileNumber } = require('../mappers/file'),
   { PROFESSOR } = require('../constants/user');
 
-const getFiles = ({ id, role }) => {
-  console.log('acaaaa ', id, role);
-  return role === PROFESSOR ? findAllFilesProfessor(id) : findAllFiles();
-};
+const getFiles = ({ id, role }) => (role === PROFESSOR ? findAllFilesProfessor(id) : findAllFiles());
 
 exports.getAllFiles = (_, res, next) =>
   getFiles(res.locals.user)
