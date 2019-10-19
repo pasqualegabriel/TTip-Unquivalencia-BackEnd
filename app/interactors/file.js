@@ -3,12 +3,20 @@ const {
     file: File,
     Sequelize: { Op }
   } = require('../models'),
-  { approved, rejected, consulting } = require('../constants/request'),
+  { equivalencesFinished, consulting } = require('../constants/request'),
   { uniq } = require('lodash');
 
 exports.findFile = fileNumber =>
   File.findOne({
-    where: { fileNumber }
+    where: { fileNumber },
+    include: [
+      {
+        model: Request,
+        required: false,
+        attributes: ['subjectUnq', 'equivalence'],
+        where: { equivalence: { [Op.notIn]: equivalencesFinished } }
+      }
+    ]
   });
 
 exports.createFile = file =>
