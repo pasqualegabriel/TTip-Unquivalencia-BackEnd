@@ -1,10 +1,10 @@
-const { flatMap } = require('lodash');
+const { flatMap, pickBy } = require('lodash');
 
 const verifyField = (fields, field, index) =>
   fields[field] ? [] : [{ message: `'${field}' is required at position ${index}`, field, index }];
 
 const verifyRequestFields = ({ careerOrigin, subjectOrigin, careerUnq, subjectUnq }, index) => {
-  const fields = { careerOrigin, subjectOrigin, careerUnq, subjectUnq };
+  const fields = pickBy({ careerOrigin, subjectOrigin, careerUnq, subjectUnq });
   return flatMap(Object.keys(fields), field => verifyField(fields, field, index));
 };
 

@@ -8,14 +8,7 @@ const {
 
 exports.findFile = fileNumber =>
   File.findOne({
-    where: { fileNumber },
-    include: [
-      {
-        model: Request,
-        attributes: ['subjectUnq', 'equivalence'],
-        where: { equivalence: { [Op.notIn]: [approved, rejected] } }
-      }
-    ]
+    where: { fileNumber }
   });
 
 exports.createFile = file =>
