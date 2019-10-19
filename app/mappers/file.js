@@ -100,12 +100,12 @@ exports.mapUpdateFile = ({ fileNumber, universityOrigin, yearNote, mail, name, s
   });
 
 exports.mapFileByFileNumber = file => {
-  const request = file.dataValues.requests[0].dataValues;
+  const request = file.dataValues.requests.length ? file.dataValues.requests[0].dataValues : file.dataValues;
   delete file.dataValues.requests;
   return { ...request, ...file.dataValues };
 };
 
-exports.getStatus = (requestsSaved, newRequests) =>
+exports.getStatus = (requestsSaved = [], newRequests = []) =>
   uniqBy(
     [
       ...requestsSaved.map(({ dataValues: { subjectUnq, equivalence } }) => ({ subjectUnq, equivalence })),

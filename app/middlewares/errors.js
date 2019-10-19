@@ -22,7 +22,7 @@ exports.handle = (error, req, res, next) => {
   if (error.internalCode) {
     return res.status(statusCodes[error.internalCode] || DEFAULT_STATUS_CODE);
   } else {
-    logger.error(error);
+//    logger.error(error);
     return res
       .status(DEFAULT_STATUS_CODE)
       .send({ message: error.message, internal_code: error.internalCode });

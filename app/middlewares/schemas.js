@@ -32,27 +32,9 @@ exports.userSchema = {
 
 exports.fileSchema = {
   type: 'object',
-  required: ['fileNumber', 'universityOrigin', 'name', 'surname', 'requests'],
+  required: ['fileNumber', 'requests'],
   properties: {
     fileNumber: {
-      type: 'string'
-    },
-    universityOrigin: {
-      type: 'string'
-    },
-    name: {
-      type: 'string'
-    },
-    surname: {
-      type: 'string'
-    },
-    yearNote: {
-      type: 'string'
-    },
-    mail: {
-      type: 'string'
-    },
-    dni: {
       type: 'string'
     },
     requests: {
