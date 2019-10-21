@@ -118,15 +118,6 @@ module.exports = {
         allowNull: true,
         type: Sequelize.INTEGER
       },
-      professor_equivalence: {
-        allowNull: true,
-        type: Sequelize.ENUM,
-        values: equivalencesFinished
-      },
-      professor_observations: {
-        allowNull: true,
-        type: Sequelize.STRING
-      },
       comments_to_professor: {
         allowNull: true,
         type: Sequelize.STRING

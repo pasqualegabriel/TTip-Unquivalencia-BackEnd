@@ -122,17 +122,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         field: 'professor_id'
       },
-      professorEquivalence: {
-        allowNull: true,
-        type: DataTypes.ENUM,
-        values: equivalencesFinished,
-        field: 'professor_equivalence'
-      },
-      professorObservations: {
-        allowNull: true,
-        type: DataTypes.STRING,
-        field: 'professor_observations'
-      },
       commentsToProfessor: {
         allowNull: true,
         type: DataTypes.STRING,
