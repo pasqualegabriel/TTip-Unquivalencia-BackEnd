@@ -82,7 +82,7 @@ const getRequestsStepper = ({ id, role }, request) =>
 exports.getRequestMatchs = async (req, res, next) => {
   try {
     const { dataValues: request } = await getRequest(req.params.requestId);
-    const requestsStepper = await getRequestsStepper(res.locals.user, request.dataValues);
+    const requestsStepper = await getRequestsStepper(res.locals.user, request);
     const requests = await getRequestMatch(request);
     const requestsTotalMatchApproved = await findRequestsTotalMatch(request);
     const requestsMatchWithoutYearPlanApproved = requestsTotalMatchApproved.length
