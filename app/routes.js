@@ -15,11 +15,11 @@ exports.init = app => {
     [userValidations.verifyAdminAndUserLogin, validate({ body: fileSchema }), fileValidations.verifyRequests],
     requestController.addRequest
   );
-  app.get('/api/v1/files', [userValidations.verifyAdminAndUserLogin], fileController.getAllFiles);
+  app.get('/api/v1/files', [userValidations.verifyAuthentication], fileController.getAllFiles);
   app.get('/api/v1/file', [userValidations.verifyAdminAndUserLogin], fileController.getFileByFileNumber);
   app.get(
     '/api/v1/requests/:fileId',
-    [userValidations.verifyAdminAndUserLogin],
+    [userValidations.verifyAuthentication],
     requestController.getRequestsByFileId
   );
   app.post(
@@ -29,7 +29,7 @@ exports.init = app => {
   );
   app.get(
     '/api/v1/request/:requestId',
-    [userValidations.verifyAdminAndUserLogin],
+    [userValidations.verifyGetRequestAuthentication],
     requestController.getRequest
   );
   app.get(

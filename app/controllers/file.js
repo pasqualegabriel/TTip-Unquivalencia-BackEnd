@@ -1,8 +1,11 @@
-const { findAllFiles, findFileByFileNumber } = require('../interactors/file'),
-  { mapFileByFileNumber } = require('../mappers/file');
+const { findAllFiles, findAllFilesProfessor, findFileByFileNumber } = require('../interactors/file'),
+  { mapFileByFileNumber } = require('../mappers/file'),
+  { PROFESSOR } = require('../constants/user');
+
+const getFiles = ({ id, role }) => (role === PROFESSOR ? findAllFilesProfessor(id) : findAllFiles());
 
 exports.getAllFiles = (_, res, next) =>
-  findAllFiles()
+  getFiles(res.locals.user)
     .then(files => res.status(200).send(files))
     .catch(next);
 

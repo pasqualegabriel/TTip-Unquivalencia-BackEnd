@@ -2,7 +2,7 @@ const {
     request: Request,
     Sequelize: { Op }
   } = require('../models'),
-  { approved, rejected, withoutEvaluating } = require('../constants/request');
+  { approved, rejected, withoutEvaluating, consulting } = require('../constants/request');
 
 exports.createRequestToFile = requests => Request.bulkCreate(requests);
 
@@ -115,4 +115,17 @@ exports.findRequestsStepper = fileId =>
     attributes: [['id', 'requestId'], 'subjectOrigin', 'subjectUnq'],
     raw: true,
     where: { fk_fileid: fileId }
+  });
+
+exports.findRequestsStepperProfessor = (fileId, professorId) =>
+  Request.findAll({
+    attributes: [['id', 'requestId'], 'subjectOrigin', 'subjectUnq'],
+    raw: true,
+    where: { fk_fileid: fileId, professorId, equivalence: consulting }
+  });
+
+exports.findAllRequestsProfessor = (professorId, fileId) =>
+  Request.findAll({
+    raw: true,
+    where: { fk_fileid: fileId, professorId }
   });
