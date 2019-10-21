@@ -34,7 +34,7 @@ exports.init = app => {
   );
   app.get(
     '/api/v1/matchs/requests/:requestId',
-    [userValidations.verifyAdminAndUserLogin],
+    [userValidations.verifyGetRequestAuthentication],
     requestController.getRequestMatchs
   );
   app.get(
