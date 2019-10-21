@@ -74,16 +74,15 @@ exports.getRequest = (req, res, next) =>
     .then(request => res.status(200).send(request))
     .catch(next);
 
+const getRequestsStepper = ({ id, role }, request) =>
+  role === PROFESSOR
+    ? findRequestsStepperProfessor(request.fk_fileid, id)
+    : findRequestsStepper(request.fk_fileid);
+
 exports.getRequestMatchs = async (req, res, next) => {
   try {
     const { dataValues: request } = await getRequest(req.params.requestId);
-    if (request.professorEquivalence)
-      return res.status(200).send({
-        requestsTotalMatchApproved: [],
-        requestsMatchWithoutYearPlanApproved: [],
-        subjectsToApprove: [],
-        requestsMatch: []
-      });
+    const requestsStepper = await getRequestsStepper(res.locals.user, request.dataValues);
     const requests = await getRequestMatch(request);
     const requestsTotalMatchApproved = await findRequestsTotalMatch(request);
     const requestsMatchWithoutYearPlanApproved = requestsTotalMatchApproved.length
@@ -96,6 +95,7 @@ exports.getRequestMatchs = async (req, res, next) => {
     const getSubjectsOrigin = someRequests =>
       differenceBy(someRequests, requests, 'subjectOrigin').map(({ subjectOrigin }) => subjectOrigin);
     return res.status(200).send({
+      ...mapSetRequests(requestsStepper, request.dataValues),
       requestsTotalMatchApproved,
       requestsMatchWithoutYearPlanApproved,
       subjectsToApprove: requestsTotalMatchApproved.length
@@ -109,11 +109,6 @@ exports.getRequestMatchs = async (req, res, next) => {
     return next(error);
   }
 };
-
-const getRequestsStepper = ({ id, role }, request) =>
-  role === PROFESSOR
-    ? findRequestsStepperProfessor(request.fk_fileid, id)
-    : findRequestsStepper(request.fk_fileid);
 
 exports.getStepperRequest = (req, res, next) =>
   getRequest(parseInt(req.params.requestId))
