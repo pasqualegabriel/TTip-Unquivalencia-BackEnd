@@ -119,7 +119,7 @@ exports.getStepperRequest = (req, res, next) =>
   getRequest(parseInt(req.params.requestId))
     .then(request =>
       getRequestsStepper(res.locals.user, request.dataValues).then(requests =>
-        res.status(200).send(mapSetRequests(requests, request.dataValues.subjectUnq))
+        res.status(200).send(mapSetRequests(requests, request.dataValues))
       )
     )
     .catch(next);
