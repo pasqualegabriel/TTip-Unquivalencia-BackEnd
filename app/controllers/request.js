@@ -95,7 +95,7 @@ exports.getRequestMatchs = async (req, res, next) => {
     const getSubjectsOrigin = someRequests =>
       differenceBy(someRequests, requests, 'subjectOrigin').map(({ subjectOrigin }) => subjectOrigin);
     return res.status(200).send({
-      ...mapSetRequests(requestsStepper, request.dataValues),
+      ...mapSetRequests(requestsStepper, request),
       requestsTotalMatchApproved,
       requestsMatchWithoutYearPlanApproved,
       subjectsToApprove: requestsTotalMatchApproved.length
