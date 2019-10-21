@@ -15,7 +15,6 @@ exports.mapSetRequests = (requests, request) => {
     }) => ({
       requestId,
       subjectUnq,
-      subjectsOrigin: requestsBySubjectUnq[subjectUnq],
       equivalence,
       courseMode,
       subjectOriginWeeklyHours,

@@ -91,14 +91,16 @@ exports.getRequestMatchs = async (req, res, next) => {
       differenceBy(someRequests, requests, 'subjectOrigin').map(({ subjectOrigin }) => subjectOrigin);
     return res.status(200).send({
       ...mapSetRequests(requestsStepper, request),
-      requestsTotalMatchApproved,
-      requestsMatchWithoutYearPlanApproved,
-      subjectsToApprove: requestsTotalMatchApproved.length
-        ? getSubjectsOrigin(requestsTotalMatchApproved)
-        : requestsMatchWithoutYearPlanApproved.length
-        ? getSubjectsOrigin(requestsMatchWithoutYearPlanApproved)
-        : [],
-      requestsMatch
+      match: {
+        requestsTotalMatchApproved,
+        requestsMatchWithoutYearPlanApproved,
+        subjectsToApprove: requestsTotalMatchApproved.length
+          ? getSubjectsOrigin(requestsTotalMatchApproved)
+          : requestsMatchWithoutYearPlanApproved.length
+          ? getSubjectsOrigin(requestsMatchWithoutYearPlanApproved)
+          : [],
+        requestsMatch
+      }
     });
   } catch (error) {
     return next(error);
