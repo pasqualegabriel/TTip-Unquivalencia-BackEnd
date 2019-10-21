@@ -10,14 +10,13 @@ const {
     findRequestsStepper,
     findRequestsStepperProfessor,
     updateRequestsWithoutEvaluating,
-    updateRequestProfessor,
     findAllRequestsProfessor
   } = require('../interactors/request'),
   { findFile, createFile, updateFile, decrementFileStatus } = require('../interactors/file'),
   { mapExistingFile, mapNewFile, mapUpdateFile, getStatus } = require('../mappers/file'),
   { mapSetRequests } = require('../mappers/request'),
   { equivalencesFinished } = require('../constants/request'),
-  { ADMIN, PROFESSOR } = require('../constants/user'),
+  { PROFESSOR } = require('../constants/user'),
   { differenceBy } = require('lodash'),
   logger = require('../logger');
 

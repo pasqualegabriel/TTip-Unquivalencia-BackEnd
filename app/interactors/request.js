@@ -106,14 +106,34 @@ exports.findRequestsMatch = ({ fk_fileid: fkFileId, universityOrigin, careerOrig
 
 exports.findRequestsStepper = fileId =>
   Request.findAll({
-    attributes: [['id', 'requestId'], 'subjectOrigin', 'subjectUnq'],
+    attributes: [
+      ['id', 'requestId'],
+      'subjectOrigin',
+      'subjectUnq',
+      'equivalence',
+      'courseMode',
+      'subjectOriginWeeklyHours',
+      'subjectOriginTotalHours',
+      'yearPlanOrigin',
+      'credits'
+    ],
     raw: true,
     where: { fk_fileid: fileId }
   });
 
 exports.findRequestsStepperProfessor = (fileId, professorId) =>
   Request.findAll({
-    attributes: [['id', 'requestId'], 'subjectOrigin', 'subjectUnq'],
+    attributes: [
+      ['id', 'requestId'],
+      'subjectOrigin',
+      'subjectUnq',
+      'equivalence',
+      'courseMode',
+      'subjectOriginWeeklyHours',
+      'subjectOriginTotalHours',
+      'yearPlanOrigin',
+      'credits'
+    ],
     raw: true,
     where: { fk_fileid: fileId, professorId, equivalence: consulting }
   });
