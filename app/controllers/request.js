@@ -10,14 +10,13 @@ const {
     findRequestsStepper,
     findRequestsStepperProfessor,
     updateRequestsWithoutEvaluating,
-    updateRequestProfessor,
     findAllRequestsProfessor
   } = require('../interactors/request'),
   { findFile, createFile, updateFile, decrementFileStatus } = require('../interactors/file'),
   { mapExistingFile, mapNewFile, mapUpdateFile, getStatus } = require('../mappers/file'),
   { mapSetRequests } = require('../mappers/request'),
   { equivalencesFinished } = require('../constants/request'),
-  { ADMIN, PROFESSOR } = require('../constants/user'),
+  { PROFESSOR } = require('../constants/user'),
   { differenceBy } = require('lodash'),
   logger = require('../logger');
 
@@ -52,19 +51,15 @@ exports.getRequestsByFileId = (req, res, next) =>
     .then(requests => res.status(200).send(requests))
     .catch(next);
 
-const updateRequests = ({ request, user }, body) =>
-  user.id === request.professorId && user.role !== ADMIN
-    ? updateRequestProfessor(request, body)
-    : updateRequest(request, body, user.name).then(() =>
-        equivalencesFinished.includes(body.equivalence)
-          ? decrementFileStatus(request.fk_fileid)
-          : Promise.resolve()
-      );
-
 exports.updateEquivalence = (req, res, next) => {
   if (equivalencesFinished.includes(res.locals.request.equivalence))
     return res.status(200).send('Request already updated');
-  return updateRequests(res.locals, req.body)
+  return updateRequest(res.locals.request, req.body, res.locals.user.name)
+    .then(() =>
+      equivalencesFinished.includes(req.body.equivalence)
+        ? decrementFileStatus(res.locals.request.fk_fileid)
+        : Promise.resolve()
+    )
     .then(() => res.status(200).send('Request updated'))
     .catch(next);
 };
@@ -96,14 +91,16 @@ exports.getRequestMatchs = async (req, res, next) => {
       differenceBy(someRequests, requests, 'subjectOrigin').map(({ subjectOrigin }) => subjectOrigin);
     return res.status(200).send({
       ...mapSetRequests(requestsStepper, request),
-      requestsTotalMatchApproved,
-      requestsMatchWithoutYearPlanApproved,
-      subjectsToApprove: requestsTotalMatchApproved.length
-        ? getSubjectsOrigin(requestsTotalMatchApproved)
-        : requestsMatchWithoutYearPlanApproved.length
-        ? getSubjectsOrigin(requestsMatchWithoutYearPlanApproved)
-        : [],
-      requestsMatch
+      match: {
+        requestsTotalMatchApproved,
+        requestsMatchWithoutYearPlanApproved,
+        subjectsToApprove: requestsTotalMatchApproved.length
+          ? getSubjectsOrigin(requestsTotalMatchApproved)
+          : requestsMatchWithoutYearPlanApproved.length
+          ? getSubjectsOrigin(requestsMatchWithoutYearPlanApproved)
+          : [],
+        requestsMatch
+      }
     });
   } catch (error) {
     return next(error);

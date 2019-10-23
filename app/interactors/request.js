@@ -20,12 +20,6 @@ exports.updateRequest = ({ fk_fileid: fdFileId, subjectUnq }, { equivalence, obs
     { where: { fk_fileid: fdFileId, subjectUnq } }
   );
 
-exports.updateRequestProfessor = ({ fk_fileid: fdFileId, subjectUnq }, { equivalence, observations }) =>
-  Request.update(
-    { professorEquivalence: equivalence, professorObservations: observations || '-' },
-    { where: { fk_fileid: fdFileId, subjectUnq } }
-  );
-
 exports.getRequest = id => Request.findByPk(id);
 
 exports.getRequestMatch = ({ fk_fileid: fkFileId, subjectUnq }) =>
@@ -112,14 +106,34 @@ exports.findRequestsMatch = ({ fk_fileid: fkFileId, universityOrigin, careerOrig
 
 exports.findRequestsStepper = fileId =>
   Request.findAll({
-    attributes: [['id', 'requestId'], 'subjectOrigin', 'subjectUnq'],
+    attributes: [
+      ['id', 'requestId'],
+      'subjectOrigin',
+      'subjectUnq',
+      'equivalence',
+      'courseMode',
+      'subjectOriginWeeklyHours',
+      'subjectOriginTotalHours',
+      'yearPlanOrigin',
+      'credits'
+    ],
     raw: true,
     where: { fk_fileid: fileId }
   });
 
 exports.findRequestsStepperProfessor = (fileId, professorId) =>
   Request.findAll({
-    attributes: [['id', 'requestId'], 'subjectOrigin', 'subjectUnq'],
+    attributes: [
+      ['id', 'requestId'],
+      'subjectOrigin',
+      'subjectUnq',
+      'equivalence',
+      'courseMode',
+      'subjectOriginWeeklyHours',
+      'subjectOriginTotalHours',
+      'yearPlanOrigin',
+      'credits'
+    ],
     raw: true,
     where: { fk_fileid: fileId, professorId, equivalence: consulting }
   });
