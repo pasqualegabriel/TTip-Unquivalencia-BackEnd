@@ -37,7 +37,9 @@ const config = {
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD
     },
-    api: {},
+    api: {
+      frontUrl: process.env.FRONT_URL
+    },
     session: {
       secret: process.env.NODE_API_SESSION_SECRET,
       invalidationTimeInMinutes: 900

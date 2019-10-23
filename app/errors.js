@@ -16,4 +16,5 @@ exports.incorrectPasswordMessage = 'Password incorrecto';
 exports.theEmailAlreadyExistsMessage = 'Ya existe el email';
 exports.permissionDeniedMessage = 'Permiso denegado';
 exports.youAreNotLoggedInMessage = 'No estas logiado';
-exports.sessionExpiredMessage = 'Session expired';
+exports.sessionExpiredMessage = 'Sesion expirada';
+exports.nonExistentRequestMessage = 'Solicitud inexistente';

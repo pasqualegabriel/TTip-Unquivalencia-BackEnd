@@ -10,7 +10,8 @@ const {
     findRequestsStepper,
     findRequestsStepperProfessor,
     updateRequestsWithoutEvaluating,
-    findAllRequestsProfessor
+    findAllRequestsProfessor,
+    updateConsultEquivalence
   } = require('../interactors/request'),
   { findFile, createFile, updateFile, decrementFileStatus } = require('../interactors/file'),
   { mapExistingFile, mapNewFile, mapUpdateFile, getStatus } = require('../mappers/file'),
@@ -18,6 +19,8 @@ const {
   { equivalencesFinished } = require('../constants/request'),
   { PROFESSOR } = require('../constants/user'),
   { differenceBy } = require('lodash'),
+  { generateConsultToProfessorMail } = require('../helpers'),
+  sendEmail = require('../services/mail'),
   logger = require('../logger');
 
 const createRequestsToFile = (fileSaved, newFile) =>
@@ -114,4 +117,15 @@ exports.getStepperRequest = (req, res, next) =>
         res.status(200).send(mapSetRequests(requests, request.dataValues))
       )
     )
+    .catch(next);
+
+exports.consultEquivalence = (req, res, next) =>
+  updateConsultEquivalence(res.locals.request, res.locals.professor, req.body)
+    .then(() => {
+      res.status(200).send('Request updated');
+      return sendEmail(generateConsultToProfessorMail(req.params.requestId, res.locals.professor));
+    })
+    .then(() => {
+      logger.info('Email sent to professor');
+    })
     .catch(next);
