@@ -104,7 +104,9 @@ exports.verifyGetRequestAuthentication = (req, res, next) =>
 
 exports.validateProfessor = (req, res, next) =>
   userInteractor.findOneByEmail(req.body.email).then(professor => {
-    res.locals.professor = professor.dataValues;
-    if (professor && isEmail(req.body.email)) return next();
+    if (professor && isEmail(req.body.email)) {
+      res.locals.professor = professor.dataValues;
+      return next();
+    }
     return res.status(401).send(nonExistentMailMessage);
   });
