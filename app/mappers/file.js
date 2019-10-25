@@ -102,7 +102,7 @@ exports.mapUpdateFile = ({ fileNumber, universityOrigin, yearNote, mail, name, s
 exports.mapFileByFileNumber = file => {
   const request = file.dataValues.requests.length ? file.dataValues.requests[0].dataValues : file.dataValues;
   delete file.dataValues.requests;
-  return { ...request, ...file.dataValues };
+  return { ...file.dataValues, ...request };
 };
 
 exports.getStatus = (requestsSaved = [], newRequests = []) =>
