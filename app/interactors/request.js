@@ -143,3 +143,13 @@ exports.findAllRequestsProfessor = (professorId, fileId) =>
     raw: true,
     where: { fk_fileid: fileId, professorId }
   });
+
+exports.updateConsultEquivalence = (
+  { fk_fileid: fkFileId, subjectUnq },
+  { id: professorId },
+  { message: commentsToProfessor = 'N/I' }
+) =>
+  Request.update(
+    { professorId, equivalence: consulting, commentsToProfessor },
+    { where: { fk_fileid: fkFileId, subjectUnq } }
+  );

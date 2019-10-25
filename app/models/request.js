@@ -1,6 +1,6 @@
 'use strict';
 
-const { equivalences, equivalencesFinished, withoutEvaluating } = require('../constants/request');
+const { equivalences, withoutEvaluating } = require('../constants/request');
 
 module.exports = (sequelize, DataTypes) => {
   const Request = sequelize.define(
