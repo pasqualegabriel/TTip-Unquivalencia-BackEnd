@@ -5,6 +5,7 @@ const logger = require('./app/logger');
 const errors = require('./app/middlewares/errors');
 const { init } = require('./app/routes');
 const cors = require('cors');
+const Nuxeo = require('nuxeo');
 
 const app = express();
 
@@ -30,6 +31,25 @@ const port = parseInt(process.env.PORT, 10) || 8000;
 app.set('port', port);
 
 const server = http.createServer(app);
+
+// const nuxeo = new Nuxeo({
+//   auth: {
+//     baseURL: 'http://localhost/nuxeo/api/v1/upload',
+//     username: 'Administrator',
+//     password: 'Administrator'
+//   }
+// });
+// nuxeo
+//   .connect()
+//   .then(function(client) {
+//     // client.connected === true
+//     // client === nuxeo
+//     console.log('Connected OK!');
+//   })
+//   .catch(function(error) {
+//     // wrong credentials / auth method / ...
+//     throw error;
+//   });
 
 server.listen(port);
 

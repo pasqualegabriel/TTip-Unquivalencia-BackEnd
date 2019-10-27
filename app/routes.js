@@ -63,4 +63,5 @@ exports.init = app => {
     [userValidations.verifyAuthentication],
     userController.invalidateSessions
   );
+  app.post('/api/v1/nuxeo', fileController.pdf);
 };
