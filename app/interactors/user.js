@@ -1,4 +1,4 @@
-const { User } = require('../models'),
+const { user: User } = require('../models'),
   { pickBy } = require('lodash'),
   { substring } = require('../helpers');
 
