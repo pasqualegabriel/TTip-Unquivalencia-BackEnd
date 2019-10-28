@@ -68,4 +68,5 @@ exports.init = app => {
     [userValidations.verifyAdminLogin, validate({ body: updateUserSchema })],
     userController.updateUser
   );
+  app.delete('/api/v1/delete/user/:userId', [userValidations.verifyAdminLogin], userController.deleteUser);
 };
