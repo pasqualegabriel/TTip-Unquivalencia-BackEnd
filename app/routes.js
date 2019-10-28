@@ -5,7 +5,7 @@ const userController = require('./controllers/user'),
   fileValidations = require('./middlewares/file'),
   requestValidations = require('./middlewares/request'),
   { Validator } = require('express-json-validator-middleware'),
-  { logInSchema, userSchema, fileSchema } = require('./middlewares/schemas');
+  { logInSchema, userSchema, fileSchema, updateUserSchema } = require('./middlewares/schemas');
 
 const { validate } = new Validator({ allErrors: true });
 
@@ -62,5 +62,10 @@ exports.init = app => {
     '/api/v1/user/invalidate/all/sessions',
     [userValidations.verifyAuthentication],
     userController.invalidateSessions
+  );
+  app.post(
+    '/api/v1/update/user',
+    [userValidations.verifyAdminLogin, validate({ body: updateUserSchema })],
+    userController.updateUser
   );
 };

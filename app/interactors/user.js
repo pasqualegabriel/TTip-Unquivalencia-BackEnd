@@ -1,7 +1,4 @@
-const {
-    User,
-    Sequelize: { Op }
-  } = require('../models'),
+const { User } = require('../models'),
   { pickBy } = require('lodash'),
   { substring } = require('../helpers');
 
@@ -41,3 +38,6 @@ exports.findAndCountAllUsers = (
 };
 
 exports.updateUser = (user, params) => user.update(params);
+
+exports.updateUserFields = toUpdate =>
+  exports.findOneByEmail(toUpdate.email).then(user => user.update(toUpdate));
