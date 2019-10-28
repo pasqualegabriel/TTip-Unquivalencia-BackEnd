@@ -55,6 +55,8 @@ exports.getRequestsByFileId = (req, res, next) =>
     .catch(next);
 
 exports.updateEquivalence = (req, res, next) => {
+  console.log('res.locals.request.equivalence');
+  console.log(res.locals.request.equivalence);
   if (equivalencesFinished.includes(res.locals.request.equivalence))
     return res.status(200).send('Request already updated');
   return updateRequest(res.locals.request, req.body, res.locals.user.name)

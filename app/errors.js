@@ -18,3 +18,4 @@ exports.permissionDeniedMessage = 'Permiso denegado';
 exports.youAreNotLoggedInMessage = 'No estas logiado';
 exports.sessionExpiredMessage = 'Sesion expirada';
 exports.nonExistentRequestMessage = 'Solicitud inexistente';
+exports.requestFinishedMessage = 'Request already finished';

@@ -1,5 +1,5 @@
-const { equivalences } = require('../constants/request'),
-  { nonExistentRequestMessage } = require('../errors'),
+const { equivalences, equivalencesFinished } = require('../constants/request'),
+  { nonExistentRequestMessage, requestFinishedMessage } = require('../errors'),
   { getRequest } = require('../interactors/request');
 
 exports.verifyEquivalence = (req, res, next) =>
@@ -10,7 +10,9 @@ exports.validateRequest = (req, res, next) =>
     .then(request => {
       if (request) {
         res.locals.request = request.dataValues;
-        return next();
+        return equivalencesFinished.includes(request.dataValues.equivalence)
+          ? res.status(401).send(requestFinishedMessage)
+          : next();
       }
       return res.status(401).send(nonExistentRequestMessage);
     })
