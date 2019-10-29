@@ -69,4 +69,9 @@ exports.init = app => {
     userController.updateUser
   );
   app.delete('/api/v1/delete/user/:userId', [userValidations.verifyAdminLogin], userController.deleteUser);
+  app.post(
+    '/api/v1/password/new',
+    [userValidations.validateLogin, userValidations.verifyNewPassword],
+    userController.updatePassword
+  );
 };

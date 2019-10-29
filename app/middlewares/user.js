@@ -8,7 +8,8 @@ const userInteractor = require('../interactors/user'),
     theEmailAlreadyExistsMessage,
     permissionDeniedMessage,
     youAreNotLoggedInMessage,
-    sessionExpiredMessage
+    sessionExpiredMessage,
+    differntPasswordMessage
   } = require('../errors'),
   { isEmail } = require('validator'),
   { compare: bcryptCompare } = require('bcryptjs'),
@@ -110,3 +111,8 @@ exports.validateProfessor = (req, res, next) =>
     }
     return res.status(401).send(nonExistentMailMessage);
   });
+
+exports.verifyNewPassword = (req, res, next) => {
+  const { password, confirmPassword } = req.body;
+  return password === confirmPassword ? next() : res.status(401).send(differntPasswordMessage);
+};

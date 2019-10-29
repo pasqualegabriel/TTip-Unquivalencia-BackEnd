@@ -19,3 +19,4 @@ exports.youAreNotLoggedInMessage = 'No estas logiado';
 exports.sessionExpiredMessage = 'Sesion expirada';
 exports.nonExistentRequestMessage = 'Solicitud inexistente';
 exports.requestFinishedMessage = 'La solicitud esta terminada';
+exports.differntPasswordMessage = 'Passwords diferentes';

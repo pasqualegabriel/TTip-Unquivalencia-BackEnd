@@ -7,7 +7,8 @@ const jwt = require('jsonwebtoken'),
     findAndCountAllUsers,
     updateUser,
     updateUserFields,
-    deleteUser
+    deleteUser,
+    updatePassword
   } = require('../interactors/user'),
   { generateNewPassword, generateNewUserMail, getPageParams } = require('../helpers'),
   sendEmail = require('../services/mail'),
@@ -68,4 +69,9 @@ exports.updateUser = (req, res, next) =>
 exports.deleteUser = (req, res, next) =>
   deleteUser(req.params.userId)
     .then(() => res.status(200).send('User deleted'))
+    .catch(next);
+
+exports.updatePassword = (req, res, next) =>
+  updatePassword(res.locals.user, req.body.password)
+    .then(() => res.status(200).send('Password update successfully'))
     .catch(next);

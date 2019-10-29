@@ -43,3 +43,5 @@ exports.updateUserFields = toUpdate =>
   exports.findOneByEmail(toUpdate.email).then(user => user.update(toUpdate));
 
 exports.deleteUser = id => User.destroy({ where: { id } });
+
+exports.updatePassword = (user, password) => user.update({ password });
