@@ -1,4 +1,4 @@
-const { user: User } = require('../models'),
+const { sequelize, Sequelize, user: User } = require('../models'),
   { pickBy } = require('lodash'),
   { substring } = require('../helpers');
 
@@ -44,4 +44,7 @@ exports.updateUserFields = toUpdate =>
 
 exports.deleteUser = id => User.destroy({ where: { id } });
 
-exports.updatePassword = (user, password) => user.update({ password });
+exports.updatePassword = (id, password) =>
+  sequelize.query(`update users set password = '${password}' where id = ${id}`, {
+    type: Sequelize.QueryTypes.UPDATE
+  });

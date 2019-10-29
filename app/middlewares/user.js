@@ -113,6 +113,6 @@ exports.validateProfessor = (req, res, next) =>
   });
 
 exports.verifyNewPassword = (req, res, next) => {
-  const { password, confirmPassword } = req.body;
-  return password === confirmPassword ? next() : res.status(401).send(differntPasswordMessage);
+  const { newPassword, confirmPassword } = req.body;
+  return newPassword === confirmPassword ? next() : res.status(401).send(differntPasswordMessage);
 };

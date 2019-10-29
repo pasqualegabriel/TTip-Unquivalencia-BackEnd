@@ -12,7 +12,8 @@ const jwt = require('jsonwebtoken'),
   } = require('../interactors/user'),
   { generateNewPassword, generateNewUserMail, getPageParams } = require('../helpers'),
   sendEmail = require('../services/mail'),
-  moment = require('moment');
+  moment = require('moment'),
+  bcrypt = require('bcryptjs');
 
 exports.signIn = (_, res) => {
   const user = mapUserData(res.locals.user);
@@ -71,7 +72,9 @@ exports.deleteUser = (req, res, next) =>
     .then(() => res.status(200).send('User deleted'))
     .catch(next);
 
-exports.updatePassword = (req, res, next) =>
-  updatePassword(res.locals.user, req.body.password)
+exports.updatePassword = (req, res, next) => {
+  const newPassword = bcrypt.hashSync(req.body.newPassword, bcrypt.genSaltSync(8), null);
+  return updatePassword(res.locals.user.id, newPassword)
     .then(() => res.status(200).send('Password update successfully'))
     .catch(next);
+};
