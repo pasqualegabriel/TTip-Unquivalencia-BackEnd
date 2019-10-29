@@ -1,6 +1,7 @@
 const userController = require('./controllers/user'),
   fileController = require('./controllers/file'),
   requestController = require('./controllers/request'),
+  subjectController = require('./controllers/subject'),
   userValidations = require('./middlewares/user'),
   fileValidations = require('./middlewares/file'),
   requestValidations = require('./middlewares/request'),
@@ -63,4 +64,5 @@ exports.init = app => {
     [userValidations.verifyAuthentication],
     userController.invalidateSessions
   );
+  app.post('/api/v1/subject', [userValidations.verifyAdminLogin], subjectController.addSubject);
 };
