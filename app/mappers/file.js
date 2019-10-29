@@ -12,6 +12,7 @@ exports.mapNewFile = ({ fileNumber, universityOrigin, yearNote, mail, name, surn
   status: uniqBy(requests, 'subjectUnq').length,
   requests: requests.map(
     ({
+      universityOrigin: universityOriginRequest,
       careerOrigin,
       yearPlanOrigin,
       subjectOrigin,
@@ -28,7 +29,7 @@ exports.mapNewFile = ({ fileNumber, universityOrigin, yearNote, mail, name, surn
       yearOfEquivalence
     }) => ({
       fileNumber,
-      universityOrigin,
+      universityOrigin: universityOriginRequest,
       yearNote,
       careerOrigin,
       yearPlanOrigin,
@@ -48,9 +49,10 @@ exports.mapNewFile = ({ fileNumber, universityOrigin, yearNote, mail, name, surn
   )
 });
 
-exports.mapExistingFile = (fileId, { fileNumber, universityOrigin, yearNote, requests }) =>
+exports.mapExistingFile = (fileId, { fileNumber, yearNote, requests }) =>
   requests.map(
     ({
+      universityOrigin,
       careerOrigin,
       yearPlanOrigin,
       subjectOrigin,
