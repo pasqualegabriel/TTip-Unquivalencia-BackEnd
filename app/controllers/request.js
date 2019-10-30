@@ -54,20 +54,16 @@ exports.getRequestsByFileId = (req, res, next) =>
     .then(requests => res.status(200).send(requests))
     .catch(next);
 
-exports.updateEquivalence = (req, res, next) => {
-  console.log('res.locals.request.equivalence');
-  console.log(res.locals.request.equivalence);
-  if (equivalencesFinished.includes(res.locals.request.equivalence))
-    return res.status(200).send('Request already updated');
-  return updateRequest(res.locals.request, req.body, res.locals.user.name)
+exports.updateEquivalence = (req, res, next) =>
+  updateRequest(res.locals.request, req.body, res.locals.user.name)
     .then(() =>
+      !equivalencesFinished.includes(res.locals.request.equivalence) &&
       equivalencesFinished.includes(req.body.equivalence)
         ? decrementFileStatus(res.locals.request.fk_fileid)
         : Promise.resolve()
     )
     .then(() => res.status(200).send('Request updated'))
     .catch(next);
-};
 
 exports.getRequest = (req, res, next) =>
   getRequest(req.params.requestId)
