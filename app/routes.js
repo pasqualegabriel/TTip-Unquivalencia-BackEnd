@@ -65,4 +65,5 @@ exports.init = app => {
     userController.invalidateSessions
   );
   app.post('/api/v1/subject', [userValidations.verifyAdminLogin], subjectController.addSubject);
+  app.get('/api/v1/subjects', [userValidations.verifyAdminLogin], subjectController.getSubjects);
 };
