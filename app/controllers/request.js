@@ -57,7 +57,7 @@ exports.getRequestsByFileId = (req, res, next) =>
     .catch(next);
 
 exports.updateEquivalence = (req, res, next) =>
-  updateRequest(res.locals.request, req.body, res.locals.user.name)
+  updateRequest(req.params.requestId, req.body, res.locals.user.name)
     .then(() =>
       !equivalencesFinished.includes(res.locals.request.equivalence) &&
       equivalencesFinished.includes(req.body.equivalence)

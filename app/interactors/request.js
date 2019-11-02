@@ -12,13 +12,14 @@ exports.findRequests = fileId =>
     include: [{ model: Subject, as: 'originSubjects' }, { model: Subject, as: 'unqSubject' }]
   });
 
-exports.updateRequest = ({ fk_fileid: fdFileId, subjectUnq }, { equivalence, observations }, signature) =>
-  Request.update(
-    { equivalence, signature, observations: observations || '-' },
-    { where: { fk_fileid: fdFileId, subjectUnq } }
-  );
+exports.updateRequest = (id, { equivalence, observations }, signature) =>
+  Request.update({ equivalence, signature, observations: observations || '-' }, { where: { id } });
 
-exports.getRequest = id => Request.findByPk(id);
+exports.getRequest = id =>
+  Request.findOne({
+    where: { id },
+    include: [{ model: Subject, as: 'originSubjects' }, { model: Subject, as: 'unqSubject' }]
+  });
 
 exports.getRequestMatch = ({ fk_fileid: fkFileId, subjectUnq }) =>
   Request.findAll({
@@ -139,7 +140,8 @@ exports.findRequestsStepperProfessor = (fileId, professorId) =>
 exports.findAllRequestsProfessor = (professorId, fileId) =>
   Request.findAll({
     raw: true,
-    where: { fk_fileid: fileId, professorId, equivalence: consulting }
+    where: { fk_fileid: fileId, professorId, equivalence: consulting },
+    include: [{ model: Subject, as: 'originSubjects' }, { model: Subject, as: 'unqSubject' }]
   });
 
 exports.updateConsultEquivalence = (

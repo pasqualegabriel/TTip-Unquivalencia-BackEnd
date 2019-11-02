@@ -1,9 +1,10 @@
 const {
     request: Request,
     file: File,
+    subject: Subject,
     Sequelize: { Op }
   } = require('../models'),
-  { equivalencesFinished, consulting } = require('../constants/request'),
+  { consulting } = require('../constants/request'),
   { uniq } = require('lodash');
 
 exports.findFile = fileNumber =>
@@ -36,6 +37,15 @@ exports.findAllFilesProfessor = professorId =>
   );
 
 exports.findFileByFileNumber = fileNumber =>
-  File.findOne({ where: { fileNumber }, include: [{ model: Request, limit: 1 }] });
+  File.findOne({
+    where: { fileNumber },
+    include: [
+      {
+        model: Request,
+        include: [{ model: Subject, as: 'originSubjects' }, { model: Subject, as: 'unqSubject' }],
+        limit: 1
+      }
+    ]
+  });
 
 exports.decrementFileStatus = id => File.decrement('status', { where: { id } });
