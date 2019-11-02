@@ -2,6 +2,7 @@ const {
     request: Request,
     request_subject: RequestSubject,
     subject: Subject,
+    sequelize,
     Sequelize,
     Sequelize: { Op }
   } = require('../models'),
@@ -37,10 +38,10 @@ exports.getRequestMatch = ({ fk_fileid: fkFileId, subjectUnq }) =>
 
 exports.findRequestsTotalMatch = ({
   fk_fileid: fkFileId,
-  universityOrigin,
-  careerOrigin,
-  yearPlanOrigin,
-  subjectUnq
+  originSubject: { university: universityOrigin, career: careerOrigin, yearPlan: yearPlanOrigin },
+  unqSubject: {
+    dataValues: { subject: subjectUnq }
+  }
 }) =>
   Request.findAll({
     where: {
@@ -52,15 +53,15 @@ exports.findRequestsTotalMatch = ({
         model: Subject,
         as: 'originSubjects',
         where: {
-          universityOrigin,
-          careerOrigin,
-          yearPlanOrigin
+          university: universityOrigin,
+          career: careerOrigin,
+          yearPlan: yearPlanOrigin
         }
       },
       {
         model: Subject,
         as: 'unqSubject',
-        where: { subjectUnq }
+        where: { subject: subjectUnq }
       }
     ],
     limit: 1

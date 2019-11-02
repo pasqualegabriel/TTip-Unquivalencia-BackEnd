@@ -43,7 +43,7 @@ exports.init = app => {
     requestController.getStepperRequest
   );
   app.post(
-    '/api/v1/consult/requests/:requestId',
+    '/api/v1/consult/requests/:requestId/:subjectId',
     [userValidations.verifyAdminLogin, userValidations.validateProfessor, requestValidations.validateRequest],
     requestController.consultEquivalence
   );

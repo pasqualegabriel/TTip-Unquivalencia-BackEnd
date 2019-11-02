@@ -83,8 +83,11 @@ exports.getRequestMatchs = async (req, res, next) => {
     const { dataValues: request } = await getRequest(req.params.requestId);
     const sets = await getRequestsStepper(res.locals.user, request);
     const requestsStepper = await getSubjectsStepper(request, req.params.subjectId);
+    request.originSubject = request.originSubjects[0].dataValues;
+    delete request.originSubjects;
+    delete request.originSubject.request_subject;
     // const requests = await getRequestMatch(request);
-    // const requestsTotalMatchApproved = await findRequestsTotalMatch(request);
+    const requestsTotalMatchApproved = await findRequestsTotalMatch(request);
     // const requestsMatchWithoutYearPlanApproved = requestsTotalMatchApproved.length
     //   ? []
     //   : await findRequestsMatchWithoutYearPlanOrigin(request);
@@ -94,13 +97,11 @@ exports.getRequestMatchs = async (req, res, next) => {
     //     : await findRequestsMatch(request);
     // const getSubjectsOrigin = someRequests =>
     //   differenceBy(someRequests, requests, 'subjectOrigin').map(({ subjectOrigin }) => subjectOrigin);
-    request.originSubject = request.originSubjects[0].dataValues;
-    delete request.originSubjects;
-    delete request.originSubject.request_subject;
     return res.status(200).send({
       request,
       sets,
-      requestsStepper: mapRequestsStepper(requestsStepper.dataValues)
+      requestsStepper: mapRequestsStepper(requestsStepper.dataValues),
+      match: { requestsTotalMatchApproved }
       // ...mapSetRequests(requestsStepper, request),
       // match: {
       //   requestsTotalMatchApproved,
@@ -131,7 +132,9 @@ exports.consultEquivalence = (req, res, next) =>
   updateConsultEquivalence(req.params.requestId, res.locals.professor, req.body)
     .then(() => {
       res.status(200).send('Request updated');
-      return sendEmail(generateConsultToProfessorMail(req.params.requestId, res.locals.professor));
+      return sendEmail(
+        generateConsultToProfessorMail(req.params.requestId, res.locals.professor, req.params.subjectId)
+      );
     })
     .then(() => {
       logger.info('Email sent to professor');

@@ -29,13 +29,13 @@ exports.generateNewUserMail = ({ email, password }) => ({
   `
 });
 
-exports.generateConsultToProfessorMail = (requestId, { email }) => ({
+exports.generateConsultToProfessorMail = (requestId, { email }, subjectId) => ({
   to: email,
   subject: `UNQuivalencias Solicitud ${requestId}`,
   text: `
     Se ha requerido su opinión sobre una equivalencia.
 
-    Link: ${config.common.api.frontUrl}/solicitud/${requestId}
+    Link: ${config.common.api.frontUrl}/solicitud/${requestId}/${subjectId}
 
     Saludos! `
 });
