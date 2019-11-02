@@ -1,5 +1,4 @@
 const {
-    createRequestToFile,
     findRequests,
     updateRequest,
     getRequest,
@@ -9,12 +8,15 @@ const {
     findRequestsMatch,
     findRequestsStepper,
     findRequestsStepperProfessor,
-    updateRequestsWithoutEvaluating,
     findAllRequestsProfessor,
-    updateConsultEquivalence
+    updateConsultEquivalence,
+    findRequestBySubjectUnqId,
+    createRequest,
+    updateToWithoutEvaluating,
+    createRequestSubject
   } = require('../interactors/request'),
-  { findFile, createFile, updateFile, decrementFileStatus } = require('../interactors/file'),
-  { mapExistingFile, mapNewFile, mapUpdateFile, getStatus } = require('../mappers/file'),
+  { findFile, createFile, decrementFileStatus } = require('../interactors/file'),
+  { mapNewFile } = require('../mappers/file'),
   { mapSetRequests } = require('../mappers/request'),
   { equivalencesFinished } = require('../constants/request'),
   { PROFESSOR } = require('../constants/user'),
@@ -23,19 +25,19 @@ const {
   sendEmail = require('../services/mail'),
   logger = require('../logger');
 
-const createRequestsToFile = (fileSaved, newFile) =>
-  createRequestToFile(mapExistingFile(fileSaved.id, newFile))
-    .then(() =>
-      updateRequestsWithoutEvaluating(fileSaved.id, newFile.requests.map(({ subjectUnq }) => subjectUnq))
+const createAndGetRequest = (file, body) =>
+  findRequestBySubjectUnqId(file.id, body.subjectUnqId).then(request =>
+    request ? updateToWithoutEvaluating(request) : createRequest(file.id, body.subjectUnqId)
+  );
+
+const createRequestsToFile = (file, body) =>
+  createAndGetRequest(file, body).then(request =>
+    createRequestSubject(
+      request.dataValues ? request.dataValues.id : request[1][0].dataValues.id,
+      body.subjectOriginId
     )
-    .then(() =>
-      updateFile(
-        mapUpdateFile({
-          status: getStatus(fileSaved.requests, newFile.requests)
-        }),
-        fileSaved.id
-      )
-    );
+  );
+// .then(() => updateStatus());
 
 exports.addRequest = (req, res, next) =>
   findFile(req.body.fileNumber)

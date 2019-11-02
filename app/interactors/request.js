@@ -1,18 +1,16 @@
 const {
     request: Request,
+    request_subject: RequestSubject,
+    subject: Subject,
     Sequelize: { Op }
   } = require('../models'),
   { approved, rejected, withoutEvaluating, consulting } = require('../constants/request');
 
-exports.createRequestToFile = requests => Request.bulkCreate(requests);
-
-exports.findRequests = fileId => Request.findAll({ raw: true, where: { fk_fileid: fileId } });
-
-exports.updateRequestsWithoutEvaluating = (fkFileId, subjectsUnq) =>
-  Request.update(
-    { equivalence: withoutEvaluating, signature: 'N/I' },
-    { where: { fk_fileid: fkFileId, subjectUnq: { [Op.in]: subjectsUnq } } }
-  );
+exports.findRequests = fileId =>
+  Request.findAll({
+    where: { fk_fileid: fileId },
+    include: [{ model: Subject, as: 'originSubjects' }, { model: Subject, as: 'unqSubject' }]
+  });
 
 exports.updateRequest = ({ fk_fileid: fdFileId, subjectUnq }, { equivalence, observations }, signature) =>
   Request.update(
@@ -153,3 +151,17 @@ exports.updateConsultEquivalence = (
     { professorId, equivalence: consulting, commentsToProfessor },
     { where: { fk_fileid: fkFileId, subjectUnq } }
   );
+
+exports.findRequestBySubjectUnqId = (fileId, subjectUnqId) =>
+  Request.findOne({ where: { fk_fileid: fileId, fk_subjectid: subjectUnqId } });
+
+exports.updateToWithoutEvaluating = request =>
+  Request.update(
+    { equivalence: withoutEvaluating, signature: 'N/I' },
+    { where: { id: request.id }, returning: true }
+  );
+
+exports.createRequest = (fileId, subjectUnqId) =>
+  Request.create({ fk_fileid: fileId, fk_subjectid: subjectUnqId });
+
+exports.createRequestSubject = (requestId, subjectId) => RequestSubject.create({ requestId, subjectId });

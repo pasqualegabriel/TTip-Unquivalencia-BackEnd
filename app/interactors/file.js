@@ -9,14 +9,7 @@ const {
 exports.findFile = fileNumber =>
   File.findOne({
     where: { fileNumber },
-    include: [
-      {
-        model: Request,
-        required: false,
-        attributes: ['subjectUnq', 'equivalence'],
-        where: { equivalence: { [Op.notIn]: equivalencesFinished } }
-      }
-    ]
+    include: [Request]
   });
 
 exports.createFile = file =>
@@ -44,7 +37,5 @@ exports.findAllFilesProfessor = professorId =>
 
 exports.findFileByFileNumber = fileNumber =>
   File.findOne({ where: { fileNumber }, include: [{ model: Request, limit: 1 }] });
-
-exports.updateFile = (file, id) => File.update(file, { where: { id } });
 
 exports.decrementFileStatus = id => File.decrement('status', { where: { id } });

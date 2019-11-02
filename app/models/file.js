@@ -33,11 +33,6 @@ module.exports = (sequelize, DataTypes) => {
         field: 'year_note',
         defaultValue: 'N/I'
       },
-      universityOrigin: {
-        allowNull: false,
-        type: DataTypes.STRING,
-        field: 'university_origin'
-      },
       status: {
         allowNull: false,
         type: DataTypes.INTEGER,
