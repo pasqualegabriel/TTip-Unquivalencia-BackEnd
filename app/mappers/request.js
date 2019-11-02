@@ -25,3 +25,10 @@ exports.mapSetRequests = (requests, request) => {
   );
   return { sets, requestsStepper: requestsBySubjectUnq[request.subjectUnq], request };
 };
+
+exports.mapRequestsStepper = ({ equivalence, originSubjects = [] }) =>
+  originSubjects.map(({ dataValues: { id: subjectId, subject: subjectOrigin } }) => ({
+    subjectId,
+    equivalence,
+    subjectOrigin
+  }));

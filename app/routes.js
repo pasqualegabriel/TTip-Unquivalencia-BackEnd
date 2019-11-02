@@ -33,7 +33,7 @@ exports.init = app => {
     requestController.getRequest
   );
   app.get(
-    '/api/v1/matchs/requests/:requestId',
+    '/api/v1/matchs/requests/:requestId/:subjectId',
     [userValidations.verifyGetRequestAuthentication],
     requestController.getRequestMatchs
   );

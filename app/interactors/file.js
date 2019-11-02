@@ -42,8 +42,7 @@ exports.findFileByFileNumber = fileNumber =>
     include: [
       {
         model: Request,
-        include: [{ model: Subject, as: 'originSubjects' }, { model: Subject, as: 'unqSubject' }],
-        limit: 1
+        include: [{ model: Subject, as: 'originSubjects' }, { model: Subject, as: 'unqSubject' }]
       }
     ]
   });
