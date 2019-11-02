@@ -144,15 +144,8 @@ exports.findAllRequestsProfessor = (professorId, fileId) =>
     include: [{ model: Subject, as: 'originSubjects' }, { model: Subject, as: 'unqSubject' }]
   });
 
-exports.updateConsultEquivalence = (
-  { fk_fileid: fkFileId, subjectUnq },
-  { id: professorId },
-  { message: commentsToProfessor = 'N/I' }
-) =>
-  Request.update(
-    { professorId, equivalence: consulting, commentsToProfessor },
-    { where: { fk_fileid: fkFileId, subjectUnq } }
-  );
+exports.updateConsultEquivalence = (id, { id: professorId }, { message: commentsToProfessor = 'N/I' }) =>
+  Request.update({ professorId, equivalence: consulting, commentsToProfessor }, { where: { id } });
 
 exports.findRequestBySubjectUnqId = (fileId, subjectUnqId) =>
   Request.findOne({ where: { fk_fileid: fileId, fk_subjectid: subjectUnqId } });

@@ -120,7 +120,7 @@ exports.getStepperRequest = (req, res, next) =>
     .catch(next);
 
 exports.consultEquivalence = (req, res, next) =>
-  updateConsultEquivalence(res.locals.request, res.locals.professor, req.body)
+  updateConsultEquivalence(req.params.requestId, res.locals.professor, req.body)
     .then(() => {
       res.status(200).send('Request updated');
       return sendEmail(generateConsultToProfessorMail(req.params.requestId, res.locals.professor));
