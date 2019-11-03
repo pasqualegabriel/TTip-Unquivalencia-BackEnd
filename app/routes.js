@@ -38,7 +38,7 @@ exports.init = app => {
     requestController.getRequestMatchs
   );
   app.get(
-    '/api/v1/stepper/requests/:requestId',
+    '/api/v1/stepper/requests/:requestId/:subjectId',
     [userValidations.verifyAuthentication],
     requestController.getStepperRequest
   );

@@ -119,14 +119,23 @@ exports.getRequestMatchs = async (req, res, next) => {
   }
 };
 
-exports.getStepperRequest = (req, res, next) =>
-  getRequest(parseInt(req.params.requestId))
-    .then(request =>
-      getRequestsStepper(res.locals.user, request.dataValues).then(requests =>
-        res.status(200).send(mapSetRequests(requests, request.dataValues))
-      )
-    )
-    .catch(next);
+exports.getStepperRequest = async (req, res, next) => {
+  try {
+    const { dataValues: request } = await getRequest(req.params.requestId);
+    const sets = await getRequestsStepper(res.locals.user, request);
+    const requestsStepper = await getSubjectsStepper(request, req.params.subjectId);
+    request.originSubject = request.originSubjects[0].dataValues;
+    delete request.originSubjects;
+    delete request.originSubject.request_subject;
+    return res.status(200).send({
+      request,
+      sets,
+      requestsStepper: mapRequestsStepper(requestsStepper.dataValues)
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
 
 exports.consultEquivalence = (req, res, next) =>
   updateConsultEquivalence(req.params.requestId, res.locals.professor, req.body)

@@ -45,8 +45,8 @@ exports.findRequestsTotalMatch = ({
 }) =>
   Request.findAll({
     where: {
-      fk_fileid: { [Op.ne]: fkFileId },
-      equivalence: approved
+      // fk_fileid: { [Op.ne]: fkFileId },
+      // equivalence: approved
     },
     include: [
       {
@@ -56,7 +56,10 @@ exports.findRequestsTotalMatch = ({
           university: universityOrigin,
           career: careerOrigin,
           yearPlan: yearPlanOrigin
-        }
+        },
+        group: ['career'],
+        having: Sequelize.where(Sequelize.fn('count', Sequelize.col('career')), { [Op.eq]: 2 })
+        // having: Sequelize.literal('count(university) = ? and sum(*) = 1', 2)
       },
       {
         model: Subject,
