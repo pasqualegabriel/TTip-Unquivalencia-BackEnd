@@ -2,6 +2,8 @@ const {
     request: Request,
     file: File,
     subject: Subject,
+    sequelize,
+    Sequelize,
     Sequelize: { Op }
   } = require('../models'),
   { consulting } = require('../constants/request'),
@@ -54,3 +56,15 @@ exports.incrementStatusToFile = (id, transaction) =>
   File.increment('status', { where: { id } }, { transaction });
 
 exports.getFile = id => File.findOne({ where: { id } });
+
+exports.deleteFile = fileId =>
+  sequelize.query(
+    `
+    delete from request_subjects where request_id in (select id from requests where fk_fileid = ${fileId});
+    delete from requests where fk_fileid = ${fileId};
+    delete from files where id = ${fileId};
+`,
+    {
+      type: Sequelize.QueryTypes.DELETE
+    }
+  );

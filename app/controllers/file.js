@@ -1,4 +1,10 @@
-const { findAllFiles, findAllFilesProfessor, findFileByFileNumber, getFile } = require('../interactors/file'),
+const {
+    findAllFiles,
+    findAllFilesProfessor,
+    findFileByFileNumber,
+    getFile,
+    deleteFile
+  } = require('../interactors/file'),
   { mapFileByFileNumber } = require('../mappers/file'),
   sendEmail = require('../services/mail'),
   { generateRecommendMail } = require('../helpers'),
@@ -32,4 +38,9 @@ exports.recommend = (req, res, next) =>
       logger.info('Email sent to professor');
       return res.status(200).send('Request updated');
     })
+    .catch(next);
+
+exports.deleteFile = (req, res, next) =>
+  deleteFile(req.params.fileId)
+    .then(() => res.status(200).send('File deleted'))
     .catch(next);
