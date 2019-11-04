@@ -2,7 +2,6 @@ const {
     findRequests,
     updateRequest,
     getRequest,
-    getRequestMatch,
     findRequestsTotalMatch,
     findRequestsMatchWithoutYearPlanOrigin,
     findRequestsMatch,
@@ -18,7 +17,7 @@ const {
   } = require('../interactors/request'),
   { findFile, createFile, decrementFileStatus } = require('../interactors/file'),
   { mapNewFile } = require('../mappers/file'),
-  { mapSetRequests, mapRequestsStepper } = require('../mappers/request'),
+  { mapRequestsStepper } = require('../mappers/request'),
   { equivalencesFinished } = require('../constants/request'),
   { PROFESSOR } = require('../constants/user'),
   { differenceBy } = require('lodash'),
@@ -81,38 +80,28 @@ const getRequestsStepper = ({ id, role }, request) =>
 exports.getRequestMatchs = async (req, res, next) => {
   try {
     const { dataValues: request } = await getRequest(req.params.requestId);
-    const sets = await getRequestsStepper(res.locals.user, request);
-    const requestsStepper = await getSubjectsStepper(request, req.params.subjectId);
     request.originSubject = request.originSubjects[0].dataValues;
-    delete request.originSubjects;
-    delete request.originSubject.request_subject;
-    // const requests = await getRequestMatch(request);
     const requestsTotalMatchApproved = await findRequestsTotalMatch(request);
-    // const requestsMatchWithoutYearPlanApproved = requestsTotalMatchApproved.length
-    //   ? []
-    //   : await findRequestsMatchWithoutYearPlanOrigin(request);
-    // const requestsMatch =
-    //   requestsTotalMatchApproved.length || requestsMatchWithoutYearPlanApproved.length
-    //     ? []
-    //     : await findRequestsMatch(request);
-    // const getSubjectsOrigin = someRequests =>
-    //   differenceBy(someRequests, requests, 'subjectOrigin').map(({ subjectOrigin }) => subjectOrigin);
+    const requestsMatchWithoutYearPlanApproved = requestsTotalMatchApproved.length
+      ? []
+      : await findRequestsMatchWithoutYearPlanOrigin(request);
+    const requestsMatch =
+      requestsTotalMatchApproved.length || requestsMatchWithoutYearPlanApproved.length
+        ? []
+        : await findRequestsMatch(request);
+    const getSubjectsOrigin = someRequests =>
+      differenceBy(someRequests, request.originSubjects.map(({ dataValues }) => dataValues), 'subject').map(
+        ({ subject: subjectOrigin }) => subjectOrigin
+      );
     return res.status(200).send({
-      request,
-      sets,
-      requestsStepper: mapRequestsStepper(requestsStepper.dataValues),
-      match: { requestsTotalMatchApproved }
-      // ...mapSetRequests(requestsStepper, request),
-      // match: {
-      //   requestsTotalMatchApproved,
-      //   requestsMatchWithoutYearPlanApproved,
-      //   subjectsToApprove: requestsTotalMatchApproved.length
-      //     ? getSubjectsOrigin(requestsTotalMatchApproved)
-      //     : requestsMatchWithoutYearPlanApproved.length
-      //     ? getSubjectsOrigin(requestsMatchWithoutYearPlanApproved)
-      //     : [],
-      //   requestsMatch
-      // }
+      requestsTotalMatchApproved,
+      requestsMatchWithoutYearPlanApproved,
+      subjectsToApprove: requestsTotalMatchApproved.length
+        ? getSubjectsOrigin(requestsTotalMatchApproved)
+        : requestsMatchWithoutYearPlanApproved.length
+        ? getSubjectsOrigin(requestsMatchWithoutYearPlanApproved)
+        : [],
+      requestsMatch
     });
   } catch (error) {
     return next(error);

@@ -7,7 +7,7 @@ INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,su
 VALUES (DEFAULT,'234','UNQ','TPI','2015','Algoritmos','cuatrimestral','12','66','obligatorio','120','url','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 3
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
-VALUES (DEFAULT,'343','UNLA','TPI','2015','Labo','cuatrimestral','12','66','obligatorio','120','url','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'343','UNLA','Informatica','2015','Labo','cuatrimestral','12','66','obligatorio','120','url','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 4
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
 VALUES (DEFAULT,'454','UNLA','Informatica','2015','poo 1','cuatrimestral','12','66','obligatorio','120','url','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
@@ -19,7 +19,7 @@ INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,su
 VALUES (DEFAULT,'35','ITBA','Ingenieria en Informatica','2015','Labo','cuatrimestral','12','66','obligatorio','120','url','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 7
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
-VALUES (DEFAULT,'343','UNLA','TPI','2011','Labo','cuatrimestral','12','66','obligatorio','120','url','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'343','UNLA','Informatica','2011','Labo','cuatrimestral','12','66','obligatorio','120','url','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 8
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
 VALUES (DEFAULT,'454','UNLA','Informatica','2011','poo 1','cuatrimestral','12','66','obligatorio','120','url','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
