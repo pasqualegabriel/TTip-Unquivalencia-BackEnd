@@ -65,4 +65,8 @@ exports.init = app => {
   );
   app.post('/api/v1/subject', [userValidations.verifyAdminLogin], subjectController.addSubject);
   app.get('/api/v1/subjects', [userValidations.verifyAdminLogin], subjectController.getSubjects);
+  app.get('/api/v1/universities', [userValidations.verifyAdminLogin], subjectController.getUniversities);
+  app.get('/api/v1/careers', [userValidations.verifyAdminLogin], subjectController.getCareers);
+  app.get('/api/v1/plan/years', [userValidations.verifyAdminLogin], subjectController.getPlanYears);
+  app.get('/api/v1/subject', [userValidations.verifyAdminLogin], subjectController.getSubject);
 };
