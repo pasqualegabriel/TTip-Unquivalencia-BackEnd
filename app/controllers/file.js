@@ -3,11 +3,16 @@ const {
     findAllFilesProfessor,
     findFileByFileNumber,
     getFile,
-    deleteFile
+    deleteFile,
+    createFile,
+    findFile
   } = require('../interactors/file'),
-  { mapFileByFileNumber } = require('../mappers/file'),
+  { findRequests } = require('../interactors/request'),
+  { mapFileByFileNumber, mapNewFile } = require('../mappers/file'),
   sendEmail = require('../services/mail'),
   { generateRecommendMail } = require('../helpers'),
+  { sequelize } = require('../models'),
+  { createRequestsToFile } = require('./request'),
   logger = require('../logger'),
   { PROFESSOR } = require('../constants/user');
 
@@ -44,3 +49,30 @@ exports.deleteFile = (req, res, next) =>
   deleteFile(req.params.fileId)
     .then(() => res.status(200).send('File deleted'))
     .catch(next);
+
+exports.duplicateFile = async (req, res, next) => {
+  try {
+    const { dataValues: file } = await getFile(req.params.fileId);
+    file.fileNumber = `${file.fileNumber}R`;
+    await createFile(mapNewFile(file));
+    const { dataValues: newFile } = await findFile(file.fileNumber);
+    const requests = await findRequests(file.id);
+    const transaction = await sequelize.transaction();
+    for (const request of requests) {
+      // eslint-disable-next-line no-await-in-loop
+      await createRequestsToFile(
+        newFile,
+        {
+          fileNumber: newFile.fileNumber,
+          subjectOriginIds: request.dataValues.originSubjects.map(({ dataValues: { id } }) => id),
+          subjectUnqId: request.dataValues.unqSubject.dataValues.id
+        },
+        transaction
+      );
+    }
+    await transaction.commit();
+    return res.status(200).send('File duplicated');
+  } catch (error) {
+    return next(error);
+  }
+};

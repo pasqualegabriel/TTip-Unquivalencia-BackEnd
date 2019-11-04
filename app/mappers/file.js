@@ -1,6 +1,3 @@
-const { uniqBy, pickBy } = require('lodash'),
-  { withoutEvaluating, equivalencesFinished } = require('../constants/request');
-
 exports.mapNewFile = ({ fileNumber, yearNote, mail, name, surname, dni }) => ({
   fileNumber,
   yearNote,

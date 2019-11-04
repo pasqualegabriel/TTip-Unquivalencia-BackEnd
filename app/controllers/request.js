@@ -34,28 +34,34 @@ const createAndGetRequest = (file, body, transaction) =>
       : createRequest(file.id, body.subjectUnqId, transaction)
   );
 
-const createRequestsToFile = async (file, body) => {
+exports.createRequestsToFile = async (file, body, transaction) => {
   try {
-    const transaction = await sequelize.transaction();
     const request = await createAndGetRequest(file, body, transaction);
     const requestId = request.dataValues ? request.dataValues.id : request[1][0].dataValues.id;
     await createRequestSubject(mapOriginSubjectsToCreate(requestId, body.subjectOriginIds), transaction);
     if (request.dataValues) await incrementStatusToFile(file.id, transaction);
-    await transaction.commit();
     return request;
   } catch (error) {
     return Promise.reject(error);
   }
 };
 
-exports.addRequest = (req, res, next) =>
-  findFile(req.body.fileNumber)
-    .then(file => {
-      logger.info(`File ${file ? 'already' : 'does not'} exists`);
-      return file ? createRequestsToFile(file.dataValues, req.body) : createFile(mapNewFile(req.body));
-    })
-    .then(() => res.status(200).send('Request created successfully'))
-    .catch(next);
+exports.addRequest = async (req, res, next) => {
+  try {
+    const file = await findFile(req.body.fileNumber);
+    logger.info(`File ${file ? 'already' : 'does not'} exists`);
+    if (file) {
+      const transaction = await sequelize.transaction();
+      await exports.createRequestsToFile(file.dataValues, req.body, transaction);
+      await transaction.commit();
+    } else {
+      await createFile(mapNewFile(req.body));
+    }
+    return res.status(200).send('Request created successfully');
+  } catch (error) {
+    return next(error);
+  }
+};
 
 const findRequestsByFileId = ({ id, rol }, fileId) =>
   rol === PROFESSOR ? findAllRequestsProfessor(id, fileId) : findRequests(fileId);
