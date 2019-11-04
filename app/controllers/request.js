@@ -85,7 +85,7 @@ exports.deleteRequest = async (req, res, next) => {
   try {
     const transaction = await sequelize.transaction();
     const request = await getRequest(req.params.requestId);
-    if (equivalencesFinished.includes(req.body.equivalence))
+    if (equivalencesFinished.includes(request.dataValues.equivalence))
       await decrementFileStatus(request.fk_fileid, transaction);
     await deleteRequest(req.params.requestId, transaction);
     await transaction.commit();
