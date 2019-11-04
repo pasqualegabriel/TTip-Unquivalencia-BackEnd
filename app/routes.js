@@ -27,6 +27,11 @@ exports.init = app => {
     [userValidations.verifyUpdateEquivalenceAuthentication, requestValidations.verifyEquivalence],
     requestController.updateEquivalence
   );
+  app.delete(
+    '/api/v1/request/:requestId',
+    [userValidations.verifyAdminLogin],
+    requestController.deleteRequest
+  );
   app.get(
     '/api/v1/request/:requestId',
     [userValidations.verifyGetRequestAuthentication],

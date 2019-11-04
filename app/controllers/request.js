@@ -13,7 +13,8 @@ const {
     createRequest,
     updateToWithoutEvaluating,
     createRequestSubject,
-    getSubjectsStepper
+    getSubjectsStepper,
+    deleteRequest
   } = require('../interactors/request'),
   { findFile, createFile, decrementFileStatus, incrementStatusToFile } = require('../interactors/file'),
   { mapNewFile } = require('../mappers/file'),
@@ -75,6 +76,20 @@ exports.updateEquivalence = async (req, res, next) => {
       await decrementFileStatus(res.locals.request.fk_fileid, transaction);
     await transaction.commit();
     return res.status(200).send('Request updated');
+  } catch (error) {
+    return next(error);
+  }
+};
+
+exports.deleteRequest = async (req, res, next) => {
+  try {
+    const transaction = await sequelize.transaction();
+    const request = await getRequest(req.params.requestId);
+    if (equivalencesFinished.includes(req.body.equivalence))
+      await decrementFileStatus(request.fk_fileid, transaction);
+    await deleteRequest(req.params.requestId, transaction);
+    await transaction.commit();
+    return res.status(200).send('Request deleted');
   } catch (error) {
     return next(error);
   }

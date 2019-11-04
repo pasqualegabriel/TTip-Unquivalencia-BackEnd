@@ -169,3 +169,8 @@ exports.createRequest = (fileId, subjectUnqId, transaction) =>
 
 exports.createRequestSubject = (requestSubjects, transaction) =>
   RequestSubject.bulkCreate(requestSubjects, { transaction });
+
+exports.deleteRequest = (requestId, transaction) =>
+  RequestSubject.destroy({ where: { requestId } }, { transaction }).then(
+    Request.destroy({ where: { id: requestId } }, { transaction })
+  );
