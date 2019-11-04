@@ -33,17 +33,17 @@ exports.init = app => {
     requestController.getRequest
   );
   app.get(
-    '/api/v1/matchs/requests/:requestId/:subjectId',
+    '/api/v1/matchs/requests/:requestId/subject/:subjectId',
     [userValidations.verifyGetRequestAuthentication],
     requestController.getRequestMatchs
   );
   app.get(
-    '/api/v1/stepper/requests/:requestId/:subjectId',
+    '/api/v1/stepper/requests/:requestId/subject/:subjectId',
     [userValidations.verifyAuthentication],
     requestController.getStepperRequest
   );
   app.post(
-    '/api/v1/consult/requests/:requestId/:subjectId',
+    '/api/v1/consult/requests/:requestId/subject/:subjectId',
     [userValidations.verifyAdminLogin, userValidations.validateProfessor, requestValidations.validateRequest],
     requestController.consultEquivalence
   );
