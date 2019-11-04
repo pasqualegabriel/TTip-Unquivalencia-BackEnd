@@ -104,28 +104,29 @@ exports.findRequestsMatch = ({
     dataValues: { id: unqSubjectId }
   }
 }) =>
-  Request.findAll({
-    where: {
-      fk_fileid: { [Op.ne]: fkFileId },
-      equivalence: { [Op.in]: [approved, rejected] }
-    },
-    include: [
+  sequelize
+    .query(
+      `
+      select distinct(requests.id) from requests, request_subjects, subjects where 
+        requests.fk_subjectId = ${unqSubjectId} and 
+        requests.fk_fileid != ${fkFileId} and
+        request_subjects.request_id = requests.id and 
+        request_subjects.subject_id = subjects.id and
+        requests.equivalence = '${rejected}' and 
+        subjects.university = '${universityOrigin}' and subjects.career = '${careerOrigin}' limit 40; 
+    `,
       {
-        model: Subject,
-        as: 'originSubjects',
-        where: {
-          university: universityOrigin,
-          career: careerOrigin
-        }
-      },
-      {
-        model: Subject,
-        as: 'unqSubject',
-        where: { id: unqSubjectId }
+        type: Sequelize.QueryTypes.SELECT
       }
-    ],
-    limit: 50
-  });
+    )
+    .then(ids =>
+      ids.length
+        ? Request.findAll({
+            where: { id: { [Op.in]: ids.map(({ id }) => id) } },
+            include: [{ model: Subject, as: 'originSubjects' }, { model: Subject, as: 'unqSubject' }]
+          })
+        : []
+    );
 
 exports.findRequestsStepper = fileId =>
   Request.findAll({
