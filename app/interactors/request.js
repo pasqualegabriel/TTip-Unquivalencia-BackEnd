@@ -20,8 +20,12 @@ exports.findRequests = fileId =>
     include: [{ model: Subject, as: 'originSubjects' }, { model: Subject, as: 'unqSubject' }]
   });
 
-exports.updateRequest = (id, { equivalence, observations }, signature) =>
-  Request.update({ equivalence, signature, observations: observations || '-' }, { where: { id } });
+exports.updateRequest = (id, { equivalence, observations }, signature, transaction) =>
+  Request.update(
+    { equivalence, signature, observations: observations || '-' },
+    { where: { id } },
+    { transaction }
+  );
 
 exports.getRequest = id =>
   Request.findOne({

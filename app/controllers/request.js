@@ -64,16 +64,21 @@ exports.getRequestsByFileId = (req, res, next) =>
     .then(requests => res.status(200).send(requests))
     .catch(next);
 
-exports.updateEquivalence = (req, res, next) =>
-  updateRequest(req.params.requestId, req.body, res.locals.user.name)
-    .then(() =>
+exports.updateEquivalence = async (req, res, next) => {
+  try {
+    const transaction = await sequelize.transaction();
+    await updateRequest(req.params.requestId, req.body, res.locals.user.name, transaction);
+    if (
       !equivalencesFinished.includes(res.locals.request.equivalence) &&
       equivalencesFinished.includes(req.body.equivalence)
-        ? decrementFileStatus(res.locals.request.fk_fileid)
-        : Promise.resolve()
     )
-    .then(() => res.status(200).send('Request updated'))
-    .catch(next);
+      await decrementFileStatus(res.locals.request.fk_fileid, transaction);
+    await transaction.commit();
+    return res.status(200).send('Request updated');
+  } catch (error) {
+    return next(error);
+  }
+};
 
 exports.getRequest = (req, res, next) =>
   getRequest(req.params.requestId)

@@ -47,7 +47,8 @@ exports.findFileByFileNumber = fileNumber =>
     ]
   });
 
-exports.decrementFileStatus = id => File.decrement('status', { where: { id } });
+exports.decrementFileStatus = (id, transaction) =>
+  File.decrement('status', { where: { id } }, { transaction });
 
 exports.incrementStatusToFile = (id, transaction) =>
   File.increment('status', { where: { id } }, { transaction });
