@@ -52,3 +52,5 @@ exports.decrementFileStatus = (id, transaction) =>
 
 exports.incrementStatusToFile = (id, transaction) =>
   File.increment('status', { where: { id } }, { transaction });
+
+exports.getFile = id => File.findOne({ where: { id } });

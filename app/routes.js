@@ -74,4 +74,5 @@ exports.init = app => {
   app.get('/api/v1/careers', [userValidations.verifyAdminLogin], subjectController.getCareers);
   app.get('/api/v1/plan/years', [userValidations.verifyAdminLogin], subjectController.getPlanYears);
   app.get('/api/v1/subject', [userValidations.verifyAdminLogin], subjectController.getSubject);
+  app.post('/api/v1/recommend', [userValidations.verifyAdminLogin], fileController.recommend);
 };

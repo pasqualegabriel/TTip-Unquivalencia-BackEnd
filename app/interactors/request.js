@@ -6,13 +6,7 @@ const {
     Sequelize,
     Sequelize: { Op }
   } = require('../models'),
-  {
-    approved,
-    rejected,
-    withoutEvaluating,
-    consulting,
-    equivalencesFinished
-  } = require('../constants/request');
+  { approved, rejected, withoutEvaluating, consulting } = require('../constants/request');
 
 exports.findRequests = fileId =>
   Request.findAll({
