@@ -48,3 +48,6 @@ exports.findFileByFileNumber = fileNumber =>
   });
 
 exports.decrementFileStatus = id => File.decrement('status', { where: { id } });
+
+exports.incrementStatusToFile = (id, transaction) =>
+  File.increment('status', { where: { id } }, { transaction });

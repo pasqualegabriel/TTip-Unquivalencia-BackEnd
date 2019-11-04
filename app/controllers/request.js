@@ -15,29 +15,37 @@ const {
     createRequestSubject,
     getSubjectsStepper
   } = require('../interactors/request'),
-  { findFile, createFile, decrementFileStatus } = require('../interactors/file'),
+  { findFile, createFile, decrementFileStatus, incrementStatusToFile } = require('../interactors/file'),
   { mapNewFile } = require('../mappers/file'),
-  { mapRequestsStepper } = require('../mappers/request'),
+  { mapRequestsStepper, mapOriginSubjectsToCreate } = require('../mappers/request'),
   { equivalencesFinished } = require('../constants/request'),
   { PROFESSOR } = require('../constants/user'),
   { differenceBy } = require('lodash'),
   { generateConsultToProfessorMail } = require('../helpers'),
   sendEmail = require('../services/mail'),
+  { sequelize } = require('../models'),
   logger = require('../logger');
 
-const createAndGetRequest = (file, body) =>
-  findRequestBySubjectUnqId(file.id, body.subjectUnqId).then(request =>
-    request ? updateToWithoutEvaluating(request) : createRequest(file.id, body.subjectUnqId)
+const createAndGetRequest = (file, body, transaction) =>
+  findRequestBySubjectUnqId(file.id, body.subjectUnqId, transaction).then(request =>
+    request
+      ? updateToWithoutEvaluating(request, transaction)
+      : createRequest(file.id, body.subjectUnqId, transaction)
   );
 
-const createRequestsToFile = (file, body) =>
-  createAndGetRequest(file, body).then(request =>
-    createRequestSubject(
-      request.dataValues ? request.dataValues.id : request[1][0].dataValues.id,
-      body.subjectOriginId
-    )
-  );
-// .then(() => updateStatus());
+const createRequestsToFile = async (file, body) => {
+  try {
+    const transaction = await sequelize.transaction();
+    const request = await createAndGetRequest(file, body, transaction);
+    const requestId = request.dataValues ? request.dataValues.id : request[1][0].dataValues.id;
+    await createRequestSubject(mapOriginSubjectsToCreate(requestId, body.subjectOriginIds), transaction);
+    if (request.dataValues) await incrementStatusToFile(file.id, transaction);
+    await transaction.commit();
+    return request;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
 
 exports.addRequest = (req, res, next) =>
   findFile(req.body.fileNumber)

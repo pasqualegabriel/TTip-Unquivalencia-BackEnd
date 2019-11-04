@@ -6,7 +6,13 @@ const {
     Sequelize,
     Sequelize: { Op }
   } = require('../models'),
-  { approved, rejected, withoutEvaluating, consulting } = require('../constants/request');
+  {
+    approved,
+    rejected,
+    withoutEvaluating,
+    consulting,
+    equivalencesFinished
+  } = require('../constants/request');
 
 exports.findRequests = fileId =>
   Request.findAll({
@@ -89,7 +95,7 @@ exports.findRequestsMatchWithoutYearPlanOrigin = ({
 
 exports.findRequestsMatch = ({
   fk_fileid: fkFileId,
-  originSubject: { university: universityOrigin, career: careerOrigin, yearPlan: yearPlanOrigin },
+  originSubject: { university: universityOrigin, career: careerOrigin },
   unqSubject: {
     dataValues: { id: unqSubjectId }
   }
@@ -105,8 +111,7 @@ exports.findRequestsMatch = ({
         as: 'originSubjects',
         where: {
           university: universityOrigin,
-          career: careerOrigin,
-          yearPlan: yearPlanOrigin
+          career: careerOrigin
         }
       },
       {
@@ -144,16 +149,18 @@ exports.findAllRequestsProfessor = (professorId, fileId) =>
 exports.updateConsultEquivalence = (id, { id: professorId }, { message: commentsToProfessor = 'N/I' }) =>
   Request.update({ professorId, equivalence: consulting, commentsToProfessor }, { where: { id } });
 
-exports.findRequestBySubjectUnqId = (fileId, subjectUnqId) =>
-  Request.findOne({ where: { fk_fileid: fileId, fk_subjectid: subjectUnqId } });
+exports.findRequestBySubjectUnqId = (fileId, subjectUnqId, transaction) =>
+  Request.findOne({ where: { fk_fileid: fileId, fk_subjectid: subjectUnqId } }, { transaction });
 
-exports.updateToWithoutEvaluating = request =>
+exports.updateToWithoutEvaluating = (request, transaction) =>
   Request.update(
     { equivalence: withoutEvaluating, signature: 'N/I' },
-    { where: { id: request.id }, returning: true }
+    { where: { id: request.id }, returning: true },
+    { transaction }
   );
 
-exports.createRequest = (fileId, subjectUnqId) =>
-  Request.create({ fk_fileid: fileId, fk_subjectid: subjectUnqId });
+exports.createRequest = (fileId, subjectUnqId, transaction) =>
+  Request.create({ fk_fileid: fileId, fk_subjectid: subjectUnqId }, { transaction });
 
-exports.createRequestSubject = (requestId, subjectId) => RequestSubject.create({ requestId, subjectId });
+exports.createRequestSubject = (requestSubjects, transaction) =>
+  RequestSubject.bulkCreate(requestSubjects, { transaction });

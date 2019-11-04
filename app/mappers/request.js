@@ -4,3 +4,6 @@ exports.mapRequestsStepper = ({ equivalence, originSubjects = [] }) =>
     equivalence,
     subjectOrigin
   }));
+
+exports.mapOriginSubjectsToCreate = (requestId, subjectOriginIds = []) =>
+  subjectOriginIds.map(subjectId => ({ requestId, subjectId }));
