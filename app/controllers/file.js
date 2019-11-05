@@ -10,18 +10,26 @@ const {
   { findRequests } = require('../interactors/request'),
   { mapFileByFileNumber, mapNewFile } = require('../mappers/file'),
   sendEmail = require('../services/mail'),
-  { generateRecommendMail } = require('../helpers'),
+  { getPageParams, generateRecommendMail } = require('../helpers'),
   { sequelize } = require('../models'),
   { createRequestsToFile } = require('./request'),
   logger = require('../logger'),
   { PROFESSOR } = require('../constants/user');
 
-const getFiles = ({ id, role }) => (role === PROFESSOR ? findAllFilesProfessor(id) : findAllFiles());
+const getFiles = ({ id, role }, query, offset, limit) =>
+  role === PROFESSOR ? findAllFilesProfessor(id, query, offset, limit) : findAllFiles(query, offset, limit);
 
-exports.getAllFiles = (_, res, next) =>
-  getFiles(res.locals.user)
-    .then(files => res.status(200).send(files))
+exports.getAllFiles = (req, res, next) => {
+  const { limit, offset } = getPageParams(req.query);
+  return getFiles(res.locals.user, req.query, offset, limit)
+    .then(({ count, rows: files }) =>
+      res.status(200).send({
+        files,
+        total_pages: limit ? Math.ceil(count / limit) : 1
+      })
+    )
     .catch(next);
+};
 
 exports.getFileByFileNumber = (req, res, next) =>
   findFileByFileNumber(req.query.fileNumber)

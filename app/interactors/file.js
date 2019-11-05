@@ -7,7 +7,8 @@ const {
     Sequelize: { Op }
   } = require('../models'),
   { consulting } = require('../constants/request'),
-  { uniq } = require('lodash');
+  { substring } = require('../helpers'),
+  { uniq, pickBy } = require('lodash');
 
 exports.findFile = fileNumber =>
   File.findOne({
@@ -20,22 +21,56 @@ exports.createFile = file =>
     include: [Request]
   });
 
-exports.findAllFiles = () => File.findAll({ raw: true });
+exports.findAllFiles = (
+  {
+    fkFileIdRes,
+    fileNumber,
+    name,
+    surname,
+    mail,
+    dni,
+    yearNote,
+    status,
+    field = 'created_at',
+    order: orderBy = 'desc'
+  },
+  offset,
+  limit
+) => {
+  const order = field && orderBy ? [[field, orderBy]] : [];
+  const where = pickBy({
+    id: fkFileIdRes ? { [Op.in]: fkFileIdRes } : null,
+    fileNumber: substring(fileNumber),
+    name: substring(name),
+    surname: substring(surname),
+    mail: substring(mail),
+    dni: substring(dni),
+    yearNote: substring(yearNote),
+    status: { [Op.ne]: 0 }
+  });
+  if (parseInt(status) === 0) {
+    where.status = 0;
+  }
+  return File.findAndCountAll({
+    where,
+    ...pickBy({ offset, limit }),
+    order
+  });
+};
 
-exports.findAllFilesProfessor = professorId =>
+exports.findAllFilesProfessor = (professorId, query, offset, limit) =>
   Request.findAll({
     attributes: [['fk_fileid', 'fileId']],
     where: { professorId, equivalence: consulting },
     raw: true
   }).then(fkFileIdRes =>
     fkFileIdRes.length
-      ? File.findAll({
-          raw: true,
-          where: {
-            id: { [Op.in]: uniq(fkFileIdRes.map(({ fileId }) => fileId)) }
-          }
-        })
-      : []
+      ? exports.findAllFiles(
+          { ...query, fkFileIdRes: uniq(fkFileIdRes.map(({ fileId }) => fileId)) },
+          offset,
+          limit
+        )
+      : { count: 0, rows: [] }
   );
 
 exports.findFileByFileNumber = fileNumber =>
