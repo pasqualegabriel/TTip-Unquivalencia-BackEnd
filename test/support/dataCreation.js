@@ -1,4 +1,4 @@
-const { User } = require('../../app/models'),
+const { user: User } = require('../../app/models'),
   { factory } = require('factory-girl'),
   { roles } = require('../../app/constants/user');
 

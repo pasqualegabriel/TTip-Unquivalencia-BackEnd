@@ -1,5 +1,4 @@
 const Umzug = require('umzug'),
-  Sequelize = require('sequelize'),
   config = require('./../config'),
   { sequelize } = require('../app/models');
 

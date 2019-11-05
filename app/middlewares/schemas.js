@@ -39,3 +39,22 @@ exports.fileSchema = {
     }
   }
 };
+
+exports.updateUserSchema = {
+  type: 'object',
+  required: ['email'],
+  properties: {
+    name: {
+      type: 'string'
+    },
+    lastName: {
+      type: 'string'
+    },
+    email: {
+      type: 'string'
+    },
+    role: {
+      type: 'string'
+    }
+  }
+};
