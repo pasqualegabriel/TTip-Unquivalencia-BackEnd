@@ -27,23 +27,23 @@ const {
   { sequelize } = require('../models'),
   logger = require('../logger');
 
-const createAndGetRequest = (file, body, transaction) =>
-  findRequestBySubjectUnqId(file.id, body.subjectUnqId, transaction).then(request =>
-    request
-      ? updateToWithoutEvaluating(request, transaction)
-      : createRequest(file.id, body.subjectUnqId, transaction)
-  );
+const createAndGetRequest = async (file, body, transaction) => {
+  const request = await findRequestBySubjectUnqId(file.id, body.subjectUnqId, transaction);
+  if (request) {
+    if (equivalencesFinished.includes(request.dataValues.equivalence))
+      await incrementStatusToFile(file.id, transaction);
+    return updateToWithoutEvaluating(request, transaction);
+  } else {
+    await incrementStatusToFile(file.id, transaction);
+    return createRequest(file.id, body.subjectUnqId, transaction);
+  }
+};
 
 exports.createRequestsToFile = async (file, body, transaction) => {
-  try {
-    const request = await createAndGetRequest(file, body, transaction);
-    const requestId = request.dataValues ? request.dataValues.id : request[1][0].dataValues.id;
-    await createRequestSubject(mapOriginSubjectsToCreate(requestId, body.subjectOriginIds), transaction);
-    if (request.dataValues) await incrementStatusToFile(file.id, transaction);
-    return request;
-  } catch (error) {
-    return Promise.reject(error);
-  }
+  const request = await createAndGetRequest(file, body, transaction);
+  const requestId = request.dataValues ? request.dataValues.id : request[1][0].dataValues.id;
+  await createRequestSubject(mapOriginSubjectsToCreate(requestId, body.subjectOriginIds), transaction);
+  return request;
 };
 
 exports.addRequest = async (req, res, next) => {
