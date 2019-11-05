@@ -29,13 +29,26 @@ exports.generateNewUserMail = ({ email, password }) => ({
   `
 });
 
-exports.generateConsultToProfessorMail = (requestId, { email }) => ({
+exports.generateConsultToProfessorMail = (requestId, { email }, subjectId) => ({
   to: email,
   subject: `UNQuivalencias Solicitud ${requestId}`,
   text: `
     Se ha requerido su opinión sobre una equivalencia.
 
-    Link: ${config.common.api.frontUrl}/solicitud/${requestId}
+    Link: ${config.common.api.frontUrl}/solicitud/${requestId}/${subjectId}
+
+    Saludos! `
+});
+
+exports.generateRecommendMail = ({ subjectUnqName, subjectNames }, email) => ({
+  to: email,
+  subject: `UNQuivalencias Recomendacion ${subjectUnqName}`,
+  text: `
+    Se ha rechazado la solicitud de equivalencia a la materia '${subjectUnqName}'.
+
+    Se solicitan las siguientes materias para reabrir el expediente y poder aprobar la solicitud:
+
+    ${subjectNames}.
 
     Saludos! `
 });

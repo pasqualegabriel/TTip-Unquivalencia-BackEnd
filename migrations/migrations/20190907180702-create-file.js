@@ -35,10 +35,6 @@ module.exports = {
         type: Sequelize.STRING,
         defaultValue: 'N/I'
       },
-      university_origin: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
       status: {
         allowNull: false,
         type: Sequelize.INTEGER,

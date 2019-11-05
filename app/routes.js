@@ -3,7 +3,6 @@ const userController = require('./controllers/user'),
   requestController = require('./controllers/request'),
   subjectController = require('./controllers/subject'),
   userValidations = require('./middlewares/user'),
-  fileValidations = require('./middlewares/file'),
   requestValidations = require('./middlewares/request'),
   { Validator } = require('express-json-validator-middleware'),
   { logInSchema, userSchema, fileSchema } = require('./middlewares/schemas');
@@ -13,7 +12,7 @@ const { validate } = new Validator({ allErrors: true });
 exports.init = app => {
   app.post(
     '/api/v1/request',
-    [userValidations.verifyAdminAndUserLogin, validate({ body: fileSchema }), fileValidations.verifyRequests],
+    [userValidations.verifyAdminAndUserLogin, validate({ body: fileSchema })],
     requestController.addRequest
   );
   app.get('/api/v1/files', [userValidations.verifyAuthentication], fileController.getAllFiles);
@@ -28,23 +27,28 @@ exports.init = app => {
     [userValidations.verifyUpdateEquivalenceAuthentication, requestValidations.verifyEquivalence],
     requestController.updateEquivalence
   );
+  app.delete(
+    '/api/v1/request/:requestId',
+    [userValidations.verifyAdminLogin],
+    requestController.deleteRequest
+  );
   app.get(
     '/api/v1/request/:requestId',
     [userValidations.verifyGetRequestAuthentication],
     requestController.getRequest
   );
   app.get(
-    '/api/v1/matchs/requests/:requestId',
+    '/api/v1/matchs/requests/:requestId/subject/:subjectId',
     [userValidations.verifyGetRequestAuthentication],
     requestController.getRequestMatchs
   );
   app.get(
-    '/api/v1/stepper/requests/:requestId',
+    '/api/v1/stepper/requests/:requestId/subject/:subjectId',
     [userValidations.verifyAuthentication],
     requestController.getStepperRequest
   );
   app.post(
-    '/api/v1/consult/requests/:requestId',
+    '/api/v1/consult/requests/:requestId/subject/:subjectId',
     [userValidations.verifyAdminLogin, userValidations.validateProfessor, requestValidations.validateRequest],
     requestController.consultEquivalence
   );
@@ -66,4 +70,15 @@ exports.init = app => {
   );
   app.post('/api/v1/subject', [userValidations.verifyAdminLogin], subjectController.addSubject);
   app.get('/api/v1/subjects', [userValidations.verifyAdminLogin], subjectController.getSubjects);
+  app.get('/api/v1/universities', [userValidations.verifyAdminLogin], subjectController.getUniversities);
+  app.get('/api/v1/careers', [userValidations.verifyAdminLogin], subjectController.getCareers);
+  app.get('/api/v1/plan/years', [userValidations.verifyAdminLogin], subjectController.getPlanYears);
+  app.get('/api/v1/subject', [userValidations.verifyAdminLogin], subjectController.getSubject);
+  app.post('/api/v1/recommend', [userValidations.verifyAdminLogin], fileController.recommend);
+  app.delete('/api/v1/file/:fileId', [userValidations.verifyAdminLogin], fileController.deleteFile);
+  app.post(
+    '/api/v1/duplicate/file/:fileId',
+    [userValidations.verifyAdminLogin],
+    fileController.duplicateFile
+  );
 };
