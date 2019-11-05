@@ -1,155 +1,170 @@
 const {
     request: Request,
+    request_subject: RequestSubject,
+    subject: Subject,
+    sequelize,
+    Sequelize,
     Sequelize: { Op }
   } = require('../models'),
   { approved, rejected, withoutEvaluating, consulting } = require('../constants/request');
 
-exports.createRequestToFile = requests => Request.bulkCreate(requests);
+exports.findRequests = fileId =>
+  Request.findAll({
+    where: { fk_fileid: fileId },
+    include: [{ model: Subject, as: 'originSubjects' }, { model: Subject, as: 'unqSubject' }]
+  });
 
-exports.findRequests = fileId => Request.findAll({ raw: true, where: { fk_fileid: fileId } });
-
-exports.updateRequestsWithoutEvaluating = (fkFileId, subjectsUnq) =>
-  Request.update(
-    { equivalence: withoutEvaluating, signature: 'N/I' },
-    { where: { fk_fileid: fkFileId, subjectUnq: { [Op.in]: subjectsUnq } } }
-  );
-
-exports.updateRequest = ({ fk_fileid: fdFileId, subjectUnq }, { equivalence, observations }, signature) =>
+exports.updateRequest = (id, { equivalence, observations }, signature, transaction) =>
   Request.update(
     { equivalence, signature, observations: observations || '-' },
-    { where: { fk_fileid: fdFileId, subjectUnq } }
+    { where: { id } },
+    { transaction }
   );
 
-exports.getRequest = id => Request.findByPk(id);
-
-exports.getRequestMatch = ({ fk_fileid: fkFileId, subjectUnq }) =>
-  Request.findAll({
-    raw: true,
-    where: { fk_fileid: fkFileId, subjectUnq }
+exports.getRequest = id =>
+  Request.findOne({
+    where: { id },
+    include: [{ model: Subject, as: 'originSubjects' }, { model: Subject, as: 'unqSubject' }]
   });
+
+// eslint-disable-next-line camelcase
+exports.getSubjectsStepper = ({ id }, subjectId) =>
+  Request.findOne({
+    where: { id },
+    include: [{ model: Subject, as: 'originSubjects', where: { id: subjectId } }]
+  });
+
+const generateTotalMatchQuery = (unqSubjectId, fkFileId, universityOrigin, careerOrigin, yearPlanOrigin) => `
+  with request_ids_in_match as (
+    select distinct(requests.id) from requests, request_subjects, subjects where 
+      requests.fk_subjectId = ${unqSubjectId} and 
+      requests.fk_fileid != ${fkFileId} and
+      request_subjects.request_id = requests.id and 
+      request_subjects.subject_id = subjects.id and
+      requests.equivalence = '${approved}' and 
+      subjects.university = '${universityOrigin}' and subjects.career = '${careerOrigin}' 
+      ${yearPlanOrigin ? `and subjects.year_plan = '${yearPlanOrigin}'` : ''}
+  ),
+  request_ids_out_match as (
+    select distinct(requests.id) as id from requests, request_subjects, subjects, request_ids_in_match where
+      requests.id = request_ids_in_match.id and
+      request_subjects.request_id = requests.id and 
+      request_subjects.subject_id = subjects.id and 
+      (subjects.university != '${universityOrigin}' or subjects.career != '${careerOrigin}' 
+      ${yearPlanOrigin ? `or subjects.year_plan != '${yearPlanOrigin}')` : ')'}
+  ), 
+  request_match_id as (
+    select distinct(requests.id) as id from requests, request_subjects, subjects, request_ids_in_match, request_ids_out_match where
+      requests.id = request_ids_in_match.id and
+      requests.id != request_ids_out_match.id and
+      request_subjects.request_id = requests.id and 
+      request_subjects.subject_id = subjects.id limit 1
+  )
+    select subjects.* from requests, request_subjects, subjects, request_match_id where
+      requests.id = request_match_id.id and
+      request_subjects.request_id = requests.id and 
+      request_subjects.subject_id = subjects.id
+`;
 
 exports.findRequestsTotalMatch = ({
   fk_fileid: fkFileId,
-  universityOrigin,
-  careerOrigin,
-  yearPlanOrigin,
-  subjectUnq
+  originSubject: { university: universityOrigin, career: careerOrigin, yearPlan: yearPlanOrigin },
+  unqSubject: {
+    dataValues: { id: unqSubjectId }
+  }
 }) =>
-  Request.findAll({
-    attributes: ['fk_fileid'],
-    raw: true,
-    where: {
-      universityOrigin,
-      careerOrigin,
-      yearPlanOrigin,
-      subjectUnq,
-      fk_fileid: { [Op.ne]: parseInt(fkFileId) },
-      equivalence: approved
-    },
-    limit: 1
-  }).then(fkFileIdRes =>
-    fkFileIdRes.length
-      ? Request.findAll({
-          raw: true,
-          where: {
-            fk_fileid: fkFileIdRes[0].fk_fileid,
-            subjectUnq,
-            equivalence: approved
-          }
-        })
-      : []
+  sequelize.query(
+    generateTotalMatchQuery(unqSubjectId, fkFileId, universityOrigin, careerOrigin, yearPlanOrigin),
+    {
+      type: Sequelize.QueryTypes.SELECT
+    }
   );
 
 exports.findRequestsMatchWithoutYearPlanOrigin = ({
   fk_fileid: fkFileId,
-  universityOrigin,
-  careerOrigin,
-  subjectUnq
+  originSubject: { university: universityOrigin, career: careerOrigin },
+  unqSubject: {
+    dataValues: { id: unqSubjectId }
+  }
 }) =>
-  Request.findAll({
-    attributes: ['fk_fileid'],
-    raw: true,
-    where: {
-      universityOrigin,
-      careerOrigin,
-      subjectUnq,
-      fk_fileid: { [Op.ne]: fkFileId },
-      equivalence: approved
-    },
-    limit: 1
-  }).then(fkFileIdRes =>
-    fkFileIdRes.length
-      ? Request.findAll({
-          raw: true,
-          where: {
-            fk_fileid: fkFileIdRes[0].fk_fileid,
-            subjectUnq,
-            equivalence: approved
-          }
-        })
-      : []
-  );
-
-exports.findRequestsMatch = ({ fk_fileid: fkFileId, universityOrigin, careerOrigin, subjectUnq }) =>
-  Request.findAll({
-    raw: true,
-    where: {
-      universityOrigin,
-      careerOrigin,
-      subjectUnq,
-      fk_fileid: { [Op.ne]: fkFileId },
-      equivalence: { [Op.in]: [approved, rejected] }
-    },
-    limit: 40,
-    order: [['fk_fileid', 'asc']]
+  sequelize.query(generateTotalMatchQuery(unqSubjectId, fkFileId, universityOrigin, careerOrigin), {
+    type: Sequelize.QueryTypes.SELECT
   });
+
+exports.findRequestsMatch = ({
+  fk_fileid: fkFileId,
+  originSubject: { university: universityOrigin, career: careerOrigin },
+  unqSubject: {
+    dataValues: { id: unqSubjectId }
+  }
+}) =>
+  sequelize
+    .query(
+      `
+      select distinct(requests.id) from requests, request_subjects, subjects where 
+        requests.fk_subjectId = ${unqSubjectId} and 
+        requests.fk_fileid != ${fkFileId} and
+        request_subjects.request_id = requests.id and 
+        request_subjects.subject_id = subjects.id and
+        requests.equivalence = '${rejected}' and 
+        subjects.university = '${universityOrigin}' and subjects.career = '${careerOrigin}' limit 40; 
+    `,
+      {
+        type: Sequelize.QueryTypes.SELECT
+      }
+    )
+    .then(ids =>
+      ids.length
+        ? Request.findAll({
+            where: { id: { [Op.in]: ids.map(({ id }) => id) } },
+            include: [{ model: Subject, as: 'originSubjects' }, { model: Subject, as: 'unqSubject' }]
+          })
+        : []
+    );
 
 exports.findRequestsStepper = fileId =>
   Request.findAll({
-    attributes: [
-      ['id', 'requestId'],
-      'subjectOrigin',
-      'subjectUnq',
-      'equivalence',
-      'courseMode',
-      'subjectOriginWeeklyHours',
-      'subjectOriginTotalHours',
-      'yearPlanOrigin',
-      'credits'
-    ],
+    attributes: [['id', 'requestId'], 'equivalence', [Sequelize.col('unqSubject.subject'), 'subjectUnq']],
     raw: true,
-    where: { fk_fileid: fileId }
+    where: { fk_fileid: fileId },
+    include: [{ model: Subject, as: 'unqSubject', attributes: [] }]
   });
 
 exports.findRequestsStepperProfessor = (fileId, professorId) =>
   Request.findAll({
-    attributes: [
-      ['id', 'requestId'],
-      'subjectOrigin',
-      'subjectUnq',
-      'equivalence',
-      'courseMode',
-      'subjectOriginWeeklyHours',
-      'subjectOriginTotalHours',
-      'yearPlanOrigin',
-      'credits'
-    ],
+    attributes: [['id', 'requestId'], 'equivalence', [Sequelize.col('unqSubject.subject'), 'subjectUnq']],
     raw: true,
-    where: { fk_fileid: fileId, professorId, equivalence: consulting }
+    where: { fk_fileid: fileId, professorId, equivalence: consulting },
+    include: [{ model: Subject, as: 'unqSubject', attributes: [] }]
   });
 
 exports.findAllRequestsProfessor = (professorId, fileId) =>
   Request.findAll({
     raw: true,
-    where: { fk_fileid: fileId, professorId, equivalence: consulting }
+    where: { fk_fileid: fileId, professorId, equivalence: consulting },
+    include: [{ model: Subject, as: 'originSubjects' }, { model: Subject, as: 'unqSubject' }]
   });
 
-exports.updateConsultEquivalence = (
-  { fk_fileid: fkFileId, subjectUnq },
-  { id: professorId },
-  { message: commentsToProfessor = 'N/I' }
-) =>
+exports.updateConsultEquivalence = (id, { id: professorId }, { message: commentsToProfessor = 'N/I' }) =>
+  Request.update({ professorId, equivalence: consulting, commentsToProfessor }, { where: { id } });
+
+exports.findRequestBySubjectUnqId = (fileId, subjectUnqId, transaction) =>
+  Request.findOne({ where: { fk_fileid: fileId, fk_subjectid: subjectUnqId } }, { transaction });
+
+exports.updateToWithoutEvaluating = (request, transaction) =>
   Request.update(
-    { professorId, equivalence: consulting, commentsToProfessor },
-    { where: { fk_fileid: fkFileId, subjectUnq } }
+    { equivalence: withoutEvaluating, signature: 'N/I' },
+    { where: { id: request.id }, returning: true },
+    { transaction }
+  );
+
+exports.createRequest = (fileId, subjectUnqId, transaction) =>
+  Request.create({ fk_fileid: fileId, fk_subjectid: subjectUnqId }, { transaction });
+
+exports.createRequestSubject = (requestSubjects, transaction) =>
+  RequestSubject.bulkCreate(requestSubjects, { transaction });
+
+exports.deleteRequest = (requestId, transaction) =>
+  RequestSubject.destroy({ where: { requestId } }, { transaction }).then(
+    Request.destroy({ where: { id: requestId } }, { transaction })
   );

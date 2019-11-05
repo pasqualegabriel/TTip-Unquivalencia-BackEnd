@@ -1,4 +1,4 @@
-const { subject: Subject } = require('../models'),
+const { subject: Subject, sequelize, Sequelize } = require('../models'),
   { pickBy } = require('lodash'),
   { substring } = require('../helpers');
 
@@ -43,3 +43,30 @@ exports.findAndCountAllSubjects = (
     order
   });
 };
+
+exports.getUniversities = () =>
+  sequelize.query('select distinct(university) from subjects;', {
+    type: Sequelize.QueryTypes.SELECT
+  });
+
+exports.getCareers = ({ university }) =>
+  sequelize.query(`select distinct(career) from subjects where university = '${university}';`, {
+    type: Sequelize.QueryTypes.SELECT
+  });
+
+exports.getPlanYears = ({ university, career }) =>
+  sequelize.query(
+    `select distinct(year_plan) from subjects where university = '${university}' and career = '${career}';`,
+    {
+      type: Sequelize.QueryTypes.SELECT
+    }
+  );
+
+exports.getSubject = ({ university, career, yearPlan }) =>
+  Subject.findOne({
+    where: {
+      university,
+      career,
+      yearPlan
+    }
+  });

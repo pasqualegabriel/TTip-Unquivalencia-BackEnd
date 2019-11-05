@@ -32,13 +32,10 @@ exports.userSchema = {
 
 exports.fileSchema = {
   type: 'object',
-  required: ['fileNumber', 'requests'],
+  required: ['fileNumber'],
   properties: {
     fileNumber: {
       type: 'string'
-    },
-    requests: {
-      type: 'array'
     }
   }
 };

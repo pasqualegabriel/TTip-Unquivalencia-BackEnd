@@ -65,7 +65,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
   subject.associate = function(models) {
-    // associations can be defined here
+    models.subject.belongsToMany(models.request, { through: models.request_subject });
+    models.subject.hasOne(models.request, { foreignKey: 'fk_subjectid', targetKey: 'id' });
   };
   return subject;
 };
