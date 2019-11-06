@@ -14,7 +14,8 @@ const {
     updateToWithoutEvaluating,
     createRequestSubject,
     getSubjectsStepper,
-    deleteRequest
+    deleteRequest,
+    findAndCountAllRequests
   } = require('../interactors/request'),
   { findFile, createFile, decrementFileStatus, incrementStatusToFile } = require('../interactors/file'),
   { mapNewFile } = require('../mappers/file'),
@@ -22,7 +23,7 @@ const {
   { equivalencesFinished } = require('../constants/request'),
   { PROFESSOR } = require('../constants/user'),
   { differenceBy } = require('lodash'),
-  { generateConsultToProfessorMail } = require('../helpers'),
+  { getPageParams, generateConsultToProfessorMail } = require('../helpers'),
   sendEmail = require('../services/mail'),
   { sequelize } = require('../models'),
   logger = require('../logger');
@@ -172,3 +173,15 @@ exports.consultEquivalence = (req, res, next) =>
       logger.info('Email sent to professor');
     })
     .catch(next);
+
+exports.getRequests = (req, res, next) => {
+  const { limit, offset } = getPageParams(req.query);
+  return findAndCountAllRequests(req.query, offset, limit)
+    .then(({ count, rows: requests }) =>
+      res.status(200).send({
+        requests,
+        total_pages: limit ? Math.ceil(count / limit) : 1
+      })
+    )
+    .catch(next);
+};

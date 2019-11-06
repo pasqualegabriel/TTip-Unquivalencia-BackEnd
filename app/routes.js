@@ -92,4 +92,5 @@ exports.init = app => {
     [userValidations.verifyAdminLogin],
     fileController.duplicateFile
   );
+  app.get('/api/v1/requests', [userValidations.verifyAdminAndUserLogin], requestController.getRequests);
 };

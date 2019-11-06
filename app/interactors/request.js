@@ -6,6 +6,8 @@ const {
     Sequelize,
     Sequelize: { Op }
   } = require('../models'),
+  { pickBy } = require('lodash'),
+  { substring } = require('../helpers'),
   { approved, rejected, withoutEvaluating, consulting } = require('../constants/request');
 
 exports.findRequests = fileId =>
@@ -167,4 +169,63 @@ exports.createRequestSubject = (requestSubjects, transaction) =>
 exports.deleteRequest = (requestId, transaction) =>
   RequestSubject.destroy({ where: { requestId } }, { transaction }).then(
     Request.destroy({ where: { id: requestId } }, { transaction })
+  );
+
+exports.findAndCountAllRequests = (
+  {
+    universityOrigin,
+    careerOrigin,
+    yearPlanOrigin,
+    subjectOrigin,
+    careerUnq,
+    subjectUnq,
+    subjectCoreUnq,
+    yearOfEquivalence,
+    signature,
+    equivalence
+  },
+  offset,
+  limit
+) =>
+  Request.findAll({
+    attributes: ['id'],
+    where: pickBy({
+      yearOfEquivalence: substring(yearOfEquivalence),
+      signature: substring(signature),
+      equivalence: substring(equivalence)
+    }),
+    include: [
+      {
+        model: Subject,
+        as: 'originSubjects',
+        where: pickBy({
+          university: substring(universityOrigin),
+          career: substring(careerOrigin),
+          yearPlan: substring(yearPlanOrigin),
+          subject: substring(subjectOrigin)
+        })
+      },
+      {
+        model: Subject,
+        as: 'unqSubject',
+        where: pickBy({
+          career: substring(careerUnq),
+          subject: substring(subjectUnq),
+          subjectCore: substring(subjectCoreUnq)
+        })
+      }
+    ]
+  }).then(ids =>
+    ids.length
+      ? Request.findAndCountAll({
+          attributes: ['id'],
+          where: { id: { [Op.in]: ids.map(({ id }) => id) } },
+          ...pickBy({ offset, limit })
+        }).then(({ count, rows: idsRes }) =>
+          Request.findAll({
+            where: { id: { [Op.in]: idsRes.map(({ id }) => id) } },
+            include: [{ model: Subject, as: 'originSubjects' }, { model: Subject, as: 'unqSubject' }]
+          }).then(requests => ({ count, rows: requests }))
+        )
+      : { count: 0, rows: [] }
   );
