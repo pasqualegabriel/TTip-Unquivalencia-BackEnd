@@ -48,3 +48,8 @@ exports.updatePassword = (id, password) =>
   sequelize.query(`update users set password = '${password}' where id = ${id}`, {
     type: Sequelize.QueryTypes.UPDATE
   });
+
+exports.updateCode = (id, code) =>
+  sequelize.query(`update users set code = '${code}' where id = ${id}`, {
+    type: Sequelize.QueryTypes.UPDATE
+  });

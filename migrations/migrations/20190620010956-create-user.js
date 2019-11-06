@@ -27,6 +27,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      code: {
+        allowNull: true,
+        type: Sequelize.STRING
+      },
       role: {
         type: Sequelize.ENUM,
         values: roles,

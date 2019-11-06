@@ -9,7 +9,8 @@ const userInteractor = require('../interactors/user'),
     permissionDeniedMessage,
     youAreNotLoggedInMessage,
     sessionExpiredMessage,
-    differntPasswordMessage
+    differntPasswordMessage,
+    theEmailDoesNotExistsMessage
   } = require('../errors'),
   { isEmail } = require('validator'),
   { compare: bcryptCompare } = require('bcryptjs'),
@@ -116,3 +117,20 @@ exports.verifyNewPassword = (req, res, next) => {
   const { newPassword, confirmPassword } = req.body;
   return newPassword === confirmPassword ? next() : res.status(401).send(differntPasswordMessage);
 };
+
+exports.validateEmail = (req, res, next) => {
+  const errors = [];
+  const isValidEmail = req.body.email && isEmail(req.body.email);
+  if (!isValidEmail) errors.push(invalidMailMessage);
+  return userInteractor.findOneByEmail(req.body.email).then(user => {
+    if (user && isValidEmail) {
+      res.locals.user = user;
+      return next();
+    }
+    if (!user) errors.push(theEmailDoesNotExistsMessage);
+    return res.status(401).send(errors);
+  });
+};
+
+exports.validateCode = (req, res, next) =>
+  req.body.code && res.locals.user.code === req.body.code ? next() : res.status(401).send(['Invalid code']);

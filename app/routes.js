@@ -93,4 +93,10 @@ exports.init = app => {
     fileController.duplicateFile
   );
   app.get('/api/v1/requests', [userValidations.verifyAdminAndUserLogin], requestController.getRequests);
+  app.post('/api/v1/password/forgotten', [userValidations.validateEmail], userController.sendCode);
+  app.post(
+    '/api/v1/password/code',
+    [userValidations.validateEmail, userValidations.validateCode],
+    userController.createNewPassword
+  );
 };
