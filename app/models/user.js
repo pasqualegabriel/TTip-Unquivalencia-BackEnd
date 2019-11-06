@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       lastName: { type: DataTypes.STRING, field: 'last_name', allowNull: false },
       email: { type: DataTypes.STRING, allowNull: false, unique: true },
       password: { type: DataTypes.STRING, allowNull: false },
+      code: { type: DataTypes.STRING, allowNull: true },
       invalidationDate: {
         type: DataTypes.DATE,
         field: 'invalidation_date',

@@ -8,9 +8,17 @@ const jwt = require('jsonwebtoken'),
     updateUser,
     updateUserFields,
     deleteUser,
-    updatePassword
+    updatePassword,
+    updateCode
   } = require('../interactors/user'),
-  { generateNewPassword, generateNewUserMail, getPageParams } = require('../helpers'),
+  {
+    generateNewPassword,
+    generateNewUserMail,
+    getPageParams,
+    generateNewCode,
+    generateCodeMail,
+    generateNewPasswordMail
+  } = require('../helpers'),
   sendEmail = require('../services/mail'),
   moment = require('moment'),
   bcrypt = require('bcryptjs');
@@ -75,6 +83,23 @@ exports.deleteUser = (req, res, next) =>
 exports.updatePassword = (req, res, next) => {
   const newPassword = bcrypt.hashSync(req.body.newPassword, bcrypt.genSaltSync(8), null);
   return updatePassword(res.locals.user.id, newPassword)
-    .then(() => res.status(200).send('Password update successfully'))
+    .then(() => res.status(200).send('Password updated successfully'))
+    .catch(next);
+};
+
+exports.sendCode = (_, res, next) => {
+  const code = generateNewCode();
+  return updateCode(res.locals.user.id, code)
+    .then(() => sendEmail(generateCodeMail(res.locals.user, code)))
+    .then(() => res.status(200).send('Code sent successfully'))
+    .catch(next);
+};
+
+exports.createNewPassword = (_, res, next) => {
+  const newPassword = generateNewPassword();
+  const newPasswordBcrypt = bcrypt.hashSync(newPassword, bcrypt.genSaltSync(8), null);
+  return updatePassword(res.locals.user.id, newPasswordBcrypt)
+    .then(() => sendEmail(generateNewPasswordMail(res.locals.user, newPassword)))
+    .then(() => res.status(200).send('Password updated successfully'))
     .catch(next);
 };

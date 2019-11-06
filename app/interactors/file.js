@@ -45,9 +45,11 @@ exports.findAllFiles = (
     surname: substring(surname),
     mail: substring(mail),
     dni: substring(dni),
-    yearNote: substring(yearNote),
-    status: { [Op.ne]: 0 }
+    yearNote: substring(yearNote)
   });
+  if (parseInt(status) > 0) {
+    where.status = { [Op.ne]: 0 };
+  }
   if (parseInt(status) === 0) {
     where.status = 0;
   }
