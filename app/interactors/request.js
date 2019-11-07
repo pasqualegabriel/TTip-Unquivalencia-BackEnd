@@ -29,11 +29,10 @@ exports.getRequest = id =>
     include: [{ model: Subject, as: 'originSubjects' }, { model: Subject, as: 'unqSubject' }]
   });
 
-// eslint-disable-next-line camelcase
-exports.getSubjectsStepper = ({ id }, subjectId) =>
+exports.getSubjectsStepper = ({ id }) =>
   Request.findOne({
     where: { id },
-    include: [{ model: Subject, as: 'originSubjects', where: { id: subjectId } }]
+    include: [{ model: Subject, as: 'originSubjects' }]
   });
 
 const generateTotalMatchQuery = (unqSubjectId, fkFileId, universityOrigin, careerOrigin, yearPlanOrigin) => `
