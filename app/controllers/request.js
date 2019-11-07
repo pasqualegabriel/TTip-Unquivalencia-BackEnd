@@ -153,7 +153,7 @@ exports.getStepperRequest = async (req, res, next) => {
       subject => subject.dataValues.id === parseInt(req.params.subjectId)
     );
     delete request.originSubjects;
-    delete request.originSubject.request_subject;
+    delete request.originSubject.dataValues.request_subject;
     return res.status(200).send({
       request,
       sets: mapSets(sets),
