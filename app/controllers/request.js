@@ -22,7 +22,7 @@ const {
   { mapRequestsStepper, mapOriginSubjectsToCreate, mapSets } = require('../mappers/request'),
   { equivalencesFinished } = require('../constants/request'),
   { PROFESSOR } = require('../constants/user'),
-  { differenceBy } = require('lodash'),
+  { differenceBy, find } = require('lodash'),
   { getPageParams, generateConsultToProfessorMail } = require('../helpers'),
   sendEmail = require('../services/mail'),
   { sequelize } = require('../models'),
@@ -148,7 +148,10 @@ exports.getStepperRequest = async (req, res, next) => {
     const { dataValues: request } = await getRequest(req.params.requestId);
     const sets = await getRequestsStepper(res.locals.user, request);
     const requestsStepper = await getSubjectsStepper(request);
-    request.originSubject = request.originSubjects[0].dataValues;
+    request.originSubject = find(
+      request.originSubjects,
+      subject => subject.dataValues.id === parseInt(req.params.subjectId)
+    );
     delete request.originSubjects;
     delete request.originSubject.request_subject;
     return res.status(200).send({
