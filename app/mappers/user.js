@@ -16,3 +16,5 @@ exports.mapUpdateUser = ({ email, name, lastName, role }) =>
     lastName,
     role
   });
+
+exports.mapEmails = mails => mails.map(({ email }) => email);

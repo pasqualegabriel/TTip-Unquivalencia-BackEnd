@@ -99,4 +99,5 @@ exports.init = app => {
     [userValidations.validateEmail, userValidations.validateCode],
     userController.createNewPassword
   );
+  app.get('/api/v1/mails', [userValidations.verifyAdminLogin], userController.getMails);
 };

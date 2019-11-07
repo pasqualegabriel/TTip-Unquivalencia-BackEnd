@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken'),
   config = require('../../config'),
   logger = require('../logger'),
-  { mapUserData, mapUpdateUser } = require('../mappers/user'),
+  { mapUserData, mapUpdateUser, mapEmails } = require('../mappers/user'),
   {
     createUser,
     findAndCountAllUsers,
@@ -9,7 +9,8 @@ const jwt = require('jsonwebtoken'),
     updateUserFields,
     deleteUser,
     updatePassword,
-    updateCode
+    updateCode,
+    findAllMails
   } = require('../interactors/user'),
   {
     generateNewPassword,
@@ -103,3 +104,8 @@ exports.createNewPassword = (_, res, next) => {
     .then(() => res.status(200).send('Password updated successfully'))
     .catch(next);
 };
+
+exports.getMails = (_, res, next) =>
+  findAllMails()
+    .then(mails => res.status(200).send(mapEmails(mails)))
+    .catch(next);

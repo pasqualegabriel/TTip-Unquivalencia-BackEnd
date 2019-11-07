@@ -53,3 +53,8 @@ exports.updateCode = (id, code) =>
   sequelize.query(`update users set code = '${code}' where id = ${id}`, {
     type: Sequelize.QueryTypes.UPDATE
   });
+
+exports.findAllMails = () =>
+  User.findAll({
+    attributes: ['email']
+  });
