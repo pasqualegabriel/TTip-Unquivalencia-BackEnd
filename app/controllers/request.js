@@ -147,7 +147,7 @@ exports.getStepperRequest = async (req, res, next) => {
   try {
     const { dataValues: request } = await getRequest(req.params.requestId);
     const sets = await getRequestsStepper(res.locals.user, request);
-    const requestsStepper = await getSubjectsStepper(request, req.params.subjectId);
+    const requestsStepper = await getSubjectsStepper(request);
     request.originSubject = request.originSubjects[0].dataValues;
     delete request.originSubjects;
     delete request.originSubject.request_subject;
