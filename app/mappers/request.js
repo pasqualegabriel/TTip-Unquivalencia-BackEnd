@@ -7,3 +7,10 @@ exports.mapRequestsStepper = ({ equivalence, originSubjects = [] }) =>
 
 exports.mapOriginSubjectsToCreate = (requestId, subjectOriginIds = []) =>
   subjectOriginIds.map(subjectId => ({ requestId, subjectId }));
+
+exports.mapSets = requests =>
+  requests.map(request => {
+    const firstSubject = request.dataValues.originSubjects[0].dataValues.id;
+    delete request.dataValues.originSubjects;
+    return { ...request.dataValues, firstSubject };
+  });

@@ -19,7 +19,7 @@ const {
   } = require('../interactors/request'),
   { findFile, createFile, decrementFileStatus, incrementStatusToFile } = require('../interactors/file'),
   { mapNewFile } = require('../mappers/file'),
-  { mapRequestsStepper, mapOriginSubjectsToCreate } = require('../mappers/request'),
+  { mapRequestsStepper, mapOriginSubjectsToCreate, mapSets } = require('../mappers/request'),
   { equivalencesFinished } = require('../constants/request'),
   { PROFESSOR } = require('../constants/user'),
   { differenceBy } = require('lodash'),
@@ -153,7 +153,7 @@ exports.getStepperRequest = async (req, res, next) => {
     delete request.originSubject.request_subject;
     return res.status(200).send({
       request,
-      sets,
+      sets: mapSets(sets),
       requestsStepper: mapRequestsStepper(requestsStepper.dataValues)
     });
   } catch (error) {

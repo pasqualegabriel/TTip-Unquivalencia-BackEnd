@@ -126,17 +126,21 @@ exports.findRequestsMatch = ({
 exports.findRequestsStepper = fileId =>
   Request.findAll({
     attributes: [['id', 'requestId'], 'equivalence', [Sequelize.col('unqSubject.subject'), 'subjectUnq']],
-    raw: true,
     where: { fk_fileid: fileId },
-    include: [{ model: Subject, as: 'unqSubject', attributes: [] }]
+    include: [
+      { model: Subject, as: 'originSubjects', attributes: ['id'] },
+      { model: Subject, as: 'unqSubject', attributes: [] }
+    ]
   });
 
 exports.findRequestsStepperProfessor = (fileId, professorId) =>
   Request.findAll({
     attributes: [['id', 'requestId'], 'equivalence', [Sequelize.col('unqSubject.subject'), 'subjectUnq']],
-    raw: true,
     where: { fk_fileid: fileId, professorId, equivalence: consulting },
-    include: [{ model: Subject, as: 'unqSubject', attributes: [] }]
+    include: [
+      { model: Subject, as: 'originSubjects', attributes: ['id'] },
+      { model: Subject, as: 'unqSubject', attributes: [] }
+    ]
   });
 
 exports.findAllRequestsProfessor = (professorId, fileId) =>
