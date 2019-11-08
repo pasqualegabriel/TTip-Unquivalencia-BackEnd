@@ -64,8 +64,8 @@ exports.addRequest = async (req, res, next) => {
   }
 };
 
-const findRequestsByFileId = ({ id, rol }, fileId) =>
-  rol === PROFESSOR ? findAllRequestsProfessor(id, fileId) : findRequests(fileId);
+const findRequestsByFileId = ({ id, role }, fileId) =>
+  role === PROFESSOR ? findAllRequestsProfessor(id, fileId) : findRequests(fileId);
 
 exports.getRequestsByFileId = (req, res, next) =>
   findRequestsByFileId(res.locals.user, req.params.fileId)
