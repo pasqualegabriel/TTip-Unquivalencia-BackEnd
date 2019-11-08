@@ -37,7 +37,7 @@ exports.generateConsultToProfessorMail = (requestId, { email }, subjectId) => ({
   text: `
     Se ha requerido su opinión sobre una equivalencia.
 
-    Link: ${config.common.api.frontUrl}/solicitud/${requestId}/${subjectId}
+    Link: ${config.common.api.frontUrl}/solicitud/${requestId}/materia/${subjectId}
 
     Saludos! `
 });
