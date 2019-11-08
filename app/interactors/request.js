@@ -145,7 +145,6 @@ exports.findRequestsStepperProfessor = (fileId, professorId) =>
 
 exports.findAllRequestsProfessor = (professorId, fileId) =>
   Request.findAll({
-    raw: true,
     where: { fk_fileid: fileId, professorId, equivalence: consulting },
     include: [{ model: Subject, as: 'originSubjects' }, { model: Subject, as: 'unqSubject' }]
   });
