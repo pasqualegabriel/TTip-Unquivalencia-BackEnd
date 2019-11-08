@@ -44,7 +44,7 @@ exports.init = app => {
   );
   app.get(
     '/api/v1/stepper/requests/:requestId/subject/:subjectId',
-    [userValidations.verifyAuthentication],
+    [userValidations.verifyGetRequestAuthentication],
     requestController.getStepperRequest
   );
   app.post(
