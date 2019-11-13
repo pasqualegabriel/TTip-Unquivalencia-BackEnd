@@ -46,18 +46,16 @@ const generateTotalMatchQuery = (unqSubjectId, fkFileId, universityOrigin, caree
       subjects.university = '${universityOrigin}' and subjects.career = '${careerOrigin}' 
       ${yearPlanOrigin ? `and subjects.year_plan = '${yearPlanOrigin}'` : ''}
   ),
-  request_ids_out_match as (
+  request_match_id as (
     select distinct(requests.id) as id from requests, request_subjects, subjects, request_ids_in_match where
+      requests.id = request_ids_in_match.id and
+      requests.id not in (    
+        select distinct(requests.id) as id from requests, request_subjects, subjects, request_ids_in_match where
       requests.id = request_ids_in_match.id and
       request_subjects.request_id = requests.id and 
       request_subjects.subject_id = subjects.id and 
       (subjects.university != '${universityOrigin}' or subjects.career != '${careerOrigin}' 
-      ${yearPlanOrigin ? `or subjects.year_plan != '${yearPlanOrigin}')` : ')'}
-  ), 
-  request_match_id as (
-    select distinct(requests.id) as id from requests, request_subjects, subjects, request_ids_in_match, request_ids_out_match where
-      requests.id = request_ids_in_match.id and
-      requests.id != request_ids_out_match.id and
+      ${yearPlanOrigin ? `or subjects.year_plan != '${yearPlanOrigin}')` : ')'}) and
       request_subjects.request_id = requests.id and 
       request_subjects.subject_id = subjects.id limit 1
   )
