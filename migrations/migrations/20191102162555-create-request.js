@@ -48,6 +48,11 @@ module.exports = {
         values: types,
         defaultValue: external
       },
+      year_of_approval: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: ''
+      },
       observations: {
         allowNull: false,
         type: Sequelize.STRING,

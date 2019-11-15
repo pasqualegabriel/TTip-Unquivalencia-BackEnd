@@ -29,6 +29,12 @@ module.exports = (sequelize, DataTypes) => {
         values: types,
         defaultValue: external
       },
+      yearOfApproval: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        field: 'year_of_approval',
+        defaultValue: ''
+      },
       observations: {
         allowNull: false,
         type: DataTypes.STRING,
