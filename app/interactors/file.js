@@ -105,3 +105,14 @@ exports.deleteFile = fileId =>
       type: Sequelize.QueryTypes.DELETE
     }
   );
+
+exports.findFileLetter = id =>
+  File.findOne({
+    where: { id },
+    include: [
+      {
+        model: Request,
+        include: [{ model: Subject, as: 'originSubjects' }, { model: Subject, as: 'unqSubject' }]
+      }
+    ]
+  });

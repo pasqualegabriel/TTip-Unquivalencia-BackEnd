@@ -36,7 +36,7 @@ const createAndGetRequest = async (file, body, transaction) => {
     return updateToWithoutEvaluating(request, transaction);
   } else {
     await incrementStatusToFile(file.id, transaction);
-    return createRequest(file.id, body.subjectUnqId, transaction);
+    return createRequest(file.id, body, transaction);
   }
 };
 

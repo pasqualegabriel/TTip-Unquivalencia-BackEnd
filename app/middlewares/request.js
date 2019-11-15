@@ -1,4 +1,4 @@
-const { equivalences, equivalencesFinished } = require('../constants/request'),
+const { equivalences, equivalencesFinished, types } = require('../constants/request'),
   { nonExistentRequestMessage, requestFinishedMessage } = require('../errors'),
   { getRequest } = require('../interactors/request');
 
@@ -17,3 +17,6 @@ exports.validateRequest = (req, res, next) =>
       return res.status(401).send(nonExistentRequestMessage);
     })
     .catch(next);
+
+exports.verifyType = (req, res, next) =>
+  types.includes(req.body.type) ? next() : res.status(401).send('Invalid type');
