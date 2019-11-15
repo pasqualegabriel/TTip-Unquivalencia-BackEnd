@@ -1,6 +1,6 @@
 'use strict';
 
-const { equivalences, withoutEvaluating } = require('../../app/constants/request');
+const { equivalences, withoutEvaluating, types, external } = require('../../app/constants/request');
 
 module.exports = {
   up: (queryInterface, Sequelize) =>
@@ -41,6 +41,12 @@ module.exports = {
         type: Sequelize.ENUM,
         values: equivalences,
         defaultValue: withoutEvaluating
+      },
+      type: {
+        allowNull: false,
+        type: Sequelize.ENUM,
+        values: types,
+        defaultValue: external
       },
       observations: {
         allowNull: false,

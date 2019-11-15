@@ -13,3 +13,8 @@ exports.equivalences = [
 ];
 
 exports.equivalencesFinished = [exports.approved, exports.rejected, exports.finished];
+
+exports.internal = 'interna';
+exports.external = 'externa';
+
+exports.types = [exports.internal, exports.external];

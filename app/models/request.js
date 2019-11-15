@@ -1,6 +1,6 @@
 'use strict';
 
-const { equivalences, withoutEvaluating } = require('../constants/request');
+const { equivalences, withoutEvaluating, types, external } = require('../constants/request');
 
 module.exports = (sequelize, DataTypes) => {
   const Request = sequelize.define(
@@ -22,6 +22,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ENUM,
         values: equivalences,
         defaultValue: withoutEvaluating
+      },
+      type: {
+        allowNull: false,
+        type: DataTypes.ENUM,
+        values: types,
+        defaultValue: external
       },
       observations: {
         allowNull: false,

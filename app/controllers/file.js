@@ -5,10 +5,11 @@ const {
     getFile,
     deleteFile,
     createFile,
-    findFile
+    findFile,
+    findFileLetter
   } = require('../interactors/file'),
   { findRequests } = require('../interactors/request'),
-  { mapFileByFileNumber, mapNewFile } = require('../mappers/file'),
+  { mapFileByFileNumber, mapNewFile, mapLetter } = require('../mappers/file'),
   sendEmail = require('../services/mail'),
   { getPageParams, generateRecommendMail } = require('../helpers'),
   { sequelize } = require('../models'),
@@ -84,3 +85,8 @@ exports.duplicateFile = async (req, res, next) => {
     return next(error);
   }
 };
+
+exports.getLetter = (req, res, next) =>
+  findFileLetter(req.params.fileId)
+    .then(file => res.status(200).send(mapLetter(file)))
+    .catch(next);

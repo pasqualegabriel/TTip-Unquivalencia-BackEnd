@@ -12,7 +12,7 @@ const { validate } = new Validator({ allErrors: true });
 exports.init = app => {
   app.post(
     '/api/v1/request',
-    [userValidations.verifyAdminAndUserLogin, validate({ body: fileSchema })],
+    [userValidations.verifyAdminAndUserLogin, validate({ body: fileSchema }), requestValidations.verifyType],
     requestController.addRequest
   );
   app.get('/api/v1/files', [userValidations.verifyAuthentication], fileController.getAllFiles);
@@ -100,4 +100,5 @@ exports.init = app => {
     userController.createNewPassword
   );
   app.get('/api/v1/mails', [userValidations.verifyAdminLogin], userController.getMails);
+  app.get('/api/v1/letter/:fileId', [userValidations.verifyAdminAndUserLogin], fileController.getLetter);
 };

@@ -12,3 +12,5 @@ exports.mapFileByFileNumber = file => {
   delete file.dataValues.requests;
   return { ...file.dataValues, ...request };
 };
+
+exports.mapLetter = file => file;

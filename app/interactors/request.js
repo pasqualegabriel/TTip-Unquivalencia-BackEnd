@@ -160,8 +160,8 @@ exports.updateToWithoutEvaluating = (request, transaction) =>
     { transaction }
   );
 
-exports.createRequest = (fileId, subjectUnqId, transaction) =>
-  Request.create({ fk_fileid: fileId, fk_subjectid: subjectUnqId }, { transaction });
+exports.createRequest = (fileId, { type, subjectUnqId }, transaction) =>
+  Request.create({ type, fk_fileid: fileId, fk_subjectid: subjectUnqId }, { transaction });
 
 exports.createRequestSubject = (requestSubjects, transaction) =>
   RequestSubject.bulkCreate(requestSubjects, { transaction });
@@ -182,7 +182,8 @@ exports.findAndCountAllRequests = (
     subjectCoreUnq,
     yearOfEquivalence,
     signature,
-    equivalence
+    equivalence,
+    type
   },
   offset,
   limit
@@ -192,7 +193,8 @@ exports.findAndCountAllRequests = (
     where: pickBy({
       yearOfEquivalence: substring(yearOfEquivalence),
       signature: substring(signature),
-      equivalence: substring(equivalence)
+      equivalence: substring(equivalence),
+      type
     }),
     include: [
       {
