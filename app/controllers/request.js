@@ -17,8 +17,7 @@ const {
     deleteRequest,
     findAndCountAllRequests
   } = require('../interactors/request'),
-  { findFile, createFile, decrementFileStatus, incrementStatusToFile } = require('../interactors/file'),
-  { mapNewFile } = require('../mappers/file'),
+  { findFile, decrementFileStatus, incrementStatusToFile } = require('../interactors/file'),
   { mapRequestsStepper, mapOriginSubjectsToCreate, mapSets } = require('../mappers/request'),
   { equivalencesFinished } = require('../constants/request'),
   { PROFESSOR } = require('../constants/user'),
