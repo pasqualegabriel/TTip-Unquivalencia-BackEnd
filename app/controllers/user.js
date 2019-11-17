@@ -40,9 +40,9 @@ exports.signUp = (req, res, next) => {
   user.password = generateNewPassword();
   logger.info('Creating user');
   return createUser(user)
-    .then(() => {
+    .then(userRes => {
       logger.info(`User ${user.email} was created successfully`);
-      res.status(200).send('User created successfully');
+      res.status(200).send(userRes);
       logger.info('Sending email');
       return sendEmail(generateNewUserMail(user));
     })

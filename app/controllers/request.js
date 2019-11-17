@@ -33,7 +33,8 @@ const createAndGetRequest = async (file, body, transaction) => {
   if (request) {
     if (equivalencesFinished.includes(request.dataValues.equivalence))
       await incrementStatusToFile(file.id, transaction);
-    return updateToWithoutEvaluating(request, transaction);
+    await updateToWithoutEvaluating(request, transaction);
+    return request;
   } else {
     await incrementStatusToFile(file.id, transaction);
     return createRequest(file.id, body, transaction);
@@ -50,15 +51,16 @@ exports.createRequestsToFile = async (file, body, transaction) => {
 exports.addRequest = async (req, res, next) => {
   try {
     const file = await findFile(req.body.fileNumber);
+    let result = file;
     logger.info(`File ${file ? 'already' : 'does not'} exists`);
     if (file) {
       const transaction = await sequelize.transaction();
-      await exports.createRequestsToFile(file.dataValues, req.body, transaction);
+      result = await exports.createRequestsToFile(file.dataValues, req.body, transaction);
       await transaction.commit();
     } else {
-      await createFile(mapNewFile(req.body));
+      result = await createFile(mapNewFile(req.body));
     }
-    return res.status(200).send('Request created successfully');
+    return res.status(200).send(result);
   } catch (error) {
     return next(error);
   }

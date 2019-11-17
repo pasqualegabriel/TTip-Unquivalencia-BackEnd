@@ -11,7 +11,7 @@ const { mapNewSubject } = require('../mappers/subject'),
 
 exports.addSubject = (req, res, next) => {
   createSubject(mapNewSubject(req.body))
-    .then(() => res.status(200).send('Subject created successfully'))
+    .then(subject => res.status(200).send(subject))
     .catch(next);
 };
 
