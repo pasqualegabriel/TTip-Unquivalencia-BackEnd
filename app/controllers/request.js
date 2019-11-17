@@ -51,16 +51,14 @@ exports.createRequestsToFile = async (file, body, transaction) => {
 exports.addRequest = async (req, res, next) => {
   try {
     const file = await findFile(req.body.fileNumber);
-    let result = file;
     logger.info(`File ${file ? 'already' : 'does not'} exists`);
     if (file) {
       const transaction = await sequelize.transaction();
-      result = await exports.createRequestsToFile(file.dataValues, req.body, transaction);
+      const newRequest = await exports.createRequestsToFile(file.dataValues, req.body, transaction);
       await transaction.commit();
-    } else {
-      result = await createFile(mapNewFile(req.body));
+      return res.status(200).send(newRequest);
     }
-    return res.status(200).send(result);
+    return res.status(401).send('File does not exists');
   } catch (error) {
     return next(error);
   }

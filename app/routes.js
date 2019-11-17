@@ -15,6 +15,11 @@ exports.init = app => {
     [userValidations.verifyAdminAndUserLogin, validate({ body: fileSchema }), requestValidations.verifyType],
     requestController.addRequest
   );
+  app.post(
+    '/api/v1/file',
+    [userValidations.verifyAdminAndUserLogin, validate({ body: fileSchema })],
+    fileController.addFile
+  );
   app.get('/api/v1/files', [userValidations.verifyAuthentication], fileController.getAllFiles);
   app.get('/api/v1/file', [userValidations.verifyAdminAndUserLogin], fileController.getFileByFileNumber);
   app.get(

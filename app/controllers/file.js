@@ -90,3 +90,12 @@ exports.getLetter = (req, res, next) =>
   findFileLetter(req.params.fileId)
     .then(file => res.status(200).send(mapLetter(file)))
     .catch(next);
+
+exports.addFile = (req, res, next) =>
+  findFile(req.body.fileNumber)
+    .then(file =>
+      file
+        ? res.status(401).send('File already exists')
+        : createFile(mapNewFile(req.body)).then(newFile => res.status(200).send(newFile))
+    )
+    .catch(next);
