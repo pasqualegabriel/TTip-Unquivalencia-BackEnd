@@ -29,6 +29,7 @@ exports.findAllFiles = (
     surname,
     mail,
     dni,
+    legajo,
     yearNote,
     status,
     field = 'created_at',
@@ -45,6 +46,7 @@ exports.findAllFiles = (
     surname: substring(surname),
     mail: substring(mail),
     dni: substring(dni),
+    legajo: substring(legajo),
     yearNote: substring(yearNote)
   });
   if (parseInt(status) > 0) {
@@ -98,6 +100,7 @@ exports.deleteFile = fileId =>
   sequelize.query(
     `
     delete from request_subjects where request_id in (select id from requests where fk_fileid = ${fileId});
+    delete from request_info_subjects where request_id in (select id from requests where fk_fileid = ${fileId});
     delete from requests where fk_fileid = ${fileId};
     delete from files where id = ${fileId};
 `,

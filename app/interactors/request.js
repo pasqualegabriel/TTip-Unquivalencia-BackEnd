@@ -2,6 +2,8 @@ const {
     request: Request,
     request_subject: RequestSubject,
     subject: Subject,
+    info_subject: InfoSubject,
+    request_info_subject: RequestInfoSubject,
     sequelize,
     Sequelize,
     Sequelize: { Op }
@@ -26,7 +28,11 @@ exports.updateRequest = (id, { equivalence, observations }, signature, transacti
 exports.getRequest = id =>
   Request.findOne({
     where: { id },
-    include: [{ model: Subject, as: 'originSubjects' }, { model: Subject, as: 'unqSubject' }]
+    include: [
+      { model: Subject, as: 'originSubjects' },
+      { model: Subject, as: 'unqSubject' },
+      { model: InfoSubject, as: 'originSubjectsInfo' }
+    ]
   });
 
 exports.getSubjectsStepper = ({ id }) =>
@@ -167,8 +173,10 @@ exports.createRequestSubject = (requestSubjects, transaction) =>
   RequestSubject.bulkCreate(requestSubjects, { transaction });
 
 exports.deleteRequest = (requestId, transaction) =>
-  RequestSubject.destroy({ where: { requestId } }, { transaction }).then(
-    Request.destroy({ where: { id: requestId } }, { transaction })
+  RequestSubject.destroy({ where: { requestId } }, { transaction }).then(() =>
+    RequestInfoSubject.destroy({ where: { requestId } }, { transaction }).then(() =>
+      Request.destroy({ where: { id: requestId } }, { transaction })
+    )
   );
 
 exports.findAndCountAllRequests = (
@@ -231,3 +239,15 @@ exports.findAndCountAllRequests = (
         )
       : { count: 0, rows: [] }
   );
+
+exports.createInfoSubjects = (infoSubjects, transaction) =>
+  InfoSubject.bulkCreate(infoSubjects, { transaction });
+
+exports.createRequestSubjectInfo = (requestSubjectsInfo, transaction) =>
+  RequestInfoSubject.bulkCreate(requestSubjectsInfo, { transaction });
+
+exports.setForeignKey = (toUpdate, transaction) =>
+  sequelize.query(`ALTER TABLE requests ${toUpdate} trigger all;`, {
+    type: Sequelize.QueryTypes.SELECT,
+    transaction
+  });

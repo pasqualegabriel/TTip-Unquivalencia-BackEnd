@@ -29,12 +29,6 @@ module.exports = (sequelize, DataTypes) => {
         values: types,
         defaultValue: external
       },
-      yearOfApproval: {
-        allowNull: false,
-        type: DataTypes.STRING,
-        field: 'year_of_approval',
-        defaultValue: ''
-      },
       observations: {
         allowNull: false,
         type: DataTypes.STRING,
@@ -63,6 +57,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'fk_subjectid',
       targetKey: 'id',
       as: 'unqSubject'
+    });
+    models.request.belongsToMany(models.info_subject, {
+      through: models.request_info_subject,
+      as: 'originSubjectsInfo'
     });
   };
   return Request;

@@ -30,6 +30,11 @@ module.exports = {
         type: Sequelize.STRING,
         defaultValue: 'N/I'
       },
+      legajo: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: 'N/I'
+      },
       year_note: {
         allowNull: false,
         type: Sequelize.STRING,
