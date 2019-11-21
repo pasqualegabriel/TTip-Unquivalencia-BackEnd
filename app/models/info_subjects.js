@@ -4,6 +4,11 @@ module.exports = (sequelize, DataTypes) => {
   const infoSubjects = sequelize.define(
     'info_subject',
     {
+      subjectId: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        field: 'subject_id'
+      },
       yearOfApproval: {
         allowNull: false,
         type: DataTypes.STRING,

@@ -15,10 +15,19 @@ const {
     createRequestSubject,
     getSubjectsStepper,
     deleteRequest,
-    findAndCountAllRequests
+    findAndCountAllRequests,
+    createInfoSubjects,
+    createRequestSubjectInfo,
+    setForeignKey
   } = require('../interactors/request'),
   { findFile, decrementFileStatus, incrementStatusToFile } = require('../interactors/file'),
-  { mapRequestsStepper, mapOriginSubjectsToCreate, mapSets } = require('../mappers/request'),
+  {
+    mapRequestsStepper,
+    mapOriginSubjectsToCreate,
+    mapSets,
+    mapCreateInfoSubjects,
+    mapOriginSubjectsInfoToCreate
+  } = require('../mappers/request'),
   { equivalencesFinished } = require('../constants/request'),
   { PROFESSOR } = require('../constants/user'),
   { differenceBy, find } = require('lodash'),
@@ -36,14 +45,22 @@ const createAndGetRequest = async (file, body, transaction) => {
     return request;
   } else {
     await incrementStatusToFile(file.id, transaction);
-    return createRequest(file.id, body, transaction);
+    await setForeignKey('DISABLE', transaction);
+    const requestToReturn = await createRequest(file.id, body, transaction);
+    await setForeignKey('ENABLE', transaction);
+    return requestToReturn;
   }
 };
 
 exports.createRequestsToFile = async (file, body, transaction) => {
   const request = await createAndGetRequest(file, body, transaction);
   const requestId = request.dataValues ? request.dataValues.id : request[1][0].dataValues.id;
-  await createRequestSubject(mapOriginSubjectsToCreate(requestId, body.subjectOriginIds), transaction);
+  const infoSubjects = await createInfoSubjects(mapCreateInfoSubjects(body.subjectOrigins), transaction);
+  await createRequestSubjectInfo(mapOriginSubjectsInfoToCreate(requestId, infoSubjects), transaction);
+  await createRequestSubject(
+    mapOriginSubjectsToCreate(requestId, body.subjectOrigins.map(({ id }) => id)),
+    transaction
+  );
   return request;
 };
 

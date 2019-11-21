@@ -9,7 +9,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      year_af_approval: {
+      subject_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      year_of_approval: {
         allowNull: false,
         type: Sequelize.STRING
       },

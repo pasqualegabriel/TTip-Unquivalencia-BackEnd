@@ -1,12 +1,13 @@
 const { get } = require('lodash');
 
-exports.mapNewFile = ({ fileNumber, yearNote, mail, name, surname, dni }) => ({
+exports.mapNewFile = ({ fileNumber, yearNote, mail, name, surname, dni, legajo }) => ({
   fileNumber,
   yearNote,
   mail,
   name,
   surname,
-  dni
+  dni,
+  legajo
 });
 
 exports.mapFileByFileNumber = file => {

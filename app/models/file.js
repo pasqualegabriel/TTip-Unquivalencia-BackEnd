@@ -27,6 +27,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         defaultValue: 'N/I'
       },
+      legajo: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        defaultValue: 'N/I'
+      },
       yearNote: {
         allowNull: false,
         type: DataTypes.STRING,
