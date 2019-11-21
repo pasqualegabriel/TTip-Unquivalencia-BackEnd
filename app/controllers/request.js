@@ -171,6 +171,11 @@ exports.getStepperRequest = async (req, res, next) => {
       request.originSubjects,
       subject => subject.dataValues.id === parseInt(req.params.subjectId)
     );
+    request.originSubjectInfo = find(
+      request.originSubjectsInfo,
+      ({ dataValues: { subjectId } }) => subjectId === parseInt(req.params.subjectId)
+    );
+    delete request.originSubjectsInfo;
     delete request.originSubjects;
     delete request.originSubject.dataValues.request_subject;
     return res.status(200).send({

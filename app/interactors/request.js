@@ -28,7 +28,11 @@ exports.updateRequest = (id, { equivalence, observations }, signature, transacti
 exports.getRequest = id =>
   Request.findOne({
     where: { id },
-    include: [{ model: Subject, as: 'originSubjects' }, { model: Subject, as: 'unqSubject' }]
+    include: [
+      { model: Subject, as: 'originSubjects' },
+      { model: Subject, as: 'unqSubject' },
+      { model: InfoSubject, as: 'originSubjectsInfo' }
+    ]
   });
 
 exports.getSubjectsStepper = ({ id }) =>
