@@ -24,7 +24,7 @@ exports.findRequests = fileId =>
 
 exports.updateRequest = (id, { equivalence, observations }, signature, transaction) =>
   Request.update(
-    { equivalence, signature, observations: observations || '-' },
+    { equivalence, signature, observations: observations || '' },
     { where: { id } },
     { transaction }
   );
