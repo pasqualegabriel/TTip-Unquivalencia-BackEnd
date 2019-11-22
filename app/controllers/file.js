@@ -6,10 +6,11 @@ const {
     deleteFile,
     createFile,
     findFile,
-    findFileLetter
+    findFileLetter,
+    getFileHome
   } = require('../interactors/file'),
-  { findRequests } = require('../interactors/request'),
-  { mapFileByFileNumber, mapNewFile, mapLetter } = require('../mappers/file'),
+  { findRequests, getRequestHome } = require('../interactors/request'),
+  { mapFileByFileNumber, mapNewFile, mapLetter, mapHome } = require('../mappers/file'),
   sendEmail = require('../services/mail'),
   { getPageParams, generateRecommendMail } = require('../helpers'),
   { sequelize } = require('../models'),
@@ -109,4 +110,9 @@ exports.addFile = (req, res, next) =>
         ? res.status(401).send('File already exists')
         : createFile(mapNewFile(req.body)).then(newFile => res.status(200).send(newFile))
     )
+    .catch(next);
+
+exports.getHome = (_, res, next) =>
+  getRequestHome()
+    .then(equivalences => getFileHome().then(files => res.status(200).send(mapHome(equivalences, files))))
     .catch(next);

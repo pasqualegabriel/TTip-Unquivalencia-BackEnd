@@ -124,3 +124,5 @@ exports.findFileLetter = id =>
       }
     ]
   });
+
+exports.getFileHome = () => File.count();

@@ -106,4 +106,5 @@ exports.init = app => {
   );
   app.get('/api/v1/mails', [userValidations.verifyAdminLogin], userController.getMails);
   app.get('/api/v1/letter/:fileId', [userValidations.verifyAdminAndUserLogin], fileController.getLetter);
+  app.get('/api/v1/home', [userValidations.verifyAuthentication], fileController.getHome);
 };

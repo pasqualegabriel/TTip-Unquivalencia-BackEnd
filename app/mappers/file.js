@@ -1,5 +1,5 @@
 const { get, orderBy } = require('lodash'),
-  { approved, rejected, finished } = require('../constants/request'),
+  { approved, rejected, finished, equivalences } = require('../constants/request'),
   moment = require('moment');
 
 exports.mapNewFile = ({ fileNumber, yearNote, mail, name, surname, dni, legajo }) => ({
@@ -65,3 +65,15 @@ exports.mapLetter = file => ({
         : get(request, ['dataValues', 'observations'])
   }))
 });
+
+exports.mapHome = (someEquivalences, files) => {
+  const home = {};
+  for (const anEquivalence of equivalences) {
+    home[anEquivalence] = 0;
+  }
+  const result = {};
+  for (const { equivalence, count } of someEquivalences) {
+    result[equivalence] = parseInt(count);
+  }
+  return { files, ...home, ...result };
+};

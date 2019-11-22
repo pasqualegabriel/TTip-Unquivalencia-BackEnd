@@ -249,3 +249,8 @@ exports.createInfoSubjects = (infoSubjects, transaction) =>
 
 exports.createRequestSubjectInfo = (requestSubjectsInfo, transaction) =>
   RequestInfoSubject.bulkCreate(requestSubjectsInfo, { transaction });
+
+exports.getRequestHome = () =>
+  sequelize.query('select equivalence, count(*) from requests group by equivalence;', {
+    type: Sequelize.QueryTypes.SELECT
+  });
