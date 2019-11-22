@@ -249,9 +249,3 @@ exports.createInfoSubjects = (infoSubjects, transaction) =>
 
 exports.createRequestSubjectInfo = (requestSubjectsInfo, transaction) =>
   RequestInfoSubject.bulkCreate(requestSubjectsInfo, { transaction });
-
-exports.setForeignKey = (toUpdate, transaction) =>
-  sequelize.query(`ALTER TABLE requests ${toUpdate} trigger all;`, {
-    type: Sequelize.QueryTypes.SELECT,
-    transaction
-  });

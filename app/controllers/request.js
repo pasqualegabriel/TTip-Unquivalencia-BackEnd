@@ -17,8 +17,7 @@ const {
     deleteRequest,
     findAndCountAllRequests,
     createInfoSubjects,
-    createRequestSubjectInfo,
-    setForeignKey
+    createRequestSubjectInfo
   } = require('../interactors/request'),
   { findFile, decrementFileStatus, incrementStatusToFile } = require('../interactors/file'),
   {
@@ -44,10 +43,8 @@ const createAndGetRequest = async (file, body, transaction) => {
     await updateToWithoutEvaluating(request, transaction);
     return request;
   } else {
-    await incrementStatusToFile(file.id, transaction);
-    await setForeignKey('DISABLE', transaction);
     const requestToReturn = await createRequest(file.id, body, transaction);
-    await setForeignKey('ENABLE', transaction);
+    await incrementStatusToFile(file.id, transaction);
     return requestToReturn;
   }
 };
