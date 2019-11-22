@@ -2,6 +2,7 @@ const {
     request: Request,
     file: File,
     subject: Subject,
+    info_subject: InfoSubject,
     sequelize,
     Sequelize,
     Sequelize: { Op }
@@ -115,7 +116,11 @@ exports.findFileLetter = id =>
     include: [
       {
         model: Request,
-        include: [{ model: Subject, as: 'originSubjects' }, { model: Subject, as: 'unqSubject' }]
+        include: [
+          { model: Subject, as: 'originSubjects' },
+          { model: Subject, as: 'unqSubject' },
+          { model: InfoSubject, as: 'originSubjectsInfo' }
+        ]
       }
     ]
   });

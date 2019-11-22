@@ -15,7 +15,11 @@ const {
 exports.findRequests = fileId =>
   Request.findAll({
     where: { fk_fileid: fileId },
-    include: [{ model: Subject, as: 'originSubjects' }, { model: Subject, as: 'unqSubject' }]
+    include: [
+      { model: Subject, as: 'originSubjects' },
+      { model: Subject, as: 'unqSubject' },
+      { model: InfoSubject, as: 'originSubjectsInfo' }
+    ]
   });
 
 exports.updateRequest = (id, { equivalence, observations }, signature, transaction) =>

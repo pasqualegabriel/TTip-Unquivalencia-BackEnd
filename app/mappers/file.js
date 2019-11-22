@@ -1,4 +1,5 @@
-const { get } = require('lodash');
+const { get, orderBy } = require('lodash'),
+  moment = require('moment');
 
 exports.mapNewFile = ({ fileNumber, yearNote, mail, name, surname, dni, legajo }) => ({
   fileNumber,
@@ -22,16 +23,24 @@ exports.mapLetter = file => ({
   surname: file.dataValues.surname,
   mail: file.dataValues.mail,
   dni: file.dataValues.dni,
+  legajo: file.dataValues.legajo,
   yearNote: file.dataValues.yearNote,
+  currentDate: moment()
+    .locale('es')
+    .format('LL'),
   requests: file.dataValues.requests.map(request => ({
     id: get(request, ['dataValues', 'id']),
     universityOrigin: get(request, ['dataValues', 'originSubjects', 0, 'dataValues', 'university'], '-'),
-    subjectOrigin: `${request.dataValues.originSubjects.map(
-      originSubject => originSubject.dataValues.subject
+    subjectOrigin: `${orderBy(
+      request.dataValues.originSubjects.map(originSubject => originSubject.dataValues.subject),
+      'subjectId'
     )}`.replace(/,/g, ', '),
     yearNote: get(file, ['dataValues', 'yearNote'], '-'),
     yearPlanOrigin: get(request, ['dataValues', 'originSubjects', 0, 'dataValues', 'yearPlan'], '-'),
-    yearOfApproval: get(request, ['dataValues', 'yearOfApproval'], '-'),
+    yearOfApproval: `${orderBy(
+      request.dataValues.originSubjectsInfo.map(info => info.dataValues.yearOfApproval),
+      'subjectId'
+    )}`.replace(/,/g, ', '),
     subjectUnq: get(request, ['dataValues', 'unqSubject', 'dataValues', 'subject'], '-'),
     yearPlanUnq: get(request, ['dataValues', 'unqSubject', 'dataValues', 'yearPlan'], '-'),
     semanalUnq: get(request, ['dataValues', 'unqSubject', 'dataValues', 'subjectWeeklyHours'], '-'),

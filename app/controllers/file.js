@@ -15,7 +15,8 @@ const {
   { sequelize } = require('../models'),
   { createRequestsToFile } = require('./request'),
   logger = require('../logger'),
-  { PROFESSOR } = require('../constants/user');
+  { PROFESSOR } = require('../constants/user'),
+  { find } = require('lodash');
 
 const getFiles = ({ id, role }, query, offset, limit) =>
   role === PROFESSOR ? findAllFilesProfessor(id, query, offset, limit) : findAllFiles(query, offset, limit);
@@ -73,7 +74,17 @@ exports.duplicateFile = async (req, res, next) => {
         newFile,
         {
           fileNumber: newFile.fileNumber,
-          subjectOriginIds: request.dataValues.originSubjects.map(({ dataValues: { id } }) => id),
+          subjectOrigins: request.dataValues.originSubjects.map(({ dataValues: { id } }) => ({
+            id,
+            yearOfApproval: find(
+              request.dataValues.originSubjectsInfo,
+              ({ dataValues: { subjectId } }) => subjectId === id
+            ).dataValues.yearOfApproval,
+            mark: find(
+              request.dataValues.originSubjectsInfo,
+              ({ dataValues: { subjectId } }) => subjectId === id
+            ).dataValues.mark
+          })),
           subjectUnqId: request.dataValues.unqSubject.dataValues.id
         },
         transaction
