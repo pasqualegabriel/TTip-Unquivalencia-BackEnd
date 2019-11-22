@@ -17,7 +17,7 @@ const {
   { createRequestsToFile } = require('./request'),
   logger = require('../logger'),
   { PROFESSOR } = require('../constants/user'),
-  { find } = require('lodash');
+  { get, find } = require('lodash');
 
 const getFiles = ({ id, role }, query, offset, limit) =>
   role === PROFESSOR ? findAllFilesProfessor(id, query, offset, limit) : findAllFiles(query, offset, limit);
@@ -63,8 +63,11 @@ exports.deleteFile = (req, res, next) =>
 
 exports.duplicateFile = async (req, res, next) => {
   try {
-    const { dataValues: file } = await getFile(req.params.fileId);
+    const { dataValues: file } = await getFile(parseInt(req.params.fileId));
+    const lastChar = file.fileNumber.charAt(file.fileNumber.length - 1);
     file.fileNumber = `${file.fileNumber}R`;
+    const oldFile = await findFile(file.fileNumber);
+    if (lastChar === 'R' || oldFile) return res.status(401).send('File has already been duplicated');
     await createFile(mapNewFile(file));
     const { dataValues: newFile } = await findFile(file.fileNumber);
     const requests = await findRequests(file.id);
@@ -75,16 +78,26 @@ exports.duplicateFile = async (req, res, next) => {
         newFile,
         {
           fileNumber: newFile.fileNumber,
-          subjectOrigins: request.dataValues.originSubjects.map(({ dataValues: { id } }) => ({
-            id,
-            yearOfApproval: find(
-              request.dataValues.originSubjectsInfo,
-              ({ dataValues: { subjectId } }) => subjectId === id
-            ).dataValues.yearOfApproval,
-            mark: find(
-              request.dataValues.originSubjectsInfo,
-              ({ dataValues: { subjectId } }) => subjectId === id
-            ).dataValues.mark
+          subjectOrigins: get(request, ['dataValues', 'originSubjects'], []).map(originSubject => ({
+            id: get(originSubject, ['dataValues', 'id']),
+            yearOfApproval: get(
+              find(
+                get(request, ['dataValues', 'originSubjectsInfo'], []),
+                subjectInfo =>
+                  get(subjectInfo, ['dataValues', 'subjectId']) === get(originSubject, ['dataValues', 'id'])
+              ),
+              ['dataValues', 'yearOfApproval'],
+              ''
+            ),
+            mark: get(
+              find(
+                get(request, ['dataValues', 'originSubjectsInfo'], []),
+                subjectInfo =>
+                  get(subjectInfo, ['dataValues', 'subjectId']) === get(originSubject, ['dataValues', 'id'])
+              ),
+              ['dataValues', 'mark'],
+              ''
+            )
           })),
           subjectUnqId: request.dataValues.unqSubject.dataValues.id
         },
