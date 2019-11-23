@@ -21,6 +21,7 @@ const {
   } = require('../interactors/request'),
   { findFile, decrementFileStatus, incrementStatusToFile, getFile } = require('../interactors/file'),
   { getSubjectById } = require('../interactors/subject'),
+  { findAllAdmins } = require('../interactors/user'),
   {
     mapRequestsStepper,
     mapOriginSubjectsToCreate,
@@ -29,9 +30,9 @@ const {
     mapOriginSubjectsInfoToCreate
   } = require('../mappers/request'),
   { equivalencesFinished } = require('../constants/request'),
-  { PROFESSOR } = require('../constants/user'),
+  { PROFESSOR, USER } = require('../constants/user'),
   { differenceBy, find } = require('lodash'),
-  { getPageParams, generateConsultToProfessorMail } = require('../helpers'),
+  { getPageParams, generateConsultToProfessorMail, generateProfessorResponseMail } = require('../helpers'),
   sendEmail = require('../services/mail'),
   { sequelize } = require('../models'),
   logger = require('../logger');
@@ -96,6 +97,18 @@ exports.updateEquivalence = async (req, res, next) => {
     )
       await decrementFileStatus(res.locals.request.fk_fileid, transaction);
     await transaction.commit();
+    if ([PROFESSOR, USER].includes(res.locals.user.role)) {
+      const file = await getFile(res.locals.request.fk_fileid);
+      const admins = await findAllAdmins();
+      sendEmail(
+        generateProfessorResponseMail(
+          res.locals.request,
+          res.locals.user,
+          file,
+          admins.map(({ email }) => email)
+        )
+      );
+    }
     return res.status(200).send('Request updated');
   } catch (error) {
     return next(error);

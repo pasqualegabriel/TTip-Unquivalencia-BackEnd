@@ -1,6 +1,7 @@
 const { sequelize, Sequelize, user: User } = require('../models'),
   { pickBy } = require('lodash'),
-  { substring } = require('../helpers');
+  { substring } = require('../helpers'),
+  { ADMIN } = require('../constants/user');
 
 exports.findOneByEmail = email =>
   User.findOne({
@@ -57,4 +58,10 @@ exports.updateCode = (id, code) =>
 exports.findAllMails = () =>
   User.findAll({
     attributes: ['email']
+  });
+
+exports.findAllAdmins = () =>
+  User.findAll({
+    attributes: ['email'],
+    where: { role: ADMIN }
   });

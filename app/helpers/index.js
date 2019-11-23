@@ -124,3 +124,12 @@ exports.generateNewPasswordMail = ({ email }, password) => ({
 
     Saludos! `
 });
+
+exports.generateProfessorResponseMail = (request, user, file, admins) => ({
+  to: admins,
+  subject: `[UNQ-EQV] Respuesta sobre una solicitud recibida, expediente: ${file.dataValues.fileNumber}`,
+  text: `
+    ${user.name} ${user.lastName} ha respondido la solicitud sobre ${request.unqSubject.dataValues.subject} (UNQ).
+
+    Saludos`
+});
