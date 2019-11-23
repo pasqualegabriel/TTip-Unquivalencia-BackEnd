@@ -1,7 +1,8 @@
 const {
     Sequelize: { Op }
   } = require('../models'),
-  config = require('../../config');
+  config = require('../../config'),
+  { get, find, orderBy } = require('lodash');
 
 exports.generateNewPassword = (size = -10) =>
   Math.random()
@@ -21,7 +22,7 @@ exports.substring = field => field && { [Op.substring]: field };
 
 exports.generateNewUserMail = ({ email, password }) => ({
   to: email,
-  subject: '[UNQuivalencias] Registro',
+  subject: '[UNQ-EQV] Registro',
   text: `
     Has sido registrado en UNQuivalencias, 
     
@@ -31,20 +32,67 @@ exports.generateNewUserMail = ({ email, password }) => ({
   `
 });
 
-exports.generateConsultToProfessorMail = (requestId, { email }, subjectId) => ({
-  to: email,
-  subject: `[UNQuivalencias] Solicitud ${requestId}`,
+const getName = number =>
+  ({
+    '1': '1 (uno)',
+    '2': '2 (dos)',
+    '3': '3 (tres)',
+    '4': '4 (cuatro)',
+    '5': '5 (cinco)',
+    '6': '6 (seis)',
+    '7': '7 (siete)',
+    '8': '8 (ocho)',
+    '9': '9 (nueve)',
+    '10': '10 (diez)'
+  }[number]);
+
+exports.generateConsultToProfessorMail = (request, { email }, subject, file) => ({
+  to: 'pasqupes12@gmail.com',
+  subject: `[UNQ-EQV] Equivalencia de ${subject.dataValues.subject} (Estudiante: ${file.dataValues.name} ${file.dataValues.surname})`,
   text: `
-    Se ha requerido su opinión sobre una equivalencia.
+    Estimados docentes,
 
-    Link: ${config.common.api.frontUrl}/solicitud/${requestId}/materia/${subjectId}
+    Por pedido de la Dirección, les envío el sgte. pedido de equivalencias para evaluar.
 
-    Saludos! `
+    El estudiante solicita ${subject.dataValues.subject} (UNQ),
+    con la/s materia/s ${`${orderBy(get(request, ['dataValues', 'originSubjects'], []), 'id').map(
+      originSubject =>
+        `${get(originSubject, ['dataValues', 'subject'])} (${get(originSubject, [
+          'dataValues',
+          'university'
+        ])})`
+    )}`.replace(/,/g, ', ')}.
+
+    Necesito que se logueen a este link ${config.common.api.frontUrl}/solicitud/${
+    request.dataValues.id
+  }/materia/${subject.dataValues.id} 
+    con el mail ${email} como usuario e informarme si podemos o no dar la equivalencia. 
+
+    Usualmente la Directora chequea que los contenidos mínimos estén en ambos programas, 
+    pero si no están, deben informar si se da o no la equivalencia. 
+    Adicionalmente les informo que su nota en la materias de origen fue: 
+    ${`${orderBy(get(request, ['dataValues', 'originSubjects'], []), 'id').map(originSubject => {
+      const mark = get(
+        find(
+          get(request, ['dataValues', 'originSubjectsInfo'], []),
+          subjectInfo =>
+            parseInt(get(subjectInfo, ['dataValues', 'subjectId'])) ===
+            parseInt(get(originSubject, ['dataValues', 'id']))
+        ),
+        ['dataValues', 'mark']
+      );
+      return getName(mark) || mark;
+    })}`.replace(/,/g, ', ')}.
+    
+    Cuando respondan, si no se la equivalencia, la razón tiene que ser sencilla. Con una frase es suficiente.
+    
+    Saludos y gracias
+  `
 });
 
 exports.generateRecommendMail = ({ subjectUnqName, subjectNames }, email) => ({
   to: email,
-  subject: `[UNQuivalencias] Recomendacion ${subjectUnqName}`,
+  subject: `[UNQ-EQV] Recomendacion ${subjectUnqName}`,
   text: `
     Se ha rechazado la solicitud de equivalencia a la materia '${subjectUnqName}'.
 
@@ -57,7 +105,7 @@ exports.generateRecommendMail = ({ subjectUnqName, subjectNames }, email) => ({
 
 exports.generateCodeMail = ({ email }, code) => ({
   to: email,
-  subject: `[UNQuivalencias] Código de verificación`,
+  subject: `[UNQ-EQV] Código de verificación`,
   text: `
     Utilice el código para reestablecer su contraseña.
 
@@ -68,7 +116,7 @@ exports.generateCodeMail = ({ email }, code) => ({
 
 exports.generateNewPasswordMail = ({ email }, password) => ({
   to: email,
-  subject: `[UNQuivalencias] Nueva contraseña`,
+  subject: `[UNQ-EQV] Nueva contraseña`,
   text: `
     Se ha reestablecido su contraseña.
 

@@ -70,3 +70,5 @@ exports.getSubject = ({ university, career, yearPlan }) =>
       yearPlan
     }
   });
+
+exports.getSubjectById = id => Subject.findOne({ where: { id } });

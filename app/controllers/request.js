@@ -19,7 +19,8 @@ const {
     createInfoSubjects,
     createRequestSubjectInfo
   } = require('../interactors/request'),
-  { findFile, decrementFileStatus, incrementStatusToFile } = require('../interactors/file'),
+  { findFile, decrementFileStatus, incrementStatusToFile, getFile } = require('../interactors/file'),
+  { getSubjectById } = require('../interactors/subject'),
   {
     mapRequestsStepper,
     mapOriginSubjectsToCreate,
@@ -185,18 +186,19 @@ exports.getStepperRequest = async (req, res, next) => {
   }
 };
 
-exports.consultEquivalence = (req, res, next) =>
-  updateConsultEquivalence(req.params.requestId, res.locals.professor, req.body)
-    .then(() => {
-      res.status(200).send('Request updated');
-      return sendEmail(
-        generateConsultToProfessorMail(req.params.requestId, res.locals.professor, req.params.subjectId)
-      );
-    })
-    .then(() => {
-      logger.info('Email sent to professor');
-    })
-    .catch(next);
+exports.consultEquivalence = async (req, res, next) => {
+  try {
+    await updateConsultEquivalence(req.params.requestId, res.locals.professor, req.body);
+    logger.info('Request updated');
+    const request = await getRequest(parseInt(req.params.requestId));
+    const subject = await getSubjectById(parseInt(req.params.subjectId));
+    const file = await getFile(request.dataValues.fk_fileid);
+    res.status(200).send('Request updated');
+    return sendEmail(generateConsultToProfessorMail(request, res.locals.professor, subject, file));
+  } catch (error) {
+    return next(error);
+  }
+};
 
 exports.getRequests = (req, res, next) => {
   const { limit, offset } = getPageParams(req.query);
