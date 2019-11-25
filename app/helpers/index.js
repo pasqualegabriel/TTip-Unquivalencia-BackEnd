@@ -47,7 +47,7 @@ const getName = number =>
   }[number]);
 
 exports.generateConsultToProfessorMail = (request, { email }, subject, file) => ({
-  to: 'pasqupes12@gmail.com',
+  to: email,
   subject: `[UNQ-EQV] Equivalencia de ${subject.dataValues.subject} (Estudiante: ${file.dataValues.name} ${file.dataValues.surname})`,
   text: `
     Estimados docentes,
@@ -92,7 +92,7 @@ exports.generateConsultToProfessorMail = (request, { email }, subject, file) => 
 
 exports.generateRecommendMail = ({ subjectUnqName, subjectNames }, email) => ({
   to: email,
-  subject: `[UNQ-EQV] Recomendacion ${subjectUnqName}`,
+  subject: `[UNQ-EQV] Recomendación ${subjectUnqName}`,
   text: `
     Se ha rechazado la solicitud de equivalencia a la materia '${subjectUnqName}'.
 
