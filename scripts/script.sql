@@ -23,7 +23,7 @@ INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,su
 VALUES (DEFAULT,'35','UNLA','Informatica','2015','poo 2','cuatrimestral','12','66','obligatorio','120','url','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 6
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
-VALUES (DEFAULT,'35','ITBA','Ingenieria en Informatica','2015','Labo','cuatrimestral','12','66','obligatorio','120','url','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'35','ITBA','Ingenieria en Informatica','2015','poo 1','cuatrimestral','12','66','obligatorio','120','url','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 7
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
 VALUES (DEFAULT,'343','UNLA','Informatica','2011','Labo','cuatrimestral','12','66','obligatorio','120','url','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
@@ -130,11 +130,11 @@ INSERT INTO request_subjects (id,request_id,subject_id,created_at,updated_at) VA
 INSERT INTO request_subjects (id,request_id,subject_id,created_at,updated_at) VALUES (DEFAULT,4,9,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- request 5
 -- 12
-INSERT INTO request_subjects (id,request_id,subject_id,created_at,updated_at) VALUES (DEFAULT,5,7,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+INSERT INTO request_subjects (id,request_id,subject_id,created_at,updated_at) VALUES (DEFAULT,5,3,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 13
-INSERT INTO request_subjects (id,request_id,subject_id,created_at,updated_at) VALUES (DEFAULT,5,8,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+INSERT INTO request_subjects (id,request_id,subject_id,created_at,updated_at) VALUES (DEFAULT,5,4,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 14
-INSERT INTO request_subjects (id,request_id,subject_id,created_at,updated_at) VALUES (DEFAULT,5,9,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+INSERT INTO request_subjects (id,request_id,subject_id,created_at,updated_at) VALUES (DEFAULT,5,5,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- request 6
 -- 15
 INSERT INTO request_subjects (id,request_id,subject_id,created_at,updated_at) VALUES (DEFAULT,6,7,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
