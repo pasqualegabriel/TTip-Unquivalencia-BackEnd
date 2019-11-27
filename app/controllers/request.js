@@ -17,7 +17,8 @@ const {
     deleteRequest,
     findAndCountAllRequests,
     createInfoSubjects,
-    createRequestSubjectInfo
+    createRequestSubjectInfo,
+    createRequestDuplicate
   } = require('../interactors/request'),
   { findFile, decrementFileStatus, incrementStatusToFile, getFile } = require('../interactors/file'),
   { getSubjectById } = require('../interactors/subject'),
@@ -77,6 +78,19 @@ exports.addRequest = async (req, res, next) => {
   } catch (error) {
     return next(error);
   }
+};
+
+exports.createRequestsToFileDuplicate = async (file, body, transaction) => {
+  const request = await createRequestDuplicate(file.id, body, transaction);
+  if (!equivalencesFinished.includes(body.equivalence)) await incrementStatusToFile(file.id, transaction);
+  const requestId = request.dataValues.id;
+  const infoSubjects = await createInfoSubjects(mapCreateInfoSubjects(body.subjectOrigins), transaction);
+  await createRequestSubjectInfo(mapOriginSubjectsInfoToCreate(requestId, infoSubjects), transaction);
+  await createRequestSubject(
+    mapOriginSubjectsToCreate(requestId, body.subjectOrigins.map(({ id }) => id)),
+    transaction
+  );
+  return request;
 };
 
 const findRequestsByFileId = ({ id, role }, fileId) =>

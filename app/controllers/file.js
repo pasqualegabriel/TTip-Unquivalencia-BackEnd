@@ -14,7 +14,7 @@ const {
   sendEmail = require('../services/mail'),
   { getPageParams, generateRecommendMail } = require('../helpers'),
   { sequelize } = require('../models'),
-  { createRequestsToFile } = require('./request'),
+  { createRequestsToFileDuplicate } = require('./request'),
   logger = require('../logger'),
   { PROFESSOR } = require('../constants/user'),
   { get, find } = require('lodash');
@@ -74,7 +74,7 @@ exports.duplicateFile = async (req, res, next) => {
     const transaction = await sequelize.transaction();
     for (const request of requests) {
       // eslint-disable-next-line no-await-in-loop
-      await createRequestsToFile(
+      await createRequestsToFileDuplicate(
         newFile,
         {
           fileNumber: newFile.fileNumber,
@@ -99,7 +99,14 @@ exports.duplicateFile = async (req, res, next) => {
               ''
             )
           })),
-          subjectUnqId: request.dataValues.unqSubject.dataValues.id
+          subjectUnqId: request.dataValues.unqSubject.dataValues.id,
+          type: get(request, ['dataValues', 'type']),
+          yearOfEquivalence: get(request, ['dataValues', 'yearOfEquivalence']),
+          signature: get(request, ['dataValues', 'signature']),
+          equivalence: get(request, ['dataValues', 'equivalence']),
+          observations: get(request, ['dataValues', 'observations']),
+          professorId: get(request, ['dataValues', 'professorId']),
+          commentsToProfessor: get(request, ['dataValues', 'commentsToProfessor'])
         },
         transaction
       );

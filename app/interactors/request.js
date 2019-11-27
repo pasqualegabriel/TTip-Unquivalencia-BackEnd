@@ -173,6 +173,35 @@ exports.updateToWithoutEvaluating = (request, transaction) =>
 exports.createRequest = (fileId, { type, subjectUnqId }, transaction) =>
   Request.create({ type, fk_fileid: fileId, fk_subjectid: subjectUnqId }, { transaction });
 
+exports.createRequestDuplicate = (
+  fileId,
+  {
+    type,
+    subjectUnqId,
+    yearOfEquivalence,
+    signature,
+    equivalence,
+    observations,
+    professorId,
+    commentsToProfessor
+  },
+  transaction
+) =>
+  Request.create(
+    {
+      type,
+      fk_fileid: fileId,
+      fk_subjectid: subjectUnqId,
+      yearOfEquivalence,
+      signature,
+      equivalence,
+      observations,
+      professorId,
+      commentsToProfessor
+    },
+    { transaction }
+  );
+
 exports.createRequestSubject = (requestSubjects, transaction) =>
   RequestSubject.bulkCreate(requestSubjects, { transaction });
 
