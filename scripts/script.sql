@@ -72,28 +72,28 @@ VALUES (DEFAULT,'0358/107','Ivo','Carbone','ivo@gmail.com','33125606','2017',0,'
 -- Requests
 -- 1 total match
 INSERT INTO requests (id,year_of_equivalence,signature,equivalence,observations,fk_fileid,fk_subjectid,created_at,updated_at,"type",professor_id,comments_to_professor) 
-VALUES (DEFAULT,'2017','Fidel','SIN EVALUAR','N/A',1,1,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00','externa',NULL,NULL);
+VALUES (DEFAULT,'2017','N/I','SIN EVALUAR','N/A',1,1,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00','externa',NULL,NULL);
 -- 2 total match aprobada
 INSERT INTO requests (id,year_of_equivalence,signature,equivalence,observations,fk_fileid,fk_subjectid,created_at,updated_at,"type",professor_id,comments_to_professor) 
 VALUES (DEFAULT,'2017','Fidel','APROBADA','N/A',2,1,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00','externa',NULL,NULL);
 -- 3 falta 1 para total match
 INSERT INTO requests (id,year_of_equivalence,signature,equivalence,observations,fk_fileid,fk_subjectid,created_at,updated_at,"type",professor_id,comments_to_professor) 
-VALUES (DEFAULT,'2017','Fidel','SIN EVALUAR','N/A',3,1,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00','externa',NULL,NULL);
+VALUES (DEFAULT,'2017','N/I','SIN EVALUAR','N/A',3,1,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00','externa',NULL,NULL);
 -- 4 total match year
 INSERT INTO requests (id,year_of_equivalence,signature,equivalence,observations,fk_fileid,fk_subjectid,created_at,updated_at,"type",professor_id,comments_to_professor) 
-VALUES (DEFAULT,'2017','Fidel','SIN EVALUAR','N/A',1,2,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00','externa',NULL,NULL);
+VALUES (DEFAULT,'2017','N/I','SIN EVALUAR','N/A',1,2,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00','externa',NULL,NULL);
 -- 5 total match aprobada year
 INSERT INTO requests (id,year_of_equivalence,signature,equivalence,observations,fk_fileid,fk_subjectid,created_at,updated_at,"type",professor_id,comments_to_professor) 
 VALUES (DEFAULT,'2017','Fidel','APROBADA','N/A',2,2,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00','externa',NULL,NULL);
 -- 6 falta 1 para total match year
 INSERT INTO requests (id,year_of_equivalence,signature,equivalence,observations,fk_fileid,fk_subjectid,created_at,updated_at,"type",professor_id,comments_to_professor) 
-VALUES (DEFAULT,'2017','Fidel','SIN EVALUAR','N/A',3,2,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00','externa',NULL,NULL);
+VALUES (DEFAULT,'2017','N/I','SIN EVALUAR','N/A',3,2,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00','externa',NULL,NULL);
 -- 7 match con distintas universidades
 INSERT INTO requests (id,year_of_equivalence,signature,equivalence,observations,fk_fileid,fk_subjectid,created_at,updated_at,"type",professor_id,comments_to_professor) 
 VALUES (DEFAULT,'2017','Fidel','APROBADA','N/A',4,1,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00','externa',NULL,NULL);
 -- 8 negadas sin evaluar
 INSERT INTO requests (id,year_of_equivalence,signature,equivalence,observations,fk_fileid,fk_subjectid,created_at,updated_at,"type",professor_id,comments_to_professor) 
-VALUES (DEFAULT,'2017','Fidel','SIN EVALUAR','N/A',5,10,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00','externa',NULL,NULL);
+VALUES (DEFAULT,'2017','N/I','SIN EVALUAR','N/A',5,10,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00','externa',NULL,NULL);
 -- 9 negadas
 INSERT INTO requests (id,year_of_equivalence,signature,equivalence,observations,fk_fileid,fk_subjectid,created_at,updated_at,"type",professor_id,comments_to_professor) 
 VALUES (DEFAULT,'2017','Fidel','NEGADA','N/A',6,10,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00','externa',NULL,NULL);
