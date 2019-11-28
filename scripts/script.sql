@@ -8,34 +8,34 @@ INSERT INTO users ("name",last_name,email,"password",code,"role",invalidation_da
 -- Subjects
 -- 1
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
-VALUES (DEFAULT,'1324','UNQ','TPI','2015','Orga','cuatrimestral','12','66','obligatorio','120','url','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'1324','UNQ','TPI','2015','Orga','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1_sS31y_6sl4UigDz7uSgMBtKFOitH7lc/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 2
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
-VALUES (DEFAULT,'234','UNQ','TPI','2015','Algoritmos','cuatrimestral','12','66','obligatorio','120','url','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'234','UNQ','TPI','2015','Algoritmos','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1W3UnrZqw6On3Gu0GU4R1QL8YV0WA7lSl/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 3
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
-VALUES (DEFAULT,'343','UNLA','Informatica','2015','Labo','cuatrimestral','12','66','obligatorio','120','url','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'343','UTN','Informatica','2015','Labo','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1votZaKq51wXinAeRbum555gBoiZttT65/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 4
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
-VALUES (DEFAULT,'454','UNLA','Informatica','2015','poo 1','cuatrimestral','12','66','obligatorio','120','url','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'454','UTN','Informatica','2015','poo 1','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1ZQFQF6twcX2BXJ7huobKQg95FiEU3KZD/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 5
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
-VALUES (DEFAULT,'35','UNLA','Informatica','2015','poo 2','cuatrimestral','12','66','obligatorio','120','url','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'35','UTN','Informatica','2015','poo 2','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1o0b-LBVXJEJNFC6s4qMq3tViKhL0KDuM/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 6
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
-VALUES (DEFAULT,'35','ITBA','Ingenieria en Informatica','2015','poo 1','cuatrimestral','12','66','obligatorio','120','url','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'35','ITBA','Ingenieria en Informatica','2015','poo 1','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/161zM9Ln7qRxOqVlaF48FtV7VSmtYuL9D/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 7
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
-VALUES (DEFAULT,'343','UNLA','Informatica','2011','Labo','cuatrimestral','12','66','obligatorio','120','url','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'343','UTN','Informatica','2011','Labo','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1votZaKq51wXinAeRbum555gBoiZttT65/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 8
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
-VALUES (DEFAULT,'454','UNLA','Informatica','2011','poo 1','cuatrimestral','12','66','obligatorio','120','url','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'454','UTN','Informatica','2011','poo 1','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1ZQFQF6twcX2BXJ7huobKQg95FiEU3KZD/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 9
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
-VALUES (DEFAULT,'35','UNLA','Informatica','2011','poo 2','cuatrimestral','12','66','obligatorio','120','url','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'35','UTN','Informatica','2011','poo 2','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1o0b-LBVXJEJNFC6s4qMq3tViKhL0KDuM/previewpreview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 10
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
-VALUES (DEFAULT,'234','UNQ','TPI','2015','Base de datos','cuatrimestral','12','66','obligatorio','120','url','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'234','UNQ','TPI','2015','Base de datos','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1MOwOIdEJvcrkQRoXLskr9-_QBbx9uAIV/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 
 -- Files
 -- 1
