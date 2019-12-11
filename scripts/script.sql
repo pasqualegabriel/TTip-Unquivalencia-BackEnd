@@ -1,52 +1,52 @@
 -- Users
 INSERT INTO users ("name",last_name,email,"password",code,"role",invalidation_date,created_at,updated_at) VALUES 
 ('Gabriel','Pasquale','pasqualeunq@gmail.com','$2a$08$flkBf9gDFI9avRdlJ.mRUOKQib9cvC.yRtzVQa1Cm55YHnYArFpQi',NULL,'admin','2019-11-23 18:23:23.606','2019-11-23 16:48:48.338','2019-11-23 18:24:39.882')
-,('Nahuel','Pasquale','pasqupes12@gmail.com','$2a$08$PBkG0zug9jZ9q85fsqK7n.oh0cwASbdc7JzdlAIrBeQXOV13CkPye',NULL,'professor','2019-11-23 18:22:29.249','2019-11-23 14:38:34.255','2019-11-23 18:24:55.111')
-,('Antonio','Pasquale','pasquplay12@gmail.com','$2a$08$mLtFUmdk9ET6ddcqvXd0xO.qauLAoKE6NadG2q3aOlagMP63C25ri',NULL,'user','2019-11-23 18:25:16.791','2019-11-22 14:43:14.989','2019-11-23 18:25:16.792')
+,('Fernando','Autalan','pasqupes12@gmail.com','$2a$08$PBkG0zug9jZ9q85fsqK7n.oh0cwASbdc7JzdlAIrBeQXOV13CkPye',NULL,'professor','2019-11-23 18:22:29.249','2019-11-23 14:38:34.255','2019-11-23 18:24:55.111')
+,('Camila','Cintioli','pasquplay12@gmail.com','$2a$08$mLtFUmdk9ET6ddcqvXd0xO.qauLAoKE6NadG2q3aOlagMP63C25ri',NULL,'user','2019-11-23 18:25:16.791','2019-11-22 14:43:14.989','2019-11-23 18:25:16.792')
 ;
 
 -- Subjects
 -- 1
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
-VALUES (DEFAULT,'1324','UNQ','TPI','2015','Orga','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1_sS31y_6sl4UigDz7uSgMBtKFOitH7lc/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'1324','UNQ','TPI','2017','Matemática 2','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1_sS31y_6sl4UigDz7uSgMBtKFOitH7lc/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 2
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
-VALUES (DEFAULT,'234','UNQ','TPI','2015','Algoritmos','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1W3UnrZqw6On3Gu0GU4R1QL8YV0WA7lSl/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'234','UNQ','TPI','2017','Matemática 3','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1DSZHp4RccQXnXoRLDiRuB1RhMRmmBjdi/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 3
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
-VALUES (DEFAULT,'343','UTN','Informatica','2015','Labo','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1votZaKq51wXinAeRbum555gBoiZttT65/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'343','UTN','Informatica','2009','Álgebra','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1votZaKq51wXinAeRbum555gBoiZttT65/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 4
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
-VALUES (DEFAULT,'454','UTN','Informatica','2015','poo 1','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1ZQFQF6twcX2BXJ7huobKQg95FiEU3KZD/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'454','UTN','Informatica','2009','Análisis Matemático','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1rPwn_bcJecOsxPXlFOLy8aRPbZUQGWfn/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 5
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
-VALUES (DEFAULT,'35','UTN','Informatica','2015','poo 2','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1o0b-LBVXJEJNFC6s4qMq3tViKhL0KDuM/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'35','UTN','Informatica','2009','Análisis Matemático 2','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1DSZHp4RccQXnXoRLDiRuB1RhMRmmBjdi/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 6
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
 VALUES (DEFAULT,'35','ITBA','Ingenieria en Informatica','2015','poo 1','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/161zM9Ln7qRxOqVlaF48FtV7VSmtYuL9D/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 7
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
-VALUES (DEFAULT,'343','UTN','Informatica','2011','Labo','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1votZaKq51wXinAeRbum555gBoiZttT65/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'343','UTN','Informatica','2011','Álgebra','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1votZaKq51wXinAeRbum555gBoiZttT65/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 8
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
-VALUES (DEFAULT,'454','UTN','Informatica','2011','poo 1','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1ZQFQF6twcX2BXJ7huobKQg95FiEU3KZD/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'454','UTN','Informatica','2011','Análisis Matemático','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1rPwn_bcJecOsxPXlFOLy8aRPbZUQGWfn/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 9
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
-VALUES (DEFAULT,'35','UTN','Informatica','2011','poo 2','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1o0b-LBVXJEJNFC6s4qMq3tViKhL0KDuM/previewpreview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'35','UTN','Informatica','2011','Análisis Matemático 2','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1DSZHp4RccQXnXoRLDiRuB1RhMRmmBjdi/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 10
 INSERT INTO subjects (id,code,university,career,year_plan,subject,course_mode,subject_weekly_hours,subject_total_hours,subject_core,credits,url,created_at,updated_at) 
-VALUES (DEFAULT,'234','UNQ','TPI','2015','Base de datos','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1MOwOIdEJvcrkQRoXLskr9-_QBbx9uAIV/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'234','UNQ','TPI','2017','Base de datos','cuatrimestral','12','66','obligatorio','120','https://drive.google.com/file/d/1MOwOIdEJvcrkQRoXLskr9-_QBbx9uAIV/preview','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 
 -- Files
 -- 1
 INSERT INTO files (id,file_number,name,surname,mail,dni,year_note,status,legajo,created_at,updated_at) 
-VALUES (DEFAULT,'0358/101','Camila','Cintioli','camila@gmail.com','45657634','2017',2,'34567','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'0358/101','Gaston','Losardo','gaston@gmail.com','45657634','2017',2,'34567','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 2
 INSERT INTO files (id,file_number,name,surname,mail,dni,year_note,status,legajo,created_at,updated_at) 
-VALUES (DEFAULT,'0358/102','Nahuel','Autalan','nahuel@gmail.com','38675645','2017',0,'32456','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'0358/102','Gonzalo','Escalante','gonza@gmail.com','38675645','2017',0,'32456','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 3
 INSERT INTO files (id,file_number,name,surname,mail,dni,year_note,status,legajo,created_at,updated_at) 
-VALUES (DEFAULT,'0358/103','Gabriel','Pasquale','gabriel@gmail.com','35465756','2017',2,'23432','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
+VALUES (DEFAULT,'0358/103','David','Montoya','david@gmail.com','35465756','2017',2,'23432','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
 -- 4
 INSERT INTO files (id,file_number,name,surname,mail,dni,year_note,status,legajo,created_at,updated_at) 
 VALUES (DEFAULT,'0358/104','Ivan','Dominikov','ivan@gmail.com','36435465','2017',0,'45632','2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00');
@@ -96,10 +96,10 @@ INSERT INTO requests (id,year_of_equivalence,signature,equivalence,observations,
 VALUES (DEFAULT,'2017','N/I','SIN EVALUAR','N/A',5,10,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00','externa',NULL,NULL);
 -- 9 negadas
 INSERT INTO requests (id,year_of_equivalence,signature,equivalence,observations,fk_fileid,fk_subjectid,created_at,updated_at,"type",professor_id,comments_to_professor) 
-VALUES (DEFAULT,'2017','Fidel','NEGADA','N/A',6,10,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00','externa',NULL,NULL);
+VALUES (DEFAULT,'2017','Fidel','NEGADA','Contenidos minimos insuficientes',6,10,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00','externa',NULL,NULL);
 -- 10 negadas 2
 INSERT INTO requests (id,year_of_equivalence,signature,equivalence,observations,fk_fileid,fk_subjectid,created_at,updated_at,"type",professor_id,comments_to_professor) 
-VALUES (DEFAULT,'2017','Fidel','NEGADA','N/A',7,10,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00','externa',NULL,NULL);
+VALUES (DEFAULT,'2017','Fidel','NEGADA','Contenidos minimos insuficientes',7,10,'2019-10-11 19:25:37.078 +00:00','2019-10-11 19:25:37.078 +00:00','externa',NULL,NULL);
 
 -- request_subjects
 -- request 1
