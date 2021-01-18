@@ -16,6 +16,12 @@ Number |       Name              | UNQ-Records |    EMail                 |Posit
 ### Trello
 [tip - trello](https://trello.com/)
 
+### Frontend
+[UNQuivalencias - frontend](https://github.com/CamilaCintioli/ttip-unquivalencia-frontend)
+
+### Documentación
+[UNQuivalencias - documentación](https://github.com/fautalan1/TTip-Unquivalencia-Documentacion)
+
 #### Installing node
 Get the latest version of node from the [official website](https://nodejs.org/) or using [nvm](https://github.com/creationix/nvm)
 Nvm approach is preferred.
